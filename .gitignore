@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Temp folders
+
+bin/*
+lib/*
+environment/logs/*
+
 # User-specific files
 *.rsuser
 *.suo
