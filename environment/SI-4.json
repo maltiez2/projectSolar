@@ -1,0 +1,261 @@
+{
+    "baseQuantities": {
+        "0": {
+            "dimension": [
+                1,
+                0,
+                0,
+                0
+            ],
+            "symbol": "T",
+            "title": "Time"
+        },
+        "1": {
+            "dimension": [
+                0,
+                1,
+                0,
+                0
+            ],
+            "symbol": "L",
+            "title": "Length"
+        },
+        "2": {
+            "dimension": [
+                0,
+                0,
+                1,
+                0
+            ],
+            "symbol": "M",
+            "title": "Mass"
+        },
+        "3": {
+            "dimension": [
+                0,
+                0,
+                0,
+                1
+            ],
+            "symbol": "Θ",
+            "title": "Temperature"
+        }
+    },
+    "coherentUnits": {
+        "0": {
+            "convertionRatioFromBaseUnits": 1,
+            "quantity": 0,
+            "symbol": "s",
+            "title": "second"
+        },
+        "1": {
+            "convertionRatioFromBaseUnits": 1,
+            "quantity": 1,
+            "symbol": "m",
+            "title": "metre"
+        },
+        "16": {
+            "convertionRatioFromBaseUnits": 1,
+            "quantity": 5,
+            "symbol": "m/s",
+            "title": "m/s"
+        },
+        "19": {
+            "convertionRatioFromBaseUnits": 1,
+            "quantity": 6,
+            "symbol": "m/s²",
+            "title": "m/s²"
+        },
+        "2": {
+            "convertionRatioFromBaseUnits": 1,
+            "quantity": 2,
+            "symbol": "kg",
+            "title": "kilogram"
+        },
+        "3": {
+            "convertionRatioFromBaseUnits": 1,
+            "quantity": 3,
+            "symbol": "K",
+            "title": "kelvin"
+        },
+        "4": {
+            "convertionRatioFromBaseUnits": 1,
+            "quantity": 4,
+            "symbol": "N",
+            "title": "newton"
+        }
+    },
+    "derivedQuantities": {
+        "4": {
+            "dimension": [
+                -2,
+                1,
+                1,
+                0
+            ],
+            "symbol": "F",
+            "title": "Force"
+        },
+        "5": {
+            "dimension": [
+                -1,
+                1,
+                0,
+                0
+            ],
+            "symbol": "V",
+            "title": "Velocity"
+        },
+        "6": {
+            "dimension": [
+                -2,
+                1,
+                0,
+                0
+            ],
+            "symbol": "A",
+            "title": "Acceleration"
+        }
+    },
+    "nonCoherentUnits": {
+        "10": {
+            "convertionRatioFromBaseUnits": 5.9742e+24,
+            "quantity": 2,
+            "symbol": "Me",
+            "title": "earth mass"
+        },
+        "11": {
+            "convertionRatioFromBaseUnits": 1.898e+30,
+            "quantity": 2,
+            "symbol": "Mj",
+            "title": "jupiter mass"
+        },
+        "12": {
+            "convertionRatioFromBaseUnits": 7.342e+22,
+            "quantity": 2,
+            "symbol": "Ml",
+            "title": "lunar mass"
+        },
+        "13": {
+            "convertionRatioFromBaseUnits": 384300000,
+            "quantity": 1,
+            "symbol": "LD",
+            "title": "lunar distance"
+        },
+        "14": {
+            "convertionRatioFromBaseUnits": 299792458,
+            "quantity": 1,
+            "symbol": "ls",
+            "title": "light-second"
+        },
+        "15": {
+            "convertionRatioFromBaseUnits": 1000,
+            "quantity": 5,
+            "symbol": "km/s",
+            "title": "km/s"
+        },
+        "17": {
+            "convertionRatioFromBaseUnits": 0.277777777,
+            "quantity": 5,
+            "symbol": "km/h",
+            "title": "km/h"
+        },
+        "18": {
+            "convertionRatioFromBaseUnits": 299792458,
+            "quantity": 5,
+            "symbol": "ls/s",
+            "title": "ls/s"
+        },
+        "20": {
+            "convertionRatioFromBaseUnits": 1000,
+            "quantity": 6,
+            "symbol": "km/s²",
+            "title": "km/s²"
+        },
+        "21": {
+            "convertionRatioFromBaseUnits": 277.777777,
+            "quantity": 6,
+            "symbol": "km/s×h",
+            "title": "km/s×h"
+        },
+        "22": {
+            "convertionRatioFromBaseUnits": 9.80665,
+            "quantity": 4,
+            "symbol": "kp",
+            "title": "kilogram-force"
+        },
+        "23": {
+            "convertionRatioFromBaseUnits": 1000,
+            "quantity": 4,
+            "symbol": "kN",
+            "title": "kilo-newton"
+        },
+        "24": {
+            "convertionRatioFromBaseUnits": 1000000,
+            "quantity": 4,
+            "symbol": "MN",
+            "title": "mega-newton"
+        },
+        "25": {
+            "convertionRatioFromBaseUnits": 1000000000,
+            "quantity": 4,
+            "symbol": "GN",
+            "title": "giga-newton"
+        },
+        "26": {
+            "convertionRatioFromBaseUnits": 0.001,
+            "quantity": 0,
+            "symbol": "ms",
+            "title": "millisecond"
+        },
+        "27": {
+            "convertionRatioFromBaseUnits": 1.0000000000000002e-06,
+            "quantity": 0,
+            "symbol": "μs",
+            "title": "microsecond"
+        },
+        "28": {
+            "convertionRatioFromBaseUnits": 1.0000000000000003e-09,
+            "quantity": 0,
+            "symbol": "ns",
+            "title": "nanosecond"
+        },
+        "29": {
+            "convertionRatioFromBaseUnits": 149597870699.99997,
+            "quantity": 1,
+            "symbol": "au",
+            "title": "astronomical unit"
+        },
+        "5": {
+            "convertionRatioFromBaseUnits": 86400,
+            "quantity": 0,
+            "symbol": "d",
+            "title": "day"
+        },
+        "6": {
+            "convertionRatioFromBaseUnits": 60,
+            "quantity": 0,
+            "symbol": "min",
+            "title": "minute"
+        },
+        "7": {
+            "convertionRatioFromBaseUnits": 3600,
+            "quantity": 0,
+            "symbol": "h",
+            "title": "hour"
+        },
+        "8": {
+            "convertionRatioFromBaseUnits": 31557600,
+            "quantity": 0,
+            "symbol": "aj",
+            "title": "julian year"
+        },
+        "9": {
+            "convertionRatioFromBaseUnits": 1.98892e+30,
+            "quantity": 2,
+            "symbol": "Ms",
+            "title": "solar mass"
+        }
+    },
+    "symbol": "SI-4"
+}
