@@ -18,8 +18,6 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
-#define quote(x) #x
-
 using namespace projectSolar::Simulation;
 
 constexpr double gravitationalConstant = 1.0;
@@ -43,7 +41,7 @@ int main()
 	LOG_DEBUG("[sandbox] Sandbox started");
 	PROFILE_BEGIN("sandbox");
 
-	
+	runSimulationTest();
 
 	PROFILE_END();
 	LOG_DEBUG("[sandbox] Sandbox finished");
