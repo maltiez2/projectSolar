@@ -39,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{
 	ProjectSection(SolutionItems) = preProject
 		environment\resources\point.png = environment\resources\point.png
 		environment\SI-4.json = environment\SI-4.json
+		environment\resources\test_1_basic.shader = environment\resources\test_1_basic.shader
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "projects", "projects", "{9E208757-349B-4A89-AAB6-C65B440EFAD0}"
