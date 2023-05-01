@@ -45,6 +45,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "projects", "projects", "{9E208757-349B-4A89-AAB6-C65B440EFAD0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphicsTest", "projects\graphics\GraphicsTest\GraphicsTest.vcxproj", "{4CD664CC-16BD-4EDC-8FAA-9D6BF96844E9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6D71940A-B7C1-4CA5-9BF9-96EA16D21CB3} = {6D71940A-B7C1-4CA5-9BF9-96EA16D21CB3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
