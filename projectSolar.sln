@@ -37,6 +37,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimulationRunner", "project
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{897C5345-3FDF-47A9-9069-D4895D6F5E15}"
 	ProjectSection(SolutionItems) = preProject
+		environment\resources\dumpling.png = environment\resources\dumpling.png
 		environment\resources\point.png = environment\resources\point.png
 		environment\SI-4.json = environment\SI-4.json
 		environment\resources\test_1_basic.shader = environment\resources\test_1_basic.shader
