@@ -53,6 +53,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineTest", "projects\prot
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGuiTest", "projects\prototypes\ImGuiTest\ImGuiTest.vcxproj", "{23DDF42F-33E5-459C-8BDE-43192B18FDF5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "fonts", "fonts", "{E25EA028-46AC-4DAC-8ACF-1ABBDD775873}"
+	ProjectSection(SolutionItems) = preProject
+		environment\resources\fonts\Comfortaa-Bold.ttf = environment\resources\fonts\Comfortaa-Bold.ttf
+		environment\resources\fonts\Comfortaa-Regular.ttf = environment\resources\fonts\Comfortaa-Regular.ttf
+		environment\resources\fonts\default.ttf = environment\resources\fonts\default.ttf
+		environment\resources\fonts\FiraCode-Regular.ttf = environment\resources\fonts\FiraCode-Regular.ttf
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -151,6 +159,7 @@ Global
 		{4CD664CC-16BD-4EDC-8FAA-9D6BF96844E9} = {4A034B26-F164-4169-BD7B-087510740F76}
 		{080665F7-770E-4071-BA6F-476423E8137D} = {4A034B26-F164-4169-BD7B-087510740F76}
 		{23DDF42F-33E5-459C-8BDE-43192B18FDF5} = {4A034B26-F164-4169-BD7B-087510740F76}
+		{E25EA028-46AC-4DAC-8ACF-1ABBDD775873} = {897C5345-3FDF-47A9-9069-D4895D6F5E15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C49C8625-9977-42C1-9EE7-8BA0DB0A6714}

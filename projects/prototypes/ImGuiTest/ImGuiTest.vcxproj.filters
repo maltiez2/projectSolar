@@ -33,13 +33,16 @@
     <ClInclude Include="vendor\imgui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\imgui_impl_glfw.h">
+    <ClInclude Include="vendor\opengl\imgui_impl_glfw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\imgui_impl_opengl3.h">
+    <ClInclude Include="vendor\opengl\imgui_impl_opengl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\imgui_impl_opengl3_loader.h">
+    <ClInclude Include="vendor\opengl\imgui_impl_opengl3_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,13 +62,16 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\imgui_impl_glfw.cpp">
+    <ClCompile Include="vendor\opengl\imgui_impl_glfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\imgui_impl_opengl3.cpp">
+    <ClCompile Include="vendor\opengl\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
