@@ -2,8 +2,6 @@
 
 #include <vector>
 
-#include "Common.h"
-
 struct VertexBufferElement
 {
 	uint32_t type;
@@ -23,7 +21,7 @@ struct VertexBufferElement
 		case GL_UNSIGNED_BYTE:
 			return 1;
 		default:
-			ASSERT(false);
+			__debugbreak();
 			return 0;
 		}
 	}
@@ -37,7 +35,7 @@ public:
 	template<typename T>
 	void push(size_t count)
 	{
-		ASSERT(false);
+		__debugbreak();
 	}
 
 	template<>

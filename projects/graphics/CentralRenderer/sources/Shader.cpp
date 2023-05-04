@@ -1,10 +1,12 @@
+#include "GraphicsCore.h"
+
 #include "Shader.h"
+#include "Logger.h"
 
 #include <fstream>
 #include <sstream>
 
-#include "Logger.h"
-#include "Common.h"
+
 
 Shader::Shader(const std::string& filename) :
 	m_filename(filename)
@@ -15,7 +17,7 @@ Shader::Shader(const std::string& filename) :
 
 Shader::~Shader()
 {
-	GLCall(glDeleteProgram(m_rendererID));
+	glDeleteProgram(m_rendererID);
 }
 
 Shader::ShaderProgramSource Shader::parseShader()
@@ -99,27 +101,27 @@ uint32_t Shader::createShader(const std::string& vertexShaderSource, const std::
 
 void Shader::bind() const
 {
-	GLCall(glUseProgram(m_rendererID));
+	glUseProgram(m_rendererID);
 }
 
 void Shader::unbind() const
 {
-	GLCall(glUseProgram(0));
+	glUseProgram(0);
 }
 
 void Shader::setUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
-	GLCall(glUniform4f(getUniformLocation(name), v0, v1, v2, v3));
+	glUniform4f(getUniformLocation(name), v0, v1, v2, v3);
 }
 
 void Shader::setUniformMat4f(const std::string& name, const glm::mat4& matrix)
 {
-	GLCall(glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &matrix[0][0]));
+	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
 }
 
 void Shader::setUniform1i(const std::string& name, int value)
 {
-	GLCall(glUniform1i(getUniformLocation(name), value));
+	glUniform1i(getUniformLocation(name), value);
 }
 
 int64_t Shader::getUniformLocation(const std::string& name)

@@ -2,8 +2,6 @@
 
 #include <string>
 
-extern struct GLFWwindow;
-
 namespace projectSolar
 {
 	struct GuiProperties

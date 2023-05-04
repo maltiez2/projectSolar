@@ -1,11 +1,7 @@
+#include "GraphicsCore.h"
+
 #include "Window.h"
 #include "Logger.h"
-
-#include "imgui/imgui.h"
-#include "opengl/imgui_impl_glfw.h"
-#include "opengl/imgui_impl_opengl3.h"
-
-#include <GLFW/glfw3.h>
 
 using namespace projectSolar;
 
@@ -79,8 +75,10 @@ void Window::init(const WindowProperties& properties)
 		return;
 	}
 
-	GLFWmonitor* primary = glfwGetPrimaryMonitor();
-	const GLFWvidmode* mode = glfwGetVideoMode(primary);
+	//GLFWmonitor* primary = glfwGetPrimaryMonitor(); // for release
+	int count;
+	GLFWmonitor** monitors = glfwGetMonitors(&count); // for debug
+	const GLFWvidmode* mode = glfwGetVideoMode(monitors[2]);
 
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
 	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
@@ -91,13 +89,15 @@ void Window::init(const WindowProperties& properties)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
 	
-	m_window = glfwCreateWindow(mode->width, mode->height, properties.title.c_str(), primary, nullptr);
+	m_window = glfwCreateWindow(mode->width, mode->height, properties.title.c_str(), monitors[2], nullptr);
 	if (m_window == nullptr)
 	{
 		LOG_ERROR("Unable to create window");
 		shutdown();
 		return;
 	}
+
+	glewInit();
 
 	glfwSetWindowUserPointer((GLFWwindow*)m_window, this);
 
@@ -107,6 +107,14 @@ void Window::init(const WindowProperties& properties)
 	setVSync(properties.VSync);
 
 	glfwSetWindowSizeCallback((GLFWwindow*)m_window, glfwResizeCallback);
+
+	if (int error = glewInit(); error != GLEW_OK)
+	{
+		LOG_ERROR("Error on glew init: " + std::to_string(error));
+		return;
+	}
+
+	LOG_INFO((std::string)"GL version: " + (char*)glGetString(GL_VERSION));
 
 	setupImGui(properties.guiProperties);
 

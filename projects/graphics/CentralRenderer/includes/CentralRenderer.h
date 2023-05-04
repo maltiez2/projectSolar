@@ -1,4 +1,4 @@
 #pragma once
 
-#include "Renderer.h"
-#include "Texture.h"
+#include "../sources/Renderer.h"
+#include "../sources/Texture.h"

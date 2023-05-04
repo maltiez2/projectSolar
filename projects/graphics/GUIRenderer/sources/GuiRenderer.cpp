@@ -1,10 +1,6 @@
+#include "GraphicsCore.h"
+
 #include "GuiRenderer.h"
-
-#include "imgui/imgui.h"
-#include "opengl/imgui_impl_glfw.h"
-#include "opengl/imgui_impl_opengl3.h"
-
-#include <GLFW/glfw3.h>
 
 projectSolar::GuiRenderer::GuiRenderer(Window* window) :
 	m_window(window)
@@ -30,7 +26,6 @@ void projectSolar::GuiRenderer::render()
 		}
 	}
 
-	auto clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
 	const ImGuiIO& io = ImGui::GetIO();
 
 	ImGui::Render();
@@ -38,8 +33,6 @@ void projectSolar::GuiRenderer::render()
 	int display_h;
 	glfwGetFramebufferSize((GLFWwindow*)m_window->getNativeWindow(), &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
-	glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

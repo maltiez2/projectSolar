@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Common.h"
-
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
