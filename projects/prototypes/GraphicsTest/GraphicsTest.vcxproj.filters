@@ -39,9 +39,6 @@
     <ClCompile Include="sources\Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\stb_image\stb_image.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sources\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,13 +51,16 @@
     <ClCompile Include="vendor\imGui\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vendor\imGui\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="vendor\imGui\imgui_tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vendor\imGui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\imGui\imgui_impl_glfw.cpp">
+    <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,9 +86,6 @@
     <ClInclude Include="headers\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\stb_image\stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="headers\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imGui\imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imGui\imgui_impl_glfw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vendor\imGui\imgui_internal.h">
@@ -110,7 +110,7 @@
     <ClInclude Include="vendor\imGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\imGui\imgui_impl_glfw.h">
+    <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

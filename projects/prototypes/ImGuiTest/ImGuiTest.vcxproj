@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG_LOGGING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)vendor;$(ProjectDir)headers;$(SolutionDir)projects\simulation\SimulationRunner\headers;$(SolutionDir)projects\general\Profiler\headers;$(SolutionDir)projects\general\EntityComponentSystem\headers;$(SolutionDir)projects\general\Logger\headers;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\Core\includes;$(SolutionDir)projects\general\GUIRenderer\includes;$(SolutionDir)projects\general\CentralRenderer\includes;$(SolutionDir)projects\general\SimulationRunner\includes;$(SolutionDir)projects\general\EntityComponentSystem\includes;%(AdditionalIncludeDirectories)$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,7 +131,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)vendor;$(ProjectDir)headers;$(SolutionDir)projects\simulation\SimulationRunner\headers;$(SolutionDir)projects\general\Profiler\headers;$(SolutionDir)projects\general\EntityComponentSystem\headers;$(SolutionDir)projects\general\Logger\headers;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\Core\includes;$(SolutionDir)projects\general\GUIRenderer\includes;$(SolutionDir)projects\general\CentralRenderer\includes;$(SolutionDir)projects\general\SimulationRunner\includes;$(SolutionDir)projects\general\EntityComponentSystem\includes;%(AdditionalIncludeDirectories)$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,10 +143,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="headers\Application.h" />
-    <ClInclude Include="headers\GuiRenderer.h" />
-    <ClInclude Include="headers\GuiWindow.h" />
-    <ClInclude Include="headers\Window.h" />
+    <ClInclude Include="sources\Application.h" />
+    <ClInclude Include="sources\GuiRenderer.h" />
+    <ClInclude Include="sources\GuiWindow.h" />
+    <ClInclude Include="sources\Window.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
     <ClInclude Include="vendor\imgui\imgui_internal.h" />

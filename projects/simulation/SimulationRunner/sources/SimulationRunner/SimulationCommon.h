@@ -2,7 +2,7 @@
 
 #include "Logger.h"
 #include "Profiler.h"
-#include "Components.h"
+#include "EntityComponentSystem.h"
 
 #include <Eigen/Core>
 #include <oneapi/tbb.h>

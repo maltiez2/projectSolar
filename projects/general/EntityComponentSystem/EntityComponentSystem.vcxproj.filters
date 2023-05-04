@@ -20,13 +20,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\EntityComponentSystem.h">
+    <ClInclude Include="sources\EntityComponentSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Components.h">
+    <ClInclude Include="sources\Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Serialization.h">
+    <ClInclude Include="sources\Serialization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\EntityComponentSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

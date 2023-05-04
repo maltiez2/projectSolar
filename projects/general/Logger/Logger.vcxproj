@@ -120,7 +120,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)headers;$(SolutionDir)projects\simulation\SimulationRunner\headers;$(SolutionDir)projects\general\Profiler\headers;$(SolutionDir)projects\general\EntityComponentSystem\headers;$(SolutionDir)projects\general\Logger\headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(ProjectDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\includes;$(SolutionDir)projects\simulation\SimulationRunner\includes;$(SolutionDir)projects\graphics\CentralRenderer\includes;$(SolutionDir)projects\graphics\GUIRenderer\includes;$(SolutionDir)projects\core\Core\includes;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
@@ -143,7 +143,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)headers;$(SolutionDir)projects\simulation\SimulationRunner\headers;$(SolutionDir)projects\general\Profiler\headers;$(SolutionDir)projects\general\EntityComponentSystem\headers;$(SolutionDir)projects\general\Logger\headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(ProjectDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\includes;$(SolutionDir)projects\simulation\SimulationRunner\includes;$(SolutionDir)projects\graphics\CentralRenderer\includes;$(SolutionDir)projects\graphics\GUIRenderer\includes;$(SolutionDir)projects\core\Core\includes;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -155,7 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="headers\Logger.h" />
+    <ClInclude Include="sources\Logger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\Logger.cpp" />

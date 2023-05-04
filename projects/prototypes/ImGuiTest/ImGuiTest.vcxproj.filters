@@ -42,16 +42,16 @@
     <ClInclude Include="vendor\opengl\imgui_impl_opengl3_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Window.h">
+    <ClInclude Include="sources\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\Application.h">
+    <ClInclude Include="sources\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\GuiWindow.h">
+    <ClInclude Include="sources\GuiWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\GuiRenderer.h">
+    <ClInclude Include="sources\GuiRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vendor\implot\implot.h">
