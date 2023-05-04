@@ -25,6 +25,5 @@ namespace imGuiTest
 	private:
 		Window* m_window;
 		std::unordered_map <std::string, GuiWindow*> m_guiWindows;
-		std::unordered_map < std::string, bool> m_showWindows;
 	};
 }

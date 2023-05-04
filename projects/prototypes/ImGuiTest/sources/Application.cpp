@@ -28,13 +28,19 @@ void Application::run()
     auto renderer = imGuiTest::GuiRenderer(&window);
 
     auto guiWindow = imGuiTest::NotificationWindow("Test window", "Test text of test window");
+    auto debugWindow = imGuiTest::DebugWindow();
+    auto demoWindow = imGuiTest::DemoWindow();
 
     renderer.addGuiWindow("test", &guiWindow, true);
+    renderer.addGuiWindow("debug", &debugWindow, true);
+    renderer.addGuiWindow("demo", &demoWindow, true);
 
     // Main loop
     while (!glfwWindowShouldClose((GLFWwindow*)window.getNativeWindow()))
     {
         glfwPollEvents();
+
+        demoWindow.showFlag = debugWindow.showDemoWindow;
 
         renderer.render();
 

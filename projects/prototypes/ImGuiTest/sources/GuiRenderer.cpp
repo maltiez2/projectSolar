@@ -19,10 +19,12 @@ void imGuiTest::GuiRenderer::render()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+
+	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
 	
 	for (auto const& [id, window] : m_guiWindows)
 	{
-		if (m_showWindows.at(id))
+		if (window->showFlag)
 		{
 			window->show();
 		}
@@ -51,48 +53,47 @@ void imGuiTest::GuiRenderer::render()
 
 bool imGuiTest::GuiRenderer::addGuiWindow(const std::string& id, GuiWindow* window, bool show)
 {
-	if (m_showWindows.contains(id))
+	if (m_guiWindows.contains(id))
 	{
 		return false;
 	}
 
 	m_guiWindows.try_emplace(id, window);
-	m_showWindows.try_emplace(id, show);
+	m_guiWindows[id]->showFlag = show;
 	
 	return true;
 }
 bool imGuiTest::GuiRenderer::showGuiWindow(const std::string& id, bool show)
 {
-	if (!m_showWindows.contains(id))
+	if (!m_guiWindows.contains(id))
 	{
 		return false;
 	}
 	
-	m_showWindows[id] = show;
+	m_guiWindows[id]->showFlag = show;
 
 	return true;
 }
 bool imGuiTest::GuiRenderer::delGuiWindow(const std::string& id)
 {
-	if (!m_showWindows.contains(id))
+	if (!m_guiWindows.contains(id))
 	{
 		return false;
 	}
 
-	m_showWindows.erase(id);
 	m_guiWindows.erase(id);
 	
 	return true;
 }
 bool imGuiTest::GuiRenderer::ifGuiWindowExists(const std::string& id) const
 {
-	return m_showWindows.contains(id);
+	return m_guiWindows.contains(id);
 }
 bool imGuiTest::GuiRenderer::ifGuiWindowShown(const std::string& id) const
 {
-	if (!m_showWindows.contains(id))
+	if (!m_guiWindows.contains(id))
 	{
 		return false;
 	}
-	return m_showWindows.at(id);
+	return m_guiWindows.at(id)->showFlag;
 }

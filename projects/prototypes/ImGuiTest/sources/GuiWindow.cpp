@@ -16,42 +16,21 @@ imGuiTest::NotificationWindow::NotificationWindow(const std::string& title, cons
 }
 void imGuiTest::NotificationWindow::show()
 {
-    bool show_demo_window;
-    const ImGuiIO& io = ImGui::GetIO();
-    
-    ImGui::ShowDemoWindow(&show_demo_window);
-
-    ImGui::ShowStyleEditor();
-
-    if (false)
-    {
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(viewport->WorkSize);
-        ImGui::SetNextWindowViewport(viewport->ID);
-    }
-
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-
-    bool mainWindowOpen;
-    ImGui::Begin(m_title.c_str(), &mainWindowOpen, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoMove);
-
-    static float f = 0.0f;
-    static int counter = 0;
-
+    ImGui::Begin(m_title.c_str(), &showFlag);
     ImGui::Text(m_message.c_str());
-    ImGui::Checkbox("Demo Window", &show_demo_window);
-
-    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-
-    if (ImGui::Button("Button"))
-        counter++;
-    ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
-
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
     ImGui::End();
-    ImGui::PopStyleVar(1);
 }
 
+void imGuiTest::DebugWindow::show()
+{
+    ImGui::Begin("Debug", &showFlag);
+    ImGui::Checkbox("Demo Window", &showDemoWindow);
+    const ImGuiIO& io = ImGui::GetIO();
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+    ImGui::End();
+}
 
+void imGuiTest::DemoWindow::show()
+{
+    ImGui::ShowDemoWindow(&showFlag);
+}

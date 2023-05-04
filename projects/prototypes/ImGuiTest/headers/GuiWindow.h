@@ -7,6 +7,8 @@ namespace imGuiTest
 	class GuiWindow
 	{
 	public:
+		bool showFlag = true;
+
 		GuiWindow() = default;
 		virtual ~GuiWindow() = default;
 		
@@ -24,6 +26,24 @@ namespace imGuiTest
 	private:
 		std::string m_title;
 		std::string m_message;
+	};
+	class DebugWindow : public GuiWindow
+	{
+	public:
+		bool showDemoWindow = false;
+		
+		DebugWindow() = default;
+		~DebugWindow() override = default;
+
+		void show() override;
+	};
+	class DemoWindow : public GuiWindow
+	{
+	public:
+		DemoWindow() = default;
+		~DemoWindow() override = default;
+
+		void show() override;
 	};
 
 }
