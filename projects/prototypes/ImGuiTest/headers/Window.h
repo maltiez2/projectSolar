@@ -2,6 +2,8 @@
 
 #include <string>
 
+extern struct GLFWwindow;
+
 namespace imGuiTest
 {
 	struct GuiProperties
@@ -42,10 +44,13 @@ namespace imGuiTest
 		// Setters
 		void setVSync(bool enabled);
 		void setFont(const std::string& font);
+		void setSize(uint32_t width, uint32_t height);
 
 	private:
 		const char* fontsFolder = "resources/fonts";
 		const char* glslVersion = "#version 130";
+		const int glMajorVersion = 3;
+		const int glMinorVersion = 3;
 		
 		void* m_window;
 		WindowProperties m_properties;

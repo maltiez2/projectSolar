@@ -143,6 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="headers\Application.h" />
+    <ClInclude Include="headers\GuiRenderer.h" />
+    <ClInclude Include="headers\GuiWindow.h" />
     <ClInclude Include="headers\Window.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
@@ -155,6 +158,9 @@
     <ClInclude Include="vendor\opengl\imgui_impl_opengl3_loader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="sources\Application.cpp" />
+    <ClCompile Include="sources\GuiRenderer.cpp" />
+    <ClCompile Include="sources\GuiWindow.cpp" />
     <ClCompile Include="sources\Window.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />

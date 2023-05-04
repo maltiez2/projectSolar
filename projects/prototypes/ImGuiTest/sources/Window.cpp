@@ -9,9 +9,14 @@
 
 using namespace imGuiTest;
 
-static void glfw_error_callback(int error, const char* description)
+static void glfwErrorCallback(int error, const char* description)
 {
 	LOG_ERROR((std::string)"[OpenGL] (" + std::to_string(error) + "): " + description);
+}
+
+static void glfwResizeCallback(GLFWwindow* window, int width, int height)
+{
+	((Window*)glfwGetWindowUserPointer(window))->setSize(width, height);
 }
 
 Window::Window(const WindowProperties& properties)
@@ -49,24 +54,43 @@ void Window::setFont(const std::string& font)
 {
 	ImGui::GetIO().Fonts->AddFontFromFileTTF((fontsFolder + ("/" + font)).c_str(), 15.0f);
 }
+void Window::setSize(uint32_t width, uint32_t height)
+{
+	int currentWidth;
+	int currentHeight;
+	glfwGetWindowSize((GLFWwindow*)m_window, &currentWidth, &currentHeight);
+	if (width != currentWidth || height != currentHeight)
+	{
+		glfwSetWindowSize((GLFWwindow*)m_window, width, height);
+	}
+	m_properties.width = width;
+	m_properties.height = height;
+	LOG_DEBUG("Set size");
+}
 
 void Window::init(const WindowProperties& properties)
 {
 	LOG_DEBUG("Window initialization started");
 	
-	glfwSetErrorCallback(glfw_error_callback);
+	glfwSetErrorCallback(glfwErrorCallback);
 	if (!glfwInit())
 	{
 		LOG_ERROR("Unable to initialize GLFW");
 		return;
 	}
 
-	const char* glsl_version = "#version 130";
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	GLFWmonitor* primary = glfwGetPrimaryMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(primary);
+
+	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajorVersion);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinorVersion);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	
-	m_window = glfwCreateWindow(properties.width, properties.height, properties.title.c_str(), nullptr, nullptr);
+	m_window = glfwCreateWindow(mode->width, mode->height, properties.title.c_str(), primary, nullptr);
 	if (m_window == nullptr)
 	{
 		LOG_ERROR("Unable to create window");
@@ -74,10 +98,14 @@ void Window::init(const WindowProperties& properties)
 		return;
 	}
 
+	glfwSetWindowUserPointer((GLFWwindow*)m_window, this);
+
 	m_properties = properties;
 
 	glfwMakeContextCurrent((GLFWwindow*)m_window);
 	setVSync(properties.VSync);
+
+	glfwSetWindowSizeCallback((GLFWwindow*)m_window, glfwResizeCallback);
 
 	setupImGui(properties.guiProperties);
 
@@ -105,7 +133,8 @@ void Window::setupImGui(const GuiProperties& properties)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+	io.IniFilename = NULL;
 
     ImGui::StyleColorsDark();
 
@@ -118,7 +147,7 @@ void Window::setupImGui(const GuiProperties& properties)
         style.GrabRounding = 5.0f;
         style.PopupRounding = 5.0f;
         style.ScrollbarRounding = 5.0f;
-        //style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
     ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)m_window, true);
