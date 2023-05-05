@@ -39,6 +39,7 @@ namespace projectSolar
 		void show() override;
 
 		float scale = 1.0f;
+		float timeScale = 1.0f;
 		bool runSimulation = false;
 		bool closeApp = false;
 	};
@@ -60,5 +61,6 @@ namespace projectSolar
 
 		float direction = 0.0;
 		float magnitude = 0.0;
+		bool followPlayer = true;
 	};
 }

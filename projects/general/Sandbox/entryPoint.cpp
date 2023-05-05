@@ -26,6 +26,7 @@ constexpr size_t attractantsAmount = 50;
 constexpr double bigMass = 1e0;
 constexpr double mediumMass = 1e-2;
 constexpr double smallerMass = 1e-5;
+constexpr double smallestMass = 1e-7;
 constexpr double initSpeed = 1.0;
 constexpr double initOrbit = 1.0;
 
@@ -64,7 +65,7 @@ int main()
 	}
 
 	Eigen::Vector3d forceVector(0.0, 0.0, 0.0);
-	data.propulsedData.addElement({ smallerMass, radiusVector * 2.0f, velocityVector / 2.0f, forceVector });
+	data.propulsedData.addElement({ smallestMass, radiusVector * 2.0f, forceVector, forceVector });
 
 	data.save("data_ser_test");
 

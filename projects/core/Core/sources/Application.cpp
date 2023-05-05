@@ -179,7 +179,7 @@ void Application::run()
 
         if (debugWindow.runSimulation)
         {
-            m_simulation.run({ 1.0f, 5e-2, 0.3f, 60, 10, -0.1f });
+            m_simulation.run({ 1.0f, 5e-2 * debugWindow.timeScale, 0.3f, 60, 10, -0.1f});
         }
 
         // *** Central ***
@@ -187,6 +187,10 @@ void Application::run()
         float scale = 0.05f * debugWindow.scale;
         glm::mat4 proj = glm::ortho(-1.0f * scale * window.getWidth(), 1.0f * scale * window.getWidth(), -1.0f * scale * window.getWidth(), 1.0f * scale * window.getHeight(), -1.0f, 1.0f);
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-player.position[0], -player.position[1], 0));
+        if (!propWindow.followPlayer)
+        {
+            view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+        }
         glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
         glm::mat4 mvp = proj * view * model;
 
