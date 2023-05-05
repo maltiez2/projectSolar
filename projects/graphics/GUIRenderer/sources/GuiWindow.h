@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <Eigen/Eigen>
 
 namespace projectSolar
 {
@@ -36,6 +37,10 @@ namespace projectSolar
 		~DebugWindow() override = default;
 
 		void show() override;
+
+		float scale = 1.0f;
+		bool runSimulation = false;
+		bool closeApp = false;
 	};
 	class DemoWindow : public GuiWindow
 	{
@@ -45,5 +50,15 @@ namespace projectSolar
 
 		void show() override;
 	};
+	class PropulsionControlWindow : public GuiWindow
+	{
+	public:
+		PropulsionControlWindow() = default;
+		~PropulsionControlWindow() override = default;
 
+		void show() override;
+
+		float direction = 0.0;
+		float magnitude = 0.0;
+	};
 }

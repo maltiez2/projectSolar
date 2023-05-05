@@ -87,7 +87,7 @@ namespace projectSolar::Simulation
 		void operator()(const oneapi::tbb::blocked_range<size_t>& range) const
 		{			
 			const auto& attractantsData = m_attractants.getData();
-			auto& attractantsBuffer = m_attractants.getData();
+			auto& attractantsBuffer = m_attractants.getBuffer();
 
 			for (auto index = range.begin(); index != range.end(); index++)
 			{

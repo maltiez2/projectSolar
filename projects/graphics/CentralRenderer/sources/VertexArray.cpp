@@ -1,6 +1,9 @@
 #include "GraphicsCore.h"
 
 #include "VertexArray.h"
+#include "Logger.h"
+
+#include <string>
 
 VertexArray::VertexArray()
 {
@@ -22,7 +25,18 @@ void VertexArray::addBufer(const VertexBuffer& vb, const VertexBufferLayout& lay
 	{
 		const auto& element = elements[i];
 		glEnableVertexAttribArray(i);
-		glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset);
+		switch (element.type)
+		{
+		case GL_FLOAT:
+			glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset);
+			break;
+		case GL_DOUBLE:
+			glVertexAttribLPointer(i, element.count, element.type, layout.getStride(), (const void*)offset);
+			break;
+		default:
+			glVertexAttribIPointer(i, element.count, element.type, layout.getStride(), (const void*)offset);
+		}
+		
 		offset += element.count * VertexBufferElement::getSizeOfType(element.type);
 	}
 }

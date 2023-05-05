@@ -1,6 +1,12 @@
 #include "GraphicsCore.h"
 
 #include "Renderer.h"
+#include "Logger.h"
+
+Renderer::Renderer()
+{
+	glEnable(GL_PROGRAM_POINT_SIZE);
+}
 
 void Renderer::clear() const
 {
@@ -13,5 +19,5 @@ void Renderer::draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 	va.bind();
 	ib.bind();
 
-	glDrawElements(GL_TRIANGLES, ib.getCount(), GL_UNSIGNED_SHORT, nullptr);
+	glDrawElements(GL_POINTS, ib.getCount(), GL_UNSIGNED_INT, nullptr);
 }

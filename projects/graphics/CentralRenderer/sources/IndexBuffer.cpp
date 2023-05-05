@@ -2,12 +2,12 @@
 
 #include "IndexBuffer.h"
 
-IndexBuffer::IndexBuffer(const uint16_t* data, size_t count) :
+IndexBuffer::IndexBuffer(const uint32_t* data, uint32_t count) :
 	m_count(count)
 {
 	glGenBuffers(1, &m_rendererID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint16_t), data, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), data, GL_STATIC_DRAW);
 }
 
 IndexBuffer::~IndexBuffer()

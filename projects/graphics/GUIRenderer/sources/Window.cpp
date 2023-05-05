@@ -78,7 +78,8 @@ void Window::init(const WindowProperties& properties)
 	//GLFWmonitor* primary = glfwGetPrimaryMonitor(); // for release
 	int count;
 	GLFWmonitor** monitors = glfwGetMonitors(&count); // for debug
-	const GLFWvidmode* mode = glfwGetVideoMode(monitors[2]);
+	int monitorNumber = 2;
+	const GLFWvidmode* mode = glfwGetVideoMode(monitors[monitorNumber]);
 
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
 	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
@@ -89,7 +90,7 @@ void Window::init(const WindowProperties& properties)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
 	
-	m_window = glfwCreateWindow(mode->width, mode->height, properties.title.c_str(), monitors[2], nullptr);
+	m_window = glfwCreateWindow(mode->width, mode->height, properties.title.c_str(), monitors[monitorNumber], nullptr);
 	if (m_window == nullptr)
 	{
 		LOG_ERROR("Unable to create window");
@@ -117,6 +118,9 @@ void Window::init(const WindowProperties& properties)
 	LOG_INFO((std::string)"GL version: " + (char*)glGetString(GL_VERSION));
 
 	setupImGui(properties.guiProperties);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	LOG_DEBUG("Window initialization complete");
 }

@@ -19,7 +19,10 @@ void projectSolar::NotificationWindow::show()
 void projectSolar::DebugWindow::show()
 {
     ImGui::Begin("Debug", &showFlag);
+    ImGui::SliderFloat("Scale", &scale, 0.0f, 10.0f);
+    ImGui::Checkbox("Run simulation", &runSimulation);
     ImGui::Checkbox("Demo Window", &showDemoWindow);
+    closeApp = ImGui::Button("Close app");
     const ImGuiIO& io = ImGui::GetIO();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
     ImGui::End();
@@ -28,4 +31,12 @@ void projectSolar::DebugWindow::show()
 void projectSolar::DemoWindow::show()
 {
     ImGui::ShowDemoWindow(&showFlag);
+}
+
+void projectSolar::PropulsionControlWindow::show()
+{
+    ImGui::Begin("Propulsion control", &showFlag);
+    ImGui::SliderFloat("Direction", &direction, 0.0f, 2.0f * 3.1415f);
+    ImGui::SliderFloat("Magnitude", &magnitude, 0.0f, 1.0f);
+    ImGui::End();
 }

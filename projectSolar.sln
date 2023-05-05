@@ -37,7 +37,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{
 		environment\resources\dumpling.png = environment\resources\dumpling.png
 		environment\resources\point.png = environment\resources\point.png
 		environment\SI-4.json = environment\SI-4.json
-		environment\resources\test_1_basic.shader = environment\resources\test_1_basic.shader
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "projects", "projects", "{9E208757-349B-4A89-AAB6-C65B440EFAD0}"
@@ -80,6 +79,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "projects\core\Core\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphicsCore", "projects\graphics\GraphicsCore\GraphicsCore.vcxproj", "{D3D68A8B-B0E1-4820-905C-69704DDC96A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{78F864D8-69CE-4A2E-9FCA-D662374003BF}"
+	ProjectSection(SolutionItems) = preProject
+		environment\resources\shaders\map.shader = environment\resources\shaders\map.shader
+		environment\resources\shaders\test_1_basic.shader = environment\resources\shaders\test_1_basic.shader
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -208,6 +213,7 @@ Global
 		{43CC44DF-B803-4481-8075-38235A5FE0C6} = {9E208757-349B-4A89-AAB6-C65B440EFAD0}
 		{FD90C7DE-EC59-4A3F-9102-48C1F7700EE4} = {43CC44DF-B803-4481-8075-38235A5FE0C6}
 		{D3D68A8B-B0E1-4820-905C-69704DDC96A4} = {326FBEC7-3278-4236-9F6C-3DF35A43D543}
+		{78F864D8-69CE-4A2E-9FCA-D662374003BF} = {897C5345-3FDF-47A9-9069-D4895D6F5E15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C49C8625-9977-42C1-9EE7-8BA0DB0A6714}
