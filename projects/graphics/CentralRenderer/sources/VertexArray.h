@@ -3,17 +3,20 @@
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 
-class VertexArray
+namespace projectSolar
 {
-public:
-	VertexArray();
-	~VertexArray();
+	class VertexArray
+	{
+	public:
+		VertexArray();
+		~VertexArray();
 
-	void addBufer(const VertexBuffer& vb, const VertexBufferLayout& layout);
+		void addBufer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 
-	void bind() const;
-	void unbind() const;
+		void bind() const;
+		void unbind() const;
 
-private:
-	uint32_t m_rendererID;
-};
+	private:
+		uint32_t m_rendererID;
+	};
+}

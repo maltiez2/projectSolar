@@ -2,16 +2,19 @@
 
 #include <stdint.h>
 
-class VertexBuffer
+namespace projectSolar
 {
-public:
-	VertexBuffer(const void* data, size_t size);
-	~VertexBuffer();
+	class VertexBuffer
+	{
+	public:
+		VertexBuffer(const void* data, size_t size);
+		~VertexBuffer();
 
-	void updateData(const void* data, size_t size) const;
-	void bind() const;
-	void unbind() const;
+		void updateData(const void* data, size_t size) const;
+		void bind() const;
+		void unbind() const;
 
-private:
-	uint32_t m_rendererID;
-};
+	private:
+		uint32_t m_rendererID;
+	};
+}

@@ -4,6 +4,8 @@
 
 #include "stb_image/stb_image.h"
 
+using namespace projectSolar;
+
 Texture::Texture(const std::string& path) :
 	m_filePath(path)
 {

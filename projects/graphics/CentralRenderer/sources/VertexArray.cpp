@@ -5,6 +5,8 @@
 
 #include <string>
 
+using namespace projectSolar;
+
 VertexArray::VertexArray()
 {
 	glGenVertexArrays(1, &m_rendererID);

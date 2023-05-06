@@ -2,6 +2,8 @@
 
 #include "VertexBuffer.h"
 
+using namespace projectSolar;
+
 VertexBuffer::VertexBuffer(const void* data, size_t size)
 {
 	glGenBuffers(1, &m_rendererID);

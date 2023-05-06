@@ -142,10 +142,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="sources\Application.cpp" />
+    <ClCompile Include="sources\MapLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\Core.h" />
     <ClInclude Include="sources\Application.h" />
+    <ClInclude Include="sources\MapLayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,18 +2,21 @@
 
 #include <stdint.h>
 
-class IndexBuffer
+namespace projectSolar
 {
-public:
-	IndexBuffer(const uint32_t* data, uint32_t count);
-	~IndexBuffer();
+	class IndexBuffer
+	{
+	public:
+		IndexBuffer(const uint32_t* data, uint32_t count);
+		~IndexBuffer();
 
-	void bind() const;
-	void unbind() const;
+		void bind() const;
+		void unbind() const;
 
-	inline uint32_t getCount() const { return m_count; };
+		inline uint32_t getCount() const { return m_count; };
 
-private:
-	uint32_t m_rendererID;
-	uint32_t m_count;
-};
+	private:
+		uint32_t m_rendererID;
+		uint32_t m_count;
+	};
+}

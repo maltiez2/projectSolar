@@ -6,7 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-
+using namespace projectSolar;
 
 Shader::Shader(const std::string& filename) :
 	m_filename(filename)

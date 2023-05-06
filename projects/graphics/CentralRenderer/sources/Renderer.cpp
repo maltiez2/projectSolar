@@ -3,6 +3,8 @@
 #include "Renderer.h"
 #include "Logger.h"
 
+using namespace projectSolar;
+
 Renderer::Renderer()
 {
 	glEnable(GL_PROGRAM_POINT_SIZE);

@@ -78,7 +78,7 @@ void Window::init(const WindowProperties& properties)
 	//GLFWmonitor* primary = glfwGetPrimaryMonitor(); // for release
 	int count;
 	GLFWmonitor** monitors = glfwGetMonitors(&count); // for debug
-	int monitorNumber = 2;
+	int monitorNumber = 0;
 	const GLFWvidmode* mode = glfwGetVideoMode(monitors[monitorNumber]);
 
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
