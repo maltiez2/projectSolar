@@ -1,41 +1,35 @@
 #define PROFILING
-#define DEBUG_LOGGING
 
 #pragma warning (disable: 4703)
 
+#include "Core.h"
+
 #include "Logger.h"
 #include "Profiler.h"
-#include "SimulationRunner.h"
-#include "Serialization.h"
 
 #define _USE_MATH_DEFINES
+
+#include "SimulationRunner.h"
 
 #include <iostream>
 #include <array>
 #include <math.h>
 #include <string>
-
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-
-#define quote(x) #x
 
 using namespace projectSolar::Simulation;
 
 constexpr double gravitationalConstant = 1.0;
-constexpr size_t attractorsAmount = 1e2;
-constexpr size_t attractantsAmount = 1e4;
+constexpr size_t attractorsAmount = 15;
+constexpr size_t attractantsAmount = 50;
 constexpr double bigMass = 1e0;
 constexpr double mediumMass = 1e-2;
 constexpr double smallerMass = 1e-5;
+constexpr double smallestMass = 1e-7;
 constexpr double initSpeed = 1.0;
 constexpr double initOrbit = 1.0;
-constexpr uint32_t stepsNumber = 6e2;
-constexpr double stepSize = 1e-2;
-constexpr uint32_t stepsToLog = 1e1;
-constexpr uint32_t objectsToLog = 10;
 
-void runSimulationTest();
 
 int main()
 {
@@ -43,21 +37,7 @@ int main()
 	LOG_DEBUG("[sandbox] Sandbox started");
 	PROFILE_BEGIN("sandbox");
 
-	
-
-	PROFILE_END();
-	LOG_DEBUG("[sandbox] Sandbox finished");
-	return 0;
-}
-
-void runSimulationTest()
-{
-	PROFILE_FUNCTION();
-	
 	auto runner = SimulationRunner();
-
-	// GENERATING INITIAL DATA
-
 	auto& data = runner.getData();
 
 	double angleForSmall = 2 * M_PI / (double)attractantsAmount;
@@ -75,11 +55,6 @@ void runSimulationTest()
 	{
 		Eigen::AngleAxisd rotation(angleForMedium * (double)(index - 1), rotationAxis);
 		data.attractorsData.addElement({ mediumMass, rotation * radiusVector, rotation * velocityVector });
-
-		if (index % 10 == 0)
-		{
-			LOG_DEBUG("[sandbox] Adding attractor: " + std::to_string(index));
-		}
 	}
 
 	for (size_t index = 0; index < attractantsAmount; index++)
@@ -87,30 +62,18 @@ void runSimulationTest()
 		Eigen::AngleAxisd rotation(angleForSmall * (double)index, rotationAxis);
 
 		data.attractantsData.addElement({ smallerMass, rotation * ((index + 2) * radiusVector), rotation * (velocityVector / (index + 2)) });
-
-		if (index % 100 == 0)
-		{
-			LOG_DEBUG("[sandbox] Adding attractant: " + std::to_string(index));
-		}
 	}
 
-	{
-		PROFILE_SCOPE("save");
-		data.save("data_ser_test");
-	}
+	Eigen::Vector3d forceVector(0.0, 0.0, 0.0);
+	data.propulsedData.addElement({ smallestMass, radiusVector * 2.0f, forceVector, forceVector });
 
-	{
-		PROFILE_SCOPE("load");
-		data.load("data_ser_test");
-	}
+	data.save("data_ser_test");
 
-	
+	auto* app = new projectSolar::Application(runner);
+	app->run();
+	delete(app);
 
-	// RUNNING SIMULATION
-	for (uint32_t step = 0; step < stepsNumber; step++)
-	{
-		PROFILE_SCOPE("step");
-		double secondsElapsed = runner.run({ gravitationalConstant, stepSize, 0.9f, 60, 10, -0.1f });
-		LOG_INFO("[sandbox] Frame: " + std::to_string(step) + ", duration in seconds: " + std::to_string(secondsElapsed) + ", apparent FPS: " + std::to_string(1 / secondsElapsed * 0.8));
-	}
+	PROFILE_END();
+	LOG_DEBUG("[sandbox] Sandbox finished");
+	return 0;
 }

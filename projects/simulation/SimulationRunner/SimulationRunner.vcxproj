@@ -112,10 +112,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG_LOGGING</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG_LOGGING;PROFILING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)headers;$(SolutionDir)projects\simulation\SimulationRunner\headers;$(SolutionDir)projects\general\Profiler\headers;$(SolutionDir)projects\general\EntityComponentSystem\headers;$(SolutionDir)projects\general\Logger\headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(ProjectDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\includes;$(SolutionDir)projects\simulation\SimulationRunner\includes;$(SolutionDir)projects\graphics\CentralRenderer\includes;$(SolutionDir)projects\graphics\GUIRenderer\includes;$(SolutionDir)projects\core\Core\includes;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG_LOGGING;PROFILING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)headers;$(SolutionDir)projects\simulation\SimulationRunner\headers;$(SolutionDir)projects\general\Profiler\headers;$(SolutionDir)projects\general\EntityComponentSystem\headers;$(SolutionDir)projects\general\Logger\headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(ProjectDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\includes;$(SolutionDir)projects\simulation\SimulationRunner\includes;$(SolutionDir)projects\graphics\CentralRenderer\includes;$(SolutionDir)projects\graphics\GUIRenderer\includes;$(SolutionDir)projects\core\Core\includes;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,12 +143,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="headers\SimulationRunner\DataManager.h" />
-    <ClInclude Include="headers\SimulationRunner\Simulations.h" />
-    <ClInclude Include="headers\SimulationRunner\SimulationCommon.h" />
-    <ClInclude Include="headers\SimulationRunner.h" />
-    <ClInclude Include="headers\SimulationRunner\DoubleBufferedContainer.h" />
-    <ClInclude Include="headers\SimulationRunner\Solvers.h" />
+    <ClInclude Include="sources\SimulationRunner\DataManager.h" />
+    <ClInclude Include="sources\SimulationRunner\Simulations.h" />
+    <ClInclude Include="sources\SimulationRunner\SimulationCommon.h" />
+    <ClInclude Include="sources\SimulationRunner.h" />
+    <ClInclude Include="sources\SimulationRunner\DoubleBufferedContainer.h" />
+    <ClInclude Include="sources\SimulationRunner\Solvers.h" />
+    <ClInclude Include="includes\SimulationRunner.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\SimulationRunner.cpp" />

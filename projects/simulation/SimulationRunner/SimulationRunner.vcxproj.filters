@@ -15,22 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\SimulationRunner.h">
+    <ClInclude Include="sources\SimulationRunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\SimulationRunner\SimulationCommon.h">
+    <ClInclude Include="sources\SimulationRunner\SimulationCommon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\SimulationRunner\DoubleBufferedContainer.h">
+    <ClInclude Include="sources\SimulationRunner\DoubleBufferedContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\SimulationRunner\DataManager.h">
+    <ClInclude Include="sources\SimulationRunner\DataManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\SimulationRunner\Simulations.h">
+    <ClInclude Include="sources\SimulationRunner\Simulations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\SimulationRunner\Solvers.h">
+    <ClInclude Include="sources\SimulationRunner\Solvers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\SimulationRunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

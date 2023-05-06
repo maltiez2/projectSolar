@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\Logger.h">
+    <ClInclude Include="sources\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
