@@ -1,10 +1,52 @@
-#include "MapLayer.h"
+#include "Layers.h"
 
 using namespace projectSolar;
 
-MapLayer::MapLayer(Renderer& centralRenderer, Simulation::SimulationRunner& simulation) :
-    m_centralRenderer(centralRenderer),
-    m_simulation(simulation),
+projectSolar::LayersManager::~LayersManager()
+{
+	for (auto& pointer : m_layers)
+	{
+		delete(pointer);
+	}
+}
+void projectSolar::LayersManager::draw()
+{
+    for (auto& [id, layer] : m_attached)
+    {
+        layer->draw();
+    }
+}
+bool projectSolar::LayersManager::attach(const std::size_t& id, Layer* layer)
+{
+    if (m_attached.contains(id));
+    {
+        LOG_ERROR("[LayersManager][attach()] Layer with id '" + std::to_string(id) + "' already exists");
+        return false;
+    }
+
+    m_attached.try_emplace(id, layer);
+    
+    return true;
+}
+Layer* projectSolar::LayersManager::detach(const std::size_t& id)
+{
+    if (!m_attached.contains(id))
+    {
+        LOG_ERROR("[LayersManager][detach()] Layer with id '" + std::to_string(id) + "' does not exist");
+        return nullptr;
+    }
+    
+    auto* layer = m_attached.at(id);
+
+    m_attached.erase(id);
+
+    return layer;
+}
+
+
+MapLayer::MapLayer(Renderer* centralRenderer, Simulation::SimulationRunner* simulation) :
+    m_centralRenderer(*centralRenderer),
+    m_simulation(*simulation),
     m_shader(shaderFile)
 {
     updateData();
@@ -20,14 +62,12 @@ MapLayer::~MapLayer()
     delete(m_vertexBuffer);
     delete(m_indexBuffer);
 }
-
-void MapLayer::draw(glm::mat4 mvp)
+void MapLayer::draw()
 {
     updateData();
 
     m_vertexBuffer->updateData(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
     m_shader.bind();
-    m_shader.setUniformMat4f("u_MVP", mvp);
 
     m_centralRenderer.draw(m_vertexArray, *m_indexBuffer, m_shader);
 
@@ -36,7 +76,12 @@ void MapLayer::draw(glm::mat4 mvp)
     m_vertexBuffer->unbind();
     m_indexBuffer->unbind();
 }
-
+void projectSolar::MapLayer::setMVP(const glm::mat4& mvp)
+{
+    m_shader.bind();
+    m_shader.setUniformMat4f("u_MVP", mvp);
+    m_shader.unbind();
+}
 void MapLayer::updateData()
 {
     auto& dataManager = m_simulation.getData();
@@ -76,4 +121,14 @@ void MapLayer::updateData()
         m_buffer[propulsesIndex + i] = Point(element.position[0], element.position[1], element.position[2], 2);
         LOG_DEBUG("Propulsed at: \t" + std::to_string(element.position[0]) + "\t" + std::to_string(element.position[1]));
     }
+}
+
+projectSolar::GuiLayer::GuiLayer(Window* window, GuiWindowsManager* guiWindows) :
+    m_renderer(*window, *guiWindows)
+{
+}
+
+void projectSolar::GuiLayer::draw()
+{
+    m_renderer.render();
 }

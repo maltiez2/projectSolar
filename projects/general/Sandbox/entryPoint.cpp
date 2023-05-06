@@ -23,12 +23,12 @@ using namespace projectSolar::Simulation;
 constexpr double gravitationalConstant = 1.0;
 constexpr size_t attractorsAmount = 15;
 constexpr size_t attractantsAmount = 50;
-constexpr double bigMass = 1e0;
+constexpr double bigMass = 1e1;
 constexpr double mediumMass = 1e-2;
 constexpr double smallerMass = 1e-5;
 constexpr double smallestMass = 1e-7;
-constexpr double initSpeed = 1.0;
-constexpr double initOrbit = 1.0;
+constexpr double initSpeed = 5.0;
+constexpr double initOrbit = 5.0;
 
 
 int main()
@@ -53,7 +53,7 @@ int main()
 
 	for (size_t index = 1; index < attractorsAmount; index++)
 	{
-		Eigen::AngleAxisd rotation(angleForMedium * (double)(index - 1), rotationAxis);
+		Eigen::AngleAxisd rotation(angleForMedium * (double)index, rotationAxis);
 		data.attractorsData.addElement({ mediumMass, rotation * radiusVector, rotation * velocityVector });
 	}
 
@@ -61,13 +61,13 @@ int main()
 	{
 		Eigen::AngleAxisd rotation(angleForSmall * (double)index, rotationAxis);
 
-		data.attractantsData.addElement({ smallerMass, rotation * ((index + 2) * radiusVector), rotation * (velocityVector / (index + 2)) });
+		data.attractantsData.addElement({ smallerMass, rotation * ((index + 2) * radiusVector), rotation * (velocityVector / (index + 2)) * 2.0 });
 	}
 
-	Eigen::Vector3d forceVector(0.0, 0.0, 0.0);
-	data.propulsedData.addElement({ smallestMass, radiusVector * 2.0f, forceVector, forceVector });
+	Eigen::Vector3d nullVector(0.0, 0.0, 0.0);
+	data.propulsedData.addElement({ smallestMass, radiusVector, velocityVector, nullVector });
 
-	data.save("data_ser_test");
+	data.save("test_data");
 
 	auto* app = new projectSolar::Application(runner);
 	app->run();

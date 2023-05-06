@@ -24,6 +24,12 @@ Window::~Window()
 	shutdown();
 }
 
+bool projectSolar::Window::startFrame()
+{
+	glfwSwapBuffers((GLFWwindow*)m_window);
+	return !glfwWindowShouldClose((GLFWwindow*)m_window);
+}
+
 uint32_t Window::getWidth() const
 {
 	return m_properties.width;
@@ -78,7 +84,7 @@ void Window::init(const WindowProperties& properties)
 	//GLFWmonitor* primary = glfwGetPrimaryMonitor(); // for release
 	int count;
 	GLFWmonitor** monitors = glfwGetMonitors(&count); // for debug
-	int monitorNumber = 0;
+	int monitorNumber = 2;
 	const GLFWvidmode* mode = glfwGetVideoMode(monitors[monitorNumber]);
 
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);

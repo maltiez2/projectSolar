@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
+#include "GraphicsCore.h"
 
+#include <vector>
 
 namespace projectSolar
 {

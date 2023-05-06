@@ -16,6 +16,8 @@ namespace projectSolar
 		virtual void show() = 0;
 	};
 
+	// DON'T forget to add new windows to GuiRenderer.cpp templates explicit instantiations
+
 	class NotificationWindow : public GuiWindow
 	{
 	public:

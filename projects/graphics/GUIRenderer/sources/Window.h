@@ -33,6 +33,8 @@ namespace projectSolar
 		explicit Window(const WindowProperties& properties = WindowProperties());
 		~Window();
 
+		bool startFrame();
+
 		// Getters
 		uint32_t getWidth() const;
 		uint32_t getHeight() const;
