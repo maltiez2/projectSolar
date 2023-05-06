@@ -81,7 +81,8 @@ namespace projectSolar::Simulation
 			SolverParallelWrapper<Components::Attractant::Data, Components::Attractor::Data, EulerSolver>(
 				{ params.gravitationalConstant, params.stepSize },
 				m_simulationData.attractantsData,
-				m_simulationData.attractorsData
+				m_simulationData.attractorsData,
+				false
 				),
 			partitioner
 		);
@@ -91,7 +92,8 @@ namespace projectSolar::Simulation
 			SolverParallelWrapper<Components::Attractor::Data, Components::Attractor::Data, EulerSolver>(
 				{ params.gravitationalConstant, params.stepSize },
 				m_simulationData.attractorsData,
-				m_simulationData.attractorsData
+				m_simulationData.attractorsData,
+				true
 				),
 			partitioner
 		);
@@ -101,7 +103,8 @@ namespace projectSolar::Simulation
 			SolverParallelWrapper<Components::Propulsed::Data, Components::Attractor::Data, EulerSolverPropulsed>(
 				{ params.gravitationalConstant, params.stepSize },
 				m_simulationData.propulsedData,
-				m_simulationData.attractorsData
+				m_simulationData.attractorsData,
+				false
 				),
 			partitioner
 		);
@@ -150,7 +153,7 @@ namespace projectSolar::Simulation
 
 		LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunStart - stepsNumber: " + std::to_string(std::max((uint16_t)reducedStepsNumber, (uint16_t)1)) + ", stepsDelta: " + std::to_string(stepsDelta));
 
-		m_currentStepNumber = std::max((uint16_t)reducedStepsNumber, (uint16_t)1);
+		m_currentStepNumber = std::min(std::max((uint16_t)reducedStepsNumber, (uint16_t)1), (uint16_t)(m_results.back().stepsNumber * m_maxGrowFactor));
 		return m_currentStepNumber;
 	}
 	float SimulationRunner::frameRateConsistensyController::onRunEnd()

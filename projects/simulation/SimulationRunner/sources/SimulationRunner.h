@@ -46,6 +46,7 @@ namespace projectSolar::Simulation
 			float onRunEnd();
 
 		private:
+			const uint8_t m_maxGrowFactor = 10;
 			const uint8_t m_queieSize = 10;
 			std::queue<Params> m_results = {};
 			std::chrono::time_point<std::chrono::steady_clock> m_startTimepoint;

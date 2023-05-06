@@ -77,10 +77,11 @@ namespace projectSolar::Simulation
 	class SolverParallelWrapper
 	{
 	public:
-		SolverParallelWrapper(Solver::SolverParams params, DoubleBuffVector<AttractantDataType>& attractants, DoubleBuffVector<AttractorDataType>& attractors) :
+		SolverParallelWrapper(Solver::SolverParams params, DoubleBuffVector<AttractantDataType>& attractants, DoubleBuffVector<AttractorDataType>& attractors, bool sameData) :
 			m_params(params),
 			m_attractants(attractants),
-			m_attractors(attractors)
+			m_attractors(attractors),
+			m_sameData(sameData)
 		{
 		}
 
@@ -91,7 +92,13 @@ namespace projectSolar::Simulation
 
 			for (auto index = range.begin(); index != range.end(); index++)
 			{
-				Solver::solve(std::set<size_t>{index}, attractantsData[index], attractantsBuffer[index], m_attractors, m_params);
+				std::set<size_t> attractorsToIgnore;
+				if (m_sameData)
+				{
+					attractorsToIgnore.insert(index);
+				}
+				
+				Solver::solve(attractorsToIgnore, attractantsData[index], attractantsBuffer[index], m_attractors, m_params);
 			}
 		}
 
@@ -99,6 +106,7 @@ namespace projectSolar::Simulation
 		Solver::SolverParams m_params;
 		DoubleBuffVector<AttractantDataType>& m_attractants;
 		DoubleBuffVector<AttractorDataType>& m_attractors;
+		bool m_sameData;
 	};
 
 	
