@@ -2,6 +2,8 @@
 
 #include <GL/glew.h>
 
+#include "Logger.h"
+
 
 namespace projectSolar
 {
@@ -41,7 +43,7 @@ namespace projectSolar
 		template<typename T>
 		void push(uint32_t count)
 		{
-			static_assert(true, "Specialize it for a specific type");
+			LOG_ASSERT(false, "Specialize it for a specific type")
 		}
 
 		template<>

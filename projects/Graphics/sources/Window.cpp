@@ -76,11 +76,9 @@ void Window::init(const WindowProperties& properties)
 	LOG_DEBUG("Window initialization started");
 	
 	glfwSetErrorCallback(glfwErrorCallback);
-	if (!glfwInit())
-	{
-		LOG_ERROR("Unable to initialize GLFW");
-		return;
-	}
+	int32_t success = glfwInit();
+	LOG_ASSERT(success, "Failed to initialize GLFW")
+
 
 	int count;
 	GLFWmonitor* monitor;
@@ -106,14 +104,10 @@ void Window::init(const WindowProperties& properties)
 	glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
 	
 	m_window = glfwCreateWindow(mode->width, mode->height, properties.title.c_str(), monitor, nullptr);
-	if (m_window == nullptr)
-	{
-		LOG_ERROR("Unable to create window");
-		shutdown();
-		return;
-	}
+	LOG_ASSERT(m_window != nullptr, "Failed to create window")
 
-	glewInit();
+	int32_t success = glewInit();
+	LOG_ASSERT(success, "Failed to initialize GLEW")
 
 	glfwSetWindowUserPointer(m_window, this);
 
@@ -128,11 +122,11 @@ void Window::init(const WindowProperties& properties)
 
 	if (int error = glewInit(); error != GLEW_OK)
 	{
-		LOG_ERROR("Error on glew init: " + std::to_string(error));
+		LOG_ERROR("Error on glew init: ", error);
 		return;
 	}
 
-	LOG_INFO((std::string)"GL version: " + (char*)glGetString(GL_VERSION));
+	LOG_INFO("GL version: ", (char*)glGetString(GL_VERSION));
 
 	setupImGui(properties.guiProperties);
 

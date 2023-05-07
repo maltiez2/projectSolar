@@ -20,7 +20,7 @@ bool projectSolar::LayersManager::attach(const std::size_t& id, Layer* layer)
 {
     if (m_attached.contains(id));
     {
-        LOG_ERROR("[LayersManager][attach()] Layer with id '" + std::to_string(id) + "' already exists");
+        LOG_ERROR("[LayersManager][attach()] Layer with id '", id, "' already exists");
         return false;
     }
 
@@ -32,7 +32,7 @@ Layer* projectSolar::LayersManager::detach(const std::size_t& id)
 {
     if (!m_attached.contains(id))
     {
-        LOG_ERROR("[LayersManager][detach()] Layer with id '" + std::to_string(id) + "' does not exist");
+        LOG_ERROR("[LayersManager][detach()] Layer with id '", id, "' does not exist");
         return nullptr;
     }
     
@@ -103,7 +103,6 @@ void MapLayer::updateData()
     {
         auto& element = atorData[i];
         m_buffer[i] = Point(element.position[0], element.position[1], element.position[2], 0);
-        LOG_DEBUG("Attractor at: \t" + std::to_string(element.position[0]) + "\t" + std::to_string(element.position[1]));
     }
 
     auto& atantData = dataManager.attractantsData.getData();
@@ -111,7 +110,7 @@ void MapLayer::updateData()
     {
         auto& element = atantData[i];
         m_buffer[attractantsIndex + i] = Point(element.position[0], element.position[1], element.position[2], 1);
-        LOG_DEBUG("Attractant at: \t" + std::to_string(element.position[0]) + "\t" + std::to_string(element.position[1]));
+
     }
 
     auto& propData = dataManager.propulsedData.getData();
@@ -119,7 +118,6 @@ void MapLayer::updateData()
     {
         auto& element = propData[i];
         m_buffer[propulsesIndex + i] = Point(element.position[0], element.position[1], element.position[2], 2);
-        LOG_DEBUG("Propulsed at: \t" + std::to_string(element.position[0]) + "\t" + std::to_string(element.position[1]));
     }
 }
 

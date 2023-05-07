@@ -21,22 +21,27 @@ struct Point
 };
 
 Application::Application(Simulation::SimulationRunner& simulation) :
-    m_simulation(simulation)
+    m_simulation(simulation),
+    m_window(new Window(2))
 {
+
+}
+
+projectSolar::Application::~Application()
+{
+    delete(m_window);
 }
 
 void Application::run()
 {
     LOG_INTT_CONSOLE("logs/log_imGuiTest.txt");
 
-    Window window(2);
-
     Renderer centralRenderer;
     GuiWindowsManager guiWindows;
     
     LayersManager layers;
     layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
-    layers.add<GuiLayer>(2, true, &window, &guiWindows);
+    layers.add<GuiLayer>(2, true, m_window, &guiWindows);
 
     // *** GUI ***
     guiWindows.add<NotificationWindow>("test", true, "Test window", "Test text of test window");
@@ -54,7 +59,7 @@ void Application::run()
     Eigen::Vector3d rotationAxis(0.0, 0.0, 1.0);
     float forceMagnitude = 1.0f;
 
-    while (window.startFrame())
+    while (m_window->startFrame())
     {
         glfwPollEvents();
 
@@ -74,7 +79,7 @@ void Application::run()
         centralRenderer.clear();
 
         float scale = 0.05f * debugWindow.scale;
-        glm::mat4 proj = glm::ortho(-1.0f * scale * (float)window.getWidth(), 1.0f * scale * (float)window.getWidth(), -1.0f * scale * (float)window.getWidth(), 1.0f * scale * (float)window.getHeight(), -1.0f, 1.0f);
+        glm::mat4 proj = glm::ortho(-1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getWidth(), -1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getHeight(), -1.0f, 1.0f);
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-player.position[0], -player.position[1], 0));
         if (!propWindow.followPlayer)
         {

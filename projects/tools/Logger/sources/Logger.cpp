@@ -50,26 +50,6 @@ namespace projectSolar
 		initialized = true;
 		return;
 	}
-	void Logger::debug(std::string_view input)
-	{
-		get().m_spdLogger->debug(input);
-	}
-	void Logger::info(std::string_view input)
-	{
-		get().m_spdLogger->info(input);
-	}
-	void Logger::warn(std::string_view input)
-	{
-		get().m_spdLogger->warn(input);
-	}
-	void Logger::error(std::string_view input)
-	{
-		get().m_spdLogger->error(input);
-	}
-	void Logger::critical(std::string_view input)
-	{
-		get().m_spdLogger->critical(input);
-	}
 	void Logger::filterCritical()
 	{
 		get().m_spdLogger->set_level(spdlog::level::level_enum::critical);

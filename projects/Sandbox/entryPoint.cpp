@@ -25,6 +25,7 @@ int main()
 {
 	LOG_INTT_CONSOLE("logs/log_sandbox.txt");
 	LOG_DEBUG("[sandbox] Sandbox started");
+	LOG_ASSERT(false, "test message: ", 1)
 	PROFILE_BEGIN("sandbox");
 
 	auto runner = SimulationRunner();

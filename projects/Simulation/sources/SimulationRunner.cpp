@@ -18,7 +18,7 @@ namespace projectSolar::Simulation
 		errno_t error = serializer.open<Serializer::fileMode::writeBytes>(filePath);
 		if (error)
 		{
-			LOG_ERROR(std::string("[DataManager] Error on opening file for writing: ") + filePath.data());
+			LOG_ERROR("[DataManager] Error on opening file for writing: ", filePath.data());
 			return error;
 		}
 		serializer.serialize(attractorsData);
@@ -33,7 +33,7 @@ namespace projectSolar::Simulation
 		errno_t error = serializer.open<Serializer::fileMode::readBytes>(filePath);
 		if (error)
 		{
-			LOG_ERROR(std::string("[DataManager] Error on opening file for reading: ") + filePath.data());
+			LOG_ERROR("[DataManager] Error on opening file for reading: ", filePath.data());
 			return error;
 		}
 		serializer.deserialize(attractorsData);
@@ -137,7 +137,7 @@ namespace projectSolar::Simulation
 		
 		if (m_results.empty())
 		{
-			LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunStart - defaultStepsNumber: " + std::to_string(m_currentRunnerParams.defaultStepsNumber));
+			LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunStart - defaultStepsNumber: ", m_currentRunnerParams.defaultStepsNumber);
 			m_currentStepNumber = m_currentRunnerParams.defaultStepsNumber;
 			return m_currentRunnerParams.defaultStepsNumber;
 		}
@@ -147,7 +147,7 @@ namespace projectSolar::Simulation
 		float stepsNumber = stepsDelta + m_results.back().stepsNumber + m_currentRunnerParams.stepsDiffBias * std::abs(stepsDelta);
 		float reducedStepsNumber = stepsNumber * frameRateDiffFactor;
 
-		LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunStart - stepsNumber: " + std::to_string(std::max((uint16_t)reducedStepsNumber, (uint16_t)1)) + ", stepsDelta: " + std::to_string(stepsDelta));
+		LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunStart - stepsNumber: ", std::max((uint16_t)reducedStepsNumber, (uint16_t)1), ", stepsDelta: ", stepsDelta);
 
 		m_currentStepNumber = std::min(std::max((uint16_t)reducedStepsNumber, (uint16_t)1), (uint16_t)(m_results.back().stepsNumber * m_maxGrowFactor));
 		return m_currentStepNumber;
@@ -167,7 +167,7 @@ namespace projectSolar::Simulation
 			m_results.pop();
 		}
 
-		LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunEnd - frameTimeSeconds: " + std::to_string(frameTimeSeconds) + ", desiredFrameTime: " + std::to_string(desiredFrameTime));
+		LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunEnd - frameTimeSeconds: ", frameTimeSeconds, ", desiredFrameTime: ", desiredFrameTime);
 
 		m_results.emplace(
 			m_currentStepNumber,

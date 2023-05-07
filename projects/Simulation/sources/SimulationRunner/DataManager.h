@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DoubleBufferedContainer.h"
+#include "Logger.h"
 
 #include <stdio.h>
 #include <Eigen/Eigen>
@@ -115,7 +116,7 @@ namespace projectSolar::Simulation
 			template<typename DataType>
 			size_t size() const
 			{
-				static_assert(true, "Specialize it for a specific type");
+				LOG_ASSERT(false, "Specialize it for a specific type")
 				return 0;
 			}
 			template<>
@@ -137,7 +138,7 @@ namespace projectSolar::Simulation
 			template<typename DataType>
 			void write(const DataType& data)
 			{
-				static_assert(true, "Specialize it for a specific type");
+				LOG_ASSERT(false, "Specialize it for a specific type")
 			}
 			template<>
 			void write<AttractorData>(const AttractorData& data)
@@ -175,7 +176,7 @@ namespace projectSolar::Simulation
 			template<typename DataType>
 			void read(DataType& data)
 			{
-				static_assert(true, "Specialize it for a specific type");
+				LOG_ASSERT(false, "Specialize it for a specific type")
 			}
 			template<>
 			void read<AttractorData>(AttractorData& data)

@@ -25,7 +25,6 @@ namespace projectSolar::Simulation
 			uint16_t defaultStepsNumber;
 			float stepsDiffBias = -0.1f;
 		};
-		struct 
 
 		SimulationRunner();
 

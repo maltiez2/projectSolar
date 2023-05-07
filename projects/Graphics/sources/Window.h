@@ -22,6 +22,7 @@ namespace projectSolar
 		GuiProperties guiProperties;
 	};
 
+	// @TODO Should be one window at a time currently, should add multi window support or make it singleton
 	class Window
 	{
 	public:
@@ -42,6 +43,14 @@ namespace projectSolar
 		void setSize(uint32_t width, uint32_t height);
 
 	private:
+		struct WindowData
+		{
+			std::string title;
+			uint32_t    width;
+			uint32_t    height;
+			bool        VSync;
+		};
+		
 		const char* fontsFolder = "resources/fonts";
 		const char* glslVersion = "#version 130";
 		const int glMajorVersion = 3;

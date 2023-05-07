@@ -145,6 +145,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\Graphics.h" />
+    <ClInclude Include="sources\Events\ApplicationEvent.h" />
+    <ClInclude Include="sources\Events\Event.h" />
+    <ClInclude Include="sources\Events\KeyCodes.h" />
+    <ClInclude Include="sources\Events\KeyEvent.h" />
+    <ClInclude Include="sources\Events\MouseCodes.h" />
+    <ClInclude Include="sources\Events\MouseEvent.h" />
     <ClInclude Include="sources\GUI\GuiRenderer.h" />
     <ClInclude Include="sources\GUI\GuiWindow.h" />
     <ClInclude Include="sources\Buffers\IndexBuffer.h" />

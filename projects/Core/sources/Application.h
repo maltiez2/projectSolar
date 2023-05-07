@@ -1,6 +1,10 @@
 #pragma once
 
 #include "Simulation.h"
+#include "Graphics.h"
+
+#include <memory>
+
 
 namespace projectSolar
 {
@@ -8,11 +12,12 @@ namespace projectSolar
 	{
 	public:
 		Application(Simulation::SimulationRunner& simulation);
-		~Application() = default;
+		~Application();
 
 		void run();
 
 	private:
 		Simulation::SimulationRunner& m_simulation;
+		Window* m_window;
 	};
 }
