@@ -1,21 +1,20 @@
 #pragma once
 
-// Internal
 #include "Logger.h"
 #include "Profiler.h"
 
-// External vendor
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <Eigen/Eigen>
-#include <EnTT/entt.hpp>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
 
-// STL
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include <string>
 #include <vector>
 #include <array>
 #include <stack>
 #include <deque>
+#include <queue>
 #include <map>
 #include <set>
 #include <unordered_map>

@@ -1,5 +1,7 @@
 #include "pch.h"
 
+#include "Graphics.h"
+#include "Simulation.h"
 #include "Application.h"
 #include "Layers.h"
 

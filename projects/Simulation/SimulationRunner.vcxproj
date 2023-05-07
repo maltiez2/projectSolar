@@ -154,7 +154,7 @@
     <ClInclude Include="sources\SimulationRunner.h" />
     <ClInclude Include="sources\SimulationRunner\DoubleBufferedContainer.h" />
     <ClInclude Include="sources\SimulationRunner\Solvers.h" />
-    <ClInclude Include="include\SimulationRunner.h" />
+    <ClInclude Include="include\Simulation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\pch.cpp">

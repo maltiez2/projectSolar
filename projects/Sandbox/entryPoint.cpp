@@ -1,22 +1,12 @@
+#include "pch.h"
+
 #define PROFILING
 
 #pragma warning (disable: 4703)
 
 #include "Core.h"
+#include "Simulation.h"
 
-#include "Logger.h"
-#include "Profiler.h"
-
-#define _USE_MATH_DEFINES
-
-#include "SimulationRunner.h"
-
-#include <iostream>
-#include <array>
-#include <math.h>
-#include <string>
-#include <Eigen/Core>
-#include <Eigen/Geometry>
 
 using namespace projectSolar::Simulation;
 

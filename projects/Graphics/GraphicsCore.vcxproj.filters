@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\GraphicsCore.h">
+    <ClInclude Include="include\Graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\GUI\GuiRenderer.h">

@@ -30,7 +30,7 @@
     <ClInclude Include="sources\SimulationRunner\Solvers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\SimulationRunner.h">
+    <ClInclude Include="include\Simulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\pch.h">

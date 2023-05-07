@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SimulationRunner.h"
+#include "Simulation.h"
 
 namespace projectSolar
 {

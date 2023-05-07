@@ -144,7 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\GraphicsCore.h" />
+    <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="sources\GUI\GuiRenderer.h" />
     <ClInclude Include="sources\GUI\GuiWindow.h" />
     <ClInclude Include="sources\Buffers\IndexBuffer.h" />

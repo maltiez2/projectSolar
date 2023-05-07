@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GraphicsCore.h"
-#include "SimulationRunner.h"
+#include "Graphics.h"
+#include "Simulation.h"
 
 #include <vector>
 #include <map>
