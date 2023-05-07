@@ -141,14 +141,14 @@ KeyCode KeyEvent::getKeyCode() const
 {
 	return m_keyCode;
 }
-explicit KeyEvent::KeyEvent(const KeyCode keycode) :
+KeyEvent::KeyEvent(const KeyCode keycode) :
 	m_keyCode(keycode)
 {
 }
 EVENT_CLASS_CATEGORY_IMPLEMENTATION(KeyEvent, EventCategoryKeyboard | EventCategoryInput)
 
 // KeyPressedEvent
-KeyPressedEvent::KeyPressedEvent(const KeyCode keycode, bool isRepeat = false) :
+KeyPressedEvent::KeyPressedEvent(const KeyCode keycode, bool isRepeat) :
 	KeyEvent(keycode),
 	m_isRepeat(isRepeat)
 {

@@ -16,14 +16,12 @@ namespace projectSolar
 
 		void run();
 
-		void onEvent(Event& ev);
-
 	private:
-		bool onWindowClose(WindowCloseEvent& ev);
-
 		Simulation::SimulationRunner& m_simulation;
 		LayersManager m_layers;
 		Window* m_window;
 		bool m_running = true;
+
+		void processEvents();
 	};
 }

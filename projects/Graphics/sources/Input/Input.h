@@ -3,7 +3,6 @@
 #include "Event.h"
 #include "KeyCodes.h"
 #include "MouseCodes.h"
-#include "Window.h"
 
 #include <queue>
 #include <Eigen/Eigen>
@@ -11,6 +10,8 @@
 
 namespace projectSolar
 {
+	class Window;
+	
 	class InputEventsManager
 	{
 	public:

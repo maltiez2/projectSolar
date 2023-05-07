@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Events/Event.h"
-#include "Events/KeyEvent.h"
-#include "Events/MouseEvent.h"
-#include "Events/ApplicationEvent.h"
 #include "Input/Input.h"
 
 #include "../vendor/opengl/imgui_impl_glfw.h"
@@ -27,6 +23,7 @@ namespace projectSolar
 		 int32_t monitor    = -1;
 		bool VSync          = true;
 		bool fullScreen     = true;
+		InputEventsManager* eventsManager = nullptr;
 
 		GuiProperties guiProperties;
 	};
@@ -35,22 +32,6 @@ namespace projectSolar
 	class Window
 	{
 	public:
-		using eventCallbackFunction = std::function<void(Event&)>;
-		
-		struct WindowData
-		{
-			std::string title;
-			uint32_t    width;
-			uint32_t    height;
-			int32_t    monitor;
-			bool VSync;
-			bool fullScreen;
-
-			InputEventsManager* eventsManager;
-
-			eventCallbackFunction eventCallback;
-		};
-		
 		explicit Window(const WindowProperties& properties = WindowProperties());
 		~Window();
 
@@ -61,29 +42,30 @@ namespace projectSolar
 		uint32_t    getWidth() const;
 		uint32_t    getHeight() const;
 		bool        isVSync() const;
+		InputEventsManager& getEventsManager();
+		InputManager& getInputManager();
 
 		// Setters
 		void setVSync(bool enabled);
 		void setFont(const std::string& font);
 		void setSize(uint32_t width, uint32_t height);
-		void setEventCallback(const eventCallbackFunction& callback);
+
+		InputEventsManager m_eventsManager;
+		InputManager m_inputManager;
+		WindowProperties m_properties;
 
 	private:
 		const char* fontsFolder = "resources/fonts";
 		const char* glslVersion = "#version 130";
 		const int glMajorVersion = 3;
 		const int glMinorVersion = 3;
-
-		InputEventsManager eventsManager;
 		
 		GLFWwindow* m_window;
-		WindowData m_properties;
 
 		void init(const WindowProperties& properties);
 		void shutdown();
 
 		void setupImGui(const GuiProperties& properties);
-		void setupEvents();
 		GLFWmonitor* setUpFullscreen();
 	};
 }

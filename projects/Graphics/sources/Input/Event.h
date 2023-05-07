@@ -49,14 +49,8 @@ namespace projectSolar
 		virtual InputEventType getEventType() const = 0;
 		virtual const char* getName() const = 0;
 		virtual int getCategoryFlags() const = 0;
-		virtual std::string toString() const { return getName(); }
+		virtual std::string toString() const;
 
 		bool isInCategory(InputEventCategory category) const;
 	};
-
-	inline std::ostream& operator<<(std::ostream& os, const InputEvent& e)
-	{
-		return os << e.toString();
-	}
-
 }

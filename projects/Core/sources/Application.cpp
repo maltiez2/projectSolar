@@ -23,13 +23,11 @@ struct Point
 
 Application::Application(Simulation::SimulationRunner& simulation, const WindowProperties& windowProps) :
     m_simulation(simulation),
-    m_window(new Window(windowProps)),
-    m_layers()
+    m_window(new Window(windowProps))
 {
-    m_window->setEventCallback(BIND_EVENT_FUNC(Application::onEvent));
 }
 
-projectSolar::Application::~Application()
+Application::~Application()
 {
     delete(m_window);
 }
@@ -101,22 +99,17 @@ void Application::run()
         {
             m_running = false;
         }
+
+        processEvents();
     }
 }
 
-void projectSolar::Application::onEvent(Event& ev)
+void Application::processEvents()
 {
-    EventDispatcher dispatcher(ev);
-
-    dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNC(Application::onWindowClose)); // @TODO add here resize event also
-
-    m_layers.onEvent(ev);
+    auto& eventsManager = m_window->getEventsManager();
+    while (!eventsManager.isEmpty())
+    {
+        m_layers.onEvent(eventsManager.front());
+        eventsManager.pop();
+    }
 }
-
-bool projectSolar::Application::onWindowClose(WindowCloseEvent& ev)
-{
-    m_running = false;
-    
-    return true;
-}
-

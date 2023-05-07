@@ -4,6 +4,7 @@
 #include "ApplicationEvent.h"
 #include "KeyEvent.h"
 #include "MouseEvent.h"
+#include "Window.h"
 
 
 namespace projectSolar
@@ -38,7 +39,7 @@ namespace projectSolar
 	{
 		glfwSetWindowSizeCallback(m_window->getNativeWindow(), [](GLFWwindow* window, int width, int height)
 			{
-				Window::WindowData& data = *(Window::WindowData*)glfwGetWindowUserPointer(window);
+				WindowProperties& data = *(WindowProperties*)glfwGetWindowUserPointer(window);
 				data.width = width;
 				data.height = height;
 
@@ -48,7 +49,7 @@ namespace projectSolar
 
 		glfwSetWindowCloseCallback(m_window->getNativeWindow(), [](GLFWwindow* window)
 			{
-				Window::WindowData& data = *(Window::WindowData*)glfwGetWindowUserPointer(window);
+				WindowProperties& data = *(WindowProperties*)glfwGetWindowUserPointer(window);
 
 				WindowCloseEvent* inputEvent = new WindowCloseEvent;
 				data.eventsManager->push((InputEvent*)inputEvent);
@@ -56,7 +57,7 @@ namespace projectSolar
 
 		glfwSetKeyCallback(m_window->getNativeWindow(), [](GLFWwindow* window, int key, int scancode, int action, int mods)
 			{
-				Window::WindowData& data = *(Window::WindowData*)glfwGetWindowUserPointer(window);
+				WindowProperties& data = *(WindowProperties*)glfwGetWindowUserPointer(window);
 
 				switch (action)
 				{
@@ -83,7 +84,7 @@ namespace projectSolar
 
 		glfwSetCharCallback(m_window->getNativeWindow(), [](GLFWwindow* window, unsigned int keycode)
 			{
-				Window::WindowData& data = *(Window::WindowData*)glfwGetWindowUserPointer(window);
+				WindowProperties& data = *(WindowProperties*)glfwGetWindowUserPointer(window);
 
 				KeyTypedEvent* inputEvent = new KeyTypedEvent(keycode);
 				data.eventsManager->push((InputEvent*)inputEvent);
@@ -91,7 +92,7 @@ namespace projectSolar
 
 		glfwSetMouseButtonCallback(m_window->getNativeWindow(), [](GLFWwindow* window, int button, int action, int mods)
 			{
-				Window::WindowData& data = *(Window::WindowData*)glfwGetWindowUserPointer(window);
+				WindowProperties& data = *(WindowProperties*)glfwGetWindowUserPointer(window);
 
 				switch (action)
 				{
@@ -112,7 +113,7 @@ namespace projectSolar
 
 		glfwSetScrollCallback(m_window->getNativeWindow(), [](GLFWwindow* window, double xOffset, double yOffset)
 			{
-				Window::WindowData& data = *(Window::WindowData*)glfwGetWindowUserPointer(window);
+				WindowProperties& data = *(WindowProperties*)glfwGetWindowUserPointer(window);
 
 				MouseScrolledEvent* inputEvent = new MouseScrolledEvent((float)xOffset, (float)yOffset);
 				data.eventsManager->push((InputEvent*)inputEvent);
@@ -120,7 +121,7 @@ namespace projectSolar
 
 		glfwSetCursorPosCallback(m_window->getNativeWindow(), [](GLFWwindow* window, double xPos, double yPos)
 			{
-				Window::WindowData& data = *(Window::WindowData*)glfwGetWindowUserPointer(window);
+				WindowProperties& data = *(WindowProperties*)glfwGetWindowUserPointer(window);
 
 				MouseMovedEvent* inputEvent = new MouseMovedEvent((float)xPos, (float)yPos);
 				data.eventsManager->push((InputEvent*)inputEvent);
@@ -153,7 +154,7 @@ namespace projectSolar
 		double yPosition;
 		glfwGetCursorPos(window, &xPosition, &yPosition);
 		
-		return Eigen::Vector2d((float)xPosition, (float)yPosition);
+		return Eigen::Vector2f((float)xPosition, (float)yPosition);
 	}
 
 	// InputEventDispatcher

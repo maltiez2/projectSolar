@@ -18,12 +18,12 @@ void projectSolar::LayersManager::draw()
         layer->draw();
     }
 }
-bool projectSolar::LayersManager::onEvent(Event& ev)
+bool projectSolar::LayersManager::onEvent(InputEvent* ev)
 {
     for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
     {
         it->second->onEvent(ev);
-        if (ev.Handled)
+        if (ev->handled)
         {
             return true;
         }
@@ -90,9 +90,9 @@ void MapLayer::draw()
     m_vertexBuffer->unbind();
     m_indexBuffer->unbind();
 }
-void projectSolar::MapLayer::onEvent(Event& ev)
+void projectSolar::MapLayer::onEvent(InputEvent* ev)
 {
-    LOG_DEBUG("[event] [MapLayer] ", ev.ToString());
+    LOG_DEBUG("[event] [MapLayer] ", ev->toString());
 }
 void projectSolar::MapLayer::setMVP(const glm::mat4& mvp)
 {
@@ -149,15 +149,15 @@ void projectSolar::GuiLayer::draw()
 {
     m_renderer.render();
 }
-void projectSolar::GuiLayer::onEvent(Event& ev)
+void projectSolar::GuiLayer::onEvent(InputEvent* ev)
 {
     if (m_blockEvents)
     {
-        LOG_DEBUG("[event] [GuiLayer] ", ev.ToString());
+        LOG_DEBUG("[event] [GuiLayer] ", ev->toString());
 
         ImGuiIO& io = ImGui::GetIO();
-        ev.Handled |= ev.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
-        ev.Handled |= ev.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+        ev->handled |= ev->isInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+        ev->handled |= ev->isInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
     }
     
 }
