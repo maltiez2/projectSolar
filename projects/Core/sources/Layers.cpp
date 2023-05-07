@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Layers.h"
 
 using namespace projectSolar;
@@ -15,6 +17,18 @@ void projectSolar::LayersManager::draw()
     {
         layer->draw();
     }
+}
+bool projectSolar::LayersManager::onEvent(Event& ev)
+{
+    for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
+    {
+        it->second->onEvent(ev);
+        if (ev.Handled)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 bool projectSolar::LayersManager::attach(const std::size_t& id, Layer* layer)
 {
@@ -76,6 +90,10 @@ void MapLayer::draw()
     m_vertexBuffer->unbind();
     m_indexBuffer->unbind();
 }
+void projectSolar::MapLayer::onEvent(Event& ev)
+{
+    LOG_DEBUG("[event] [MapLayer] ", ev.ToString());
+}
 void projectSolar::MapLayer::setMVP(const glm::mat4& mvp)
 {
     m_shader.bind();
@@ -121,12 +139,25 @@ void MapLayer::updateData()
     }
 }
 
-projectSolar::GuiLayer::GuiLayer(Window* window, GuiWindowsManager* guiWindows) :
-    m_renderer(*window, *guiWindows)
+projectSolar::GuiLayer::GuiLayer(Window* window, GuiWindowsManager* guiWindows, bool blockEvents) :
+    m_renderer(*window, *guiWindows),
+    m_blockEvents(blockEvents)
 {
 }
 
 void projectSolar::GuiLayer::draw()
 {
     m_renderer.render();
+}
+void projectSolar::GuiLayer::onEvent(Event& ev)
+{
+    if (m_blockEvents)
+    {
+        LOG_DEBUG("[event] [GuiLayer] ", ev.ToString());
+
+        ImGuiIO& io = ImGui::GetIO();
+        ev.Handled |= ev.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+        ev.Handled |= ev.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+    }
+    
 }

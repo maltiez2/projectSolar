@@ -16,6 +16,7 @@ namespace projectSolar
 		virtual ~Layer() = default;
 
 		virtual void draw() = 0;
+		virtual void onEvent(Event& ev) = 0;
 	};
 
 	class LayersManager
@@ -25,6 +26,7 @@ namespace projectSolar
 		~LayersManager();
 
 		void draw();
+		bool onEvent(Event& ev);
 
 		template<typename LayerType, typename ... Args>
 		Layer* add(const size_t& id, bool draw, const Args& ... args)
@@ -70,6 +72,7 @@ namespace projectSolar
 		~MapLayer() override;
 
 		void draw() override;
+		void onEvent(Event& ev) override;
 
 		void setMVP(const glm::mat4& mvp);
 
@@ -97,16 +100,17 @@ namespace projectSolar
 
 		void updateData();
 	};
-
 	class GuiLayer : public Layer
 	{
 	public:
-		GuiLayer(Window* window, GuiWindowsManager* guiWindows);
+		GuiLayer(Window* window, GuiWindowsManager* guiWindows, bool blockEvents = true);
 		~GuiLayer() override = default;
 
 		void draw() override;
+		void onEvent(Event& ev) override;
 
 	private:
 		GuiRenderer m_renderer;
+		bool m_blockEvents;
 	};
 }

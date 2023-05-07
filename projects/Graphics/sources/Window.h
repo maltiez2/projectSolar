@@ -1,8 +1,14 @@
 #pragma once
 
+#include "Events/Event.h"
+#include "Events/KeyEvent.h"
+#include "Events/MouseEvent.h"
+#include "Events/ApplicationEvent.h"
+
 #include "../vendor/opengl/imgui_impl_glfw.h"
 
 #include <string>
+#include <functional>
 
 
 namespace projectSolar
@@ -14,10 +20,12 @@ namespace projectSolar
 	
 	struct WindowProperties
 	{
-		std::string title  = "Project 'Solar'";
-		uint32_t    width  = 1600;
-		uint32_t    height = 900;
-		bool        VSync  = true;
+		std::string title   = "Project 'Solar'";
+		uint32_t width      = 1600;
+		uint32_t height     = 900;
+		 int32_t monitor    = -1;
+		bool VSync          = true;
+		bool fullScreen     = true;
 
 		GuiProperties guiProperties;
 	};
@@ -26,10 +34,12 @@ namespace projectSolar
 	class Window
 	{
 	public:
-		explicit Window(const int32_t& monitor = -1, const WindowProperties& properties = WindowProperties());
+		using eventCallbackFunction = std::function<void(Event&)>;
+		
+		explicit Window(const WindowProperties& properties = WindowProperties());
 		~Window();
 
-		bool startFrame();
+		void startFrame();
 
 		// Getters
 		GLFWwindow* getNativeWindow();
@@ -41,6 +51,7 @@ namespace projectSolar
 		void setVSync(bool enabled);
 		void setFont(const std::string& font);
 		void setSize(uint32_t width, uint32_t height);
+		void setEventCallback(const eventCallbackFunction& callback);
 
 	private:
 		struct WindowData
@@ -48,7 +59,11 @@ namespace projectSolar
 			std::string title;
 			uint32_t    width;
 			uint32_t    height;
-			bool        VSync;
+			 int32_t    monitor;
+			bool VSync;
+			bool fullScreen;
+
+			eventCallbackFunction eventCallback;
 		};
 		
 		const char* fontsFolder = "resources/fonts";
@@ -57,13 +72,14 @@ namespace projectSolar
 		const int glMinorVersion = 3;
 		
 		GLFWwindow* m_window;
-		WindowProperties m_properties;
-		int32_t m_monitor;
+		WindowData m_properties;
 
 		void init(const WindowProperties& properties);
 		void shutdown();
 
 		void setupImGui(const GuiProperties& properties);
+		void setupEvents();
+		GLFWmonitor* setUpFullscreen();
 	};
 }
 

@@ -13,12 +13,8 @@ GuiRenderer::GuiRenderer(Window& window, GuiWindowsManager& windowsManager) :
 }
 void GuiRenderer::render()
 {
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
+	begin();
 
-	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
-	
 	for (auto const& [id, window] : m_windowsManager.getWindows())
 	{
 		if (window->showFlag)
@@ -27,6 +23,17 @@ void GuiRenderer::render()
 		}
 	}
 
+	end();
+}
+void projectSolar::GuiRenderer::begin()
+{
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
+}
+void projectSolar::GuiRenderer::end()
+{
 	const ImGuiIO& io = ImGui::GetIO();
 
 	ImGui::Render();

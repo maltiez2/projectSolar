@@ -1,11 +1,10 @@
 #include "pch.h"
 
-#define PROFILING
-
 #pragma warning (disable: 4703)
 
 #include "Core.h"
 #include "Simulation.h"
+#include "Graphics.h"
 
 
 using namespace projectSolar::Simulation;
@@ -20,15 +19,30 @@ constexpr double smallestMass = 1e-7;
 constexpr double initSpeed = 5.0;
 constexpr double initOrbit = 5.0;
 
+void runnerDataSetup(SimulationRunner& runner);
 
 int main()
 {
 	LOG_INTT_CONSOLE("logs/log_sandbox.txt");
 	LOG_DEBUG("[sandbox] Sandbox started");
-	LOG_ASSERT(false, "test message: ", 1)
-	PROFILE_BEGIN("sandbox");
 
 	auto runner = SimulationRunner();
+	runnerDataSetup(runner);
+
+	projectSolar::WindowProperties windowProps;
+	windowProps.fullScreen = false;
+
+	auto* app = new projectSolar::Application(runner, windowProps);
+	app->run();
+	delete(app);
+
+
+	LOG_DEBUG("[sandbox] Sandbox finished");
+	return 0;
+}
+
+void runnerDataSetup(SimulationRunner& runner)
+{
 	auto& data = runner.getData();
 
 	double angleForSmall = 2 * M_PI / (double)attractantsAmount;
@@ -59,12 +73,4 @@ int main()
 	data.propulsedData.addElement({ radiusVector, velocityVector, nullVector });
 
 	data.save("test_data");
-
-	auto* app = new projectSolar::Application(runner);
-	app->run();
-	delete(app);
-
-	PROFILE_END();
-	LOG_DEBUG("[sandbox] Sandbox finished");
-	return 0;
 }

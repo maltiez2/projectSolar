@@ -2,8 +2,9 @@
 
 #include <functional>
 
-
 #define BIT(x) (1 << x)
+#define BIND_EVENT_FUNC(x) std::bind(&x, this, std::placeholders::_1)
+
 
 namespace projectSolar
 {

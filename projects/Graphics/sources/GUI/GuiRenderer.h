@@ -63,6 +63,8 @@ namespace projectSolar
 		~GuiRenderer() = default;
 
 		void render();
+		void begin();
+		void end();
 
 		inline GuiWindowsManager& getWindowsManager() { return m_windowsManager; }
 

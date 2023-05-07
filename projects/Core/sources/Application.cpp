@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <Eigen/Eigen>
+#include <functional>
 
 
 using namespace projectSolar;
@@ -20,11 +21,12 @@ struct Point
     uint32_t type;
 };
 
-Application::Application(Simulation::SimulationRunner& simulation) :
+Application::Application(Simulation::SimulationRunner& simulation, const WindowProperties& windowProps) :
     m_simulation(simulation),
-    m_window(new Window(2))
+    m_window(new Window(windowProps)),
+    m_layers()
 {
-
+    m_window->setEventCallback(BIND_EVENT_FUNC(Application::onEvent));
 }
 
 projectSolar::Application::~Application()
@@ -39,9 +41,8 @@ void Application::run()
     Renderer centralRenderer;
     GuiWindowsManager guiWindows;
     
-    LayersManager layers;
-    layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
-    layers.add<GuiLayer>(2, true, m_window, &guiWindows);
+    m_layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
+    m_layers.add<GuiLayer>(2, true, m_window, &guiWindows);
 
     // *** GUI ***
     guiWindows.add<NotificationWindow>("test", true, "Test window", "Test text of test window");
@@ -59,9 +60,9 @@ void Application::run()
     Eigen::Vector3d rotationAxis(0.0, 0.0, 1.0);
     float forceMagnitude = 1.0f;
 
-    while (m_window->startFrame())
+    while (m_running)
     {
-        glfwPollEvents();
+        m_window->startFrame();
 
         // *** Data setup ***
 
@@ -76,8 +77,6 @@ void Application::run()
 
         // *** Central map setup ***
 
-        centralRenderer.clear();
-
         float scale = 0.05f * debugWindow.scale;
         glm::mat4 proj = glm::ortho(-1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getWidth(), -1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getHeight(), -1.0f, 1.0f);
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-player.position[0], -player.position[1], 0));
@@ -88,7 +87,7 @@ void Application::run()
         glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
         glm::mat4 mvp = proj * view * model;
 
-        layers.get<MapLayer>(1)->setMVP(mvp);
+        m_layers.get<MapLayer>(1)->setMVP(mvp);
 
         // *** GUI setup ***
 
@@ -96,12 +95,28 @@ void Application::run()
 
         // *** Draw ***
         
-        layers.draw();
+        m_layers.draw();
 
         if (debugWindow.closeApp)
         {
-            break;
+            m_running = false;
         }
     }
+}
+
+void projectSolar::Application::onEvent(Event& ev)
+{
+    EventDispatcher dispatcher(ev);
+
+    dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNC(Application::onWindowClose)); // @TODO add here resize event also
+
+    m_layers.onEvent(ev);
+}
+
+bool projectSolar::Application::onWindowClose(WindowCloseEvent& ev)
+{
+    m_running = false;
+    
+    return true;
 }
 
