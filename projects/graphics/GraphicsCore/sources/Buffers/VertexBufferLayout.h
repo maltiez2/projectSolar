@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../pch.h"
+#include <GL/glew.h>
 
 
 namespace projectSolar
@@ -41,7 +41,7 @@ namespace projectSolar
 		template<typename T>
 		void push(uint32_t count)
 		{
-			__debugbreak(); // Wrong template type
+			static_assert(true, "Specialize it for a specific type");
 		}
 
 		template<>

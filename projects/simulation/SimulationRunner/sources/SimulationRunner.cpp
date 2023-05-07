@@ -1,11 +1,7 @@
+#include "pch.h"
+
 #include "SimulationRunner.h"
 
-#include <oneapi/tbb/info.h>
-#include <oneapi/tbb/parallel_for.h>
-#include <oneapi/tbb/task_arena.h>
-#include <Eigen/Eigen>
-#include <cmath>
-#include <chrono>
 
 namespace projectSolar::Simulation
 {

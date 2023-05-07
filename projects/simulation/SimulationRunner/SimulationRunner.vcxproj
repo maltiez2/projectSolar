@@ -115,7 +115,9 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG_LOGGING;PROFILING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(ProjectDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\includes;$(SolutionDir)projects\simulation\SimulationRunner\includes;$(SolutionDir)projects\graphics\CentralRenderer\includes;$(SolutionDir)projects\graphics\GUIRenderer\includes;$(SolutionDir)projects\core\Core\includes;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +134,9 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG_LOGGING;PROFILING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(ProjectDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\includes;$(SolutionDir)projects\simulation\SimulationRunner\includes;$(SolutionDir)projects\graphics\CentralRenderer\includes;$(SolutionDir)projects\graphics\GUIRenderer\includes;$(SolutionDir)projects\core\Core\includes;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,15 +147,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="sources\pch.h" />
     <ClInclude Include="sources\SimulationRunner\DataManager.h" />
     <ClInclude Include="sources\SimulationRunner\Simulations.h" />
-    <ClInclude Include="sources\SimulationRunner\SimulationCommon.h" />
     <ClInclude Include="sources\SimulationRunner.h" />
     <ClInclude Include="sources\SimulationRunner\DoubleBufferedContainer.h" />
     <ClInclude Include="sources\SimulationRunner\Solvers.h" />
-    <ClInclude Include="includes\SimulationRunner.h" />
+    <ClInclude Include="include\SimulationRunner.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="sources\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="sources\SimulationRunner.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

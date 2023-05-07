@@ -68,6 +68,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "projects\core\Core\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GraphicsCore", "projects\graphics\GraphicsCore\GraphicsCore.vcxproj", "{D3D68A8B-B0E1-4820-905C-69704DDC96A4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6D71940A-B7C1-4CA5-9BF9-96EA16D21CB3} = {6D71940A-B7C1-4CA5-9BF9-96EA16D21CB3}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{78F864D8-69CE-4A2E-9FCA-D662374003BF}"
 	ProjectSection(SolutionItems) = preProject

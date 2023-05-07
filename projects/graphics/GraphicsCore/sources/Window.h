@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Window.h"
+#include "../vendor/opengl/imgui_impl_glfw.h"
+
+#include <string>
 
 
 namespace projectSolar

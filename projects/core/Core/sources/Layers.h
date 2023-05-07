@@ -1,13 +1,11 @@
 #pragma once
 
-#include "Logger.h"
-
 #include "GraphicsCore.h"
 #include "SimulationRunner.h"
 
 #include <vector>
 #include <map>
-#include <string>
+
 
 namespace projectSolar
 {

@@ -1,10 +1,11 @@
 #pragma once
 
-#include "../pch.h"
-
 #include "../Window.h"
 #include "GuiWindow.h"
 #include "Logger.h"
+
+#include <unordered_map>
+#include <string>
 
 
 namespace projectSolar

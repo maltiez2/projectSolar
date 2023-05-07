@@ -142,7 +142,7 @@
     <ClCompile Include="sources\EntityComponentSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="includes\EntityComponentSystem.h" />
+    <ClInclude Include="include\EntityComponentSystem.h" />
     <ClInclude Include="sources\Components.h" />
     <ClInclude Include="sources\EntityComponentSystem.h" />
     <ClInclude Include="sources\Serialization.h" />

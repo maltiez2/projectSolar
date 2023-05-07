@@ -1,9 +1,10 @@
 #pragma once
 
-#include "SimulationCommon.h"
 #include "DoubleBufferedContainer.h"
+#include "EntityComponentSystem.h"
 
 #include <stdio.h>
+
 
 namespace projectSolar::Simulation
 {

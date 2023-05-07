@@ -1,6 +1,5 @@
 #pragma once
 
-#include "SimulationRunner/SimulationCommon.h"
 #include "SimulationRunner/DoubleBufferedContainer.h"
 #include "SimulationRunner/DataManager.h"
 #include "SimulationRunner/Simulations.h"
@@ -8,6 +7,9 @@
 
 #include <queue>
 #include <chrono>
+
+
+
 
 namespace projectSolar::Simulation
 {	

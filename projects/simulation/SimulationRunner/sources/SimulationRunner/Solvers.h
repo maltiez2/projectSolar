@@ -1,7 +1,12 @@
 #pragma once
 
-#include "SimulationCommon.h"
+#include <Eigen/Core>
+#include <oneapi/tbb.h>
+#include <set>
+#include <vector>
+
 #include "DoubleBufferedContainer.h"
+
 
 namespace projectSolar::Simulation
 {

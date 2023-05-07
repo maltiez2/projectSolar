@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SimulationCommon.h"
 #include "DataManager.h"
+
 
 namespace projectSolar::Simulation
 {

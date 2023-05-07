@@ -1,21 +1,15 @@
 #pragma once
 
-// OpenGL setup
-#include <GL/glew.h>
-#include "../vendor/imgui/imgui.h"
-#include "../vendor/opengl/imgui_impl_glfw.h"
-#include "../vendor/opengl/imgui_impl_opengl3.h"
-#include <GLFW/glfw3.h>
-
 // Internal
 #include "Logger.h"
-
-// Vendor
-#include "../vendor/implot/implot.h"
-#include "../vendor/stb_image/stb_image.h"
+#include "Profiler.h"
+#include "EntityComponentSystem.h"
+#include "GraphicsCore.h"
+#include "SimulationRunner.h"
 
 // External vendor
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <Eigen/Eigen>
 
 // STL
@@ -31,3 +25,6 @@
 #include <fstream>
 #include <sstream>
 #include <utility>
+#include <stdio.h>
+#include <cmath>
+#include <chrono>

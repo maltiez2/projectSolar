@@ -29,7 +29,7 @@
     <ClInclude Include="sources\Serialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="includes\EntityComponentSystem.h">
+    <ClInclude Include="include\EntityComponentSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "SimulationCommon.h"
+#include <set>
+#include <vector>
 
 namespace projectSolar::Simulation
 {
