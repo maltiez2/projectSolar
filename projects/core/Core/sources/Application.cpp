@@ -1,12 +1,9 @@
 #include "GraphicsCore.h"
 
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Application.h"
 
-#include "GUIRenderer.h"
-#include "CentralRenderer.h"
 #include "SimulationRunner.h"
 #include "Layers.h"
 #include "Logger.h"

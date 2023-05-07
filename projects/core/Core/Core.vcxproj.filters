@@ -18,9 +18,6 @@
     <ClCompile Include="sources\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\MapLayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sources\Layers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -29,10 +26,7 @@
     <ClInclude Include="sources\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="includes\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\MapLayer.h">
+    <ClInclude Include="include\Core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\Layers.h">

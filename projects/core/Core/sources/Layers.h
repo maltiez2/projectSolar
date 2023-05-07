@@ -2,8 +2,7 @@
 
 #include "Logger.h"
 
-#include "CentralRenderer.h"
-#include "GUIRenderer.h"
+#include "GraphicsCore.h"
 #include "SimulationRunner.h"
 
 #include <vector>

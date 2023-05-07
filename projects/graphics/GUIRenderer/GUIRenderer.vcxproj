@@ -139,9 +139,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="sources\GraphicsCore.h" />
     <ClInclude Include="includes\GUIRenderer.h" />
     <ClInclude Include="sources\GuiRenderer.h" />
     <ClInclude Include="sources\GuiWindow.h" />
+    <ClInclude Include="sources\IndexBuffer.h" />
+    <ClInclude Include="sources\pch.h" />
+    <ClInclude Include="sources\Renderer.h" />
+    <ClInclude Include="sources\Shader.h" />
+    <ClInclude Include="sources\Texture.h" />
+    <ClInclude Include="sources\VertexArray.h" />
+    <ClInclude Include="sources\VertexBuffer.h" />
+    <ClInclude Include="sources\VertexBufferLayout.h" />
     <ClInclude Include="sources\Window.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
@@ -154,10 +163,18 @@
     <ClInclude Include="vendor\opengl\imgui_impl_glfw.h" />
     <ClInclude Include="vendor\opengl\imgui_impl_opengl3.h" />
     <ClInclude Include="vendor\opengl\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\GuiRenderer.cpp" />
     <ClCompile Include="sources\GuiWindow.cpp" />
+    <ClCompile Include="sources\IndexBuffer.cpp" />
+    <ClCompile Include="sources\pch.cpp" />
+    <ClCompile Include="sources\Renderer.cpp" />
+    <ClCompile Include="sources\Shader.cpp" />
+    <ClCompile Include="sources\Texture.cpp" />
+    <ClCompile Include="sources\VertexArray.cpp" />
+    <ClCompile Include="sources\VertexBuffer.cpp" />
     <ClCompile Include="sources\Window.cpp" />
     <ClCompile Include="vendor\imgui\imgui.cpp" />
     <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
@@ -169,6 +186,7 @@
     <ClCompile Include="vendor\implot\implot_items.cpp" />
     <ClCompile Include="vendor\opengl\imgui_impl_glfw.cpp" />
     <ClCompile Include="vendor\opengl\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
