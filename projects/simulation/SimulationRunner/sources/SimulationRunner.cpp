@@ -74,7 +74,7 @@ namespace projectSolar::Simulation
 
 		oneapi::tbb::parallel_for(
 			oneapi::tbb::blocked_range<size_t>(0, attractantsAmount, attractantsGrainSize),
-			SolverParallelWrapper<Components::Attractant::Data, Components::Attractor::Data, EulerSolver>(
+			SolverParallelWrapper<AttractantData, AttractorData, EulerSolver>(
 				{ params.gravitationalConstant, params.stepSize },
 				m_simulationData.attractantsData,
 				m_simulationData.attractorsData,
@@ -85,7 +85,7 @@ namespace projectSolar::Simulation
 
 		oneapi::tbb::parallel_for(
 			oneapi::tbb::blocked_range<size_t>(0, attractorsAmount, attractorsGrainSize),
-			SolverParallelWrapper<Components::Attractor::Data, Components::Attractor::Data, EulerSolver>(
+			SolverParallelWrapper<AttractorData, AttractorData, EulerSolver>(
 				{ params.gravitationalConstant, params.stepSize },
 				m_simulationData.attractorsData,
 				m_simulationData.attractorsData,
@@ -96,7 +96,7 @@ namespace projectSolar::Simulation
 
 		oneapi::tbb::parallel_for(
 			oneapi::tbb::blocked_range<size_t>(0, propulsedAmount, propulsedGrainSize),
-			SolverParallelWrapper<Components::Propulsed::Data, Components::Attractor::Data, EulerSolverPropulsed>(
+			SolverParallelWrapper<PropulsedData, AttractorData, EulerSolverPropulsed>(
 				{ params.gravitationalConstant, params.stepSize },
 				m_simulationData.propulsedData,
 				m_simulationData.attractorsData,

@@ -25,7 +25,7 @@ namespace projectSolar
 	class Window
 	{
 	public:
-		explicit Window(const WindowProperties& properties = WindowProperties());
+		explicit Window(const int32_t& monitor = -1, const WindowProperties& properties = WindowProperties());
 		~Window();
 
 		bool startFrame();
@@ -49,6 +49,7 @@ namespace projectSolar
 		
 		GLFWwindow* m_window;
 		WindowProperties m_properties;
+		int32_t m_monitor;
 
 		void init(const WindowProperties& properties);
 		void shutdown();

@@ -3,7 +3,6 @@
 // Internal
 #include "Logger.h"
 #include "Profiler.h"
-#include "EntityComponentSystem.h"
 
 // External vendor
 #include <Eigen/Eigen>

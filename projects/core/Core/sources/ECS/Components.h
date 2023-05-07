@@ -4,6 +4,9 @@
 
 #include <EnTT/entt.hpp>
 
+#define ECS_ALL_COMPONENTS	Components::Universe,	Components::Object,		Components::Attractor,\
+							Components::Attractant,	Components::Propulsed
+
 namespace projectSolar
 {
 	namespace ECS
@@ -39,38 +42,16 @@ namespace projectSolar
 		struct Attractor
 		{
 			size_t dataIndex;
-
-			struct Data
-			{
-				double mass;
-				Eigen::Vector3d position;
-				Eigen::Vector3d velocity;
-			};
 		};
 
 		struct Attractant
 		{
 			size_t dataIndex;
-
-			struct Data
-			{
-				double mass;
-				Eigen::Vector3d position;
-				Eigen::Vector3d velocity;
-			};
 		};
 
 		struct Propulsed
 		{
 			size_t dataIndex;
-
-			struct Data
-			{
-				double mass;
-				Eigen::Vector3d position;
-				Eigen::Vector3d velocity;
-				Eigen::Vector3d propulsion;
-			};
 		};
 	}
 }

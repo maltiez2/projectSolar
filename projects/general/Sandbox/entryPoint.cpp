@@ -61,11 +61,11 @@ int main()
 	{
 		Eigen::AngleAxisd rotation(angleForSmall * (double)index, rotationAxis);
 
-		data.attractantsData.addElement({ smallerMass, rotation * ((index + 2) * radiusVector), rotation * (velocityVector / (index + 2)) * 2.0 });
+		data.attractantsData.addElement({ rotation * ((index + 2) * radiusVector), rotation * (velocityVector / (index + 2)) * 2.0 });
 	}
 
 	Eigen::Vector3d nullVector(0.0, 0.0, 0.0);
-	data.propulsedData.addElement({ smallestMass, radiusVector, velocityVector, nullVector });
+	data.propulsedData.addElement({ radiusVector, velocityVector, nullVector });
 
 	data.save("test_data");
 

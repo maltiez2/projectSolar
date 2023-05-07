@@ -27,7 +27,7 @@ void Application::run()
 {
     LOG_INTT_CONSOLE("logs/log_imGuiTest.txt");
 
-    Window window;
+    Window window(2);
 
     Renderer centralRenderer;
     GuiWindowsManager guiWindows;

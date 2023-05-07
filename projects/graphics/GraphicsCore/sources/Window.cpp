@@ -15,7 +15,8 @@ static void glfwResizeCallback(GLFWwindow* window, int width, int height)
 	((Window*)glfwGetWindowUserPointer(window))->setSize(width, height);
 }
 
-Window::Window(const WindowProperties& properties)
+Window::Window(const int32_t& monitor, const WindowProperties& properties) :
+	m_monitor(monitor)
 {
 	init(properties);
 }
@@ -81,11 +82,19 @@ void Window::init(const WindowProperties& properties)
 		return;
 	}
 
-	//GLFWmonitor* primary = glfwGetPrimaryMonitor(); // for release
 	int count;
-	GLFWmonitor** monitors = glfwGetMonitors(&count); // for debug
-	int monitorNumber = 2;
-	const GLFWvidmode* mode = glfwGetVideoMode(monitors[monitorNumber]);
+	GLFWmonitor* monitor;
+	GLFWmonitor** monitors = glfwGetMonitors(&count);
+	if (m_monitor < 0 || m_monitor >= count)
+	{
+		monitor = glfwGetPrimaryMonitor();
+	}
+	else
+	{
+		monitor = monitors[m_monitor];
+	}
+
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
 	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
@@ -96,7 +105,7 @@ void Window::init(const WindowProperties& properties)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
 	
-	m_window = glfwCreateWindow(mode->width, mode->height, properties.title.c_str(), monitors[monitorNumber], nullptr);
+	m_window = glfwCreateWindow(mode->width, mode->height, properties.title.c_str(), monitor, nullptr);
 	if (m_window == nullptr)
 	{
 		LOG_ERROR("Unable to create window");
@@ -109,6 +118,8 @@ void Window::init(const WindowProperties& properties)
 	glfwSetWindowUserPointer(m_window, this);
 
 	m_properties = properties;
+	m_properties.height = mode->height;
+	m_properties.width = mode->width;
 
 	glfwMakeContextCurrent(m_window);
 	setVSync(properties.VSync);
