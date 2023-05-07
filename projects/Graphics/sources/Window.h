@@ -4,6 +4,7 @@
 #include "Events/KeyEvent.h"
 #include "Events/MouseEvent.h"
 #include "Events/ApplicationEvent.h"
+#include "Input/Input.h"
 
 #include "../vendor/opengl/imgui_impl_glfw.h"
 
@@ -36,6 +37,20 @@ namespace projectSolar
 	public:
 		using eventCallbackFunction = std::function<void(Event&)>;
 		
+		struct WindowData
+		{
+			std::string title;
+			uint32_t    width;
+			uint32_t    height;
+			int32_t    monitor;
+			bool VSync;
+			bool fullScreen;
+
+			InputEventsManager* eventsManager;
+
+			eventCallbackFunction eventCallback;
+		};
+		
 		explicit Window(const WindowProperties& properties = WindowProperties());
 		~Window();
 
@@ -54,22 +69,12 @@ namespace projectSolar
 		void setEventCallback(const eventCallbackFunction& callback);
 
 	private:
-		struct WindowData
-		{
-			std::string title;
-			uint32_t    width;
-			uint32_t    height;
-			 int32_t    monitor;
-			bool VSync;
-			bool fullScreen;
-
-			eventCallbackFunction eventCallback;
-		};
-		
 		const char* fontsFolder = "resources/fonts";
 		const char* glslVersion = "#version 130";
 		const int glMajorVersion = 3;
 		const int glMinorVersion = 3;
+
+		InputEventsManager eventsManager;
 		
 		GLFWwindow* m_window;
 		WindowData m_properties;

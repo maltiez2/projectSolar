@@ -31,3 +31,4 @@
 #include <fstream>
 #include <sstream>
 #include <utility>
+#include <memory>

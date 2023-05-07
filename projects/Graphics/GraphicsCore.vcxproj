@@ -145,16 +145,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\Graphics.h" />
-    <ClInclude Include="sources\Events\ApplicationEvent.h" />
-    <ClInclude Include="sources\Events\Event.h" />
-    <ClInclude Include="sources\Events\Input.h" />
-    <ClInclude Include="sources\Events\KeyCodes.h" />
-    <ClInclude Include="sources\Events\KeyEvent.h" />
-    <ClInclude Include="sources\Events\MouseCodes.h" />
-    <ClInclude Include="sources\Events\MouseEvent.h" />
     <ClInclude Include="sources\GUI\GuiRenderer.h" />
     <ClInclude Include="sources\GUI\GuiWindow.h" />
     <ClInclude Include="sources\Buffers\IndexBuffer.h" />
+    <ClInclude Include="sources\Input\ApplicationEvent.h" />
+    <ClInclude Include="sources\Input\Event.h" />
+    <ClInclude Include="sources\Input\Input.h" />
+    <ClInclude Include="sources\Input\KeyCodes.h" />
+    <ClInclude Include="sources\Input\KeyEvent.h" />
+    <ClInclude Include="sources\Input\MouseCodes.h" />
+    <ClInclude Include="sources\Input\MouseEvent.h" />
     <ClInclude Include="sources\pch.h" />
     <ClInclude Include="sources\Renderer.h" />
     <ClInclude Include="sources\Shader.h" />
@@ -177,7 +177,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sources\Events\Input.cpp" />
     <ClCompile Include="sources\GUI\GuiRenderer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
@@ -187,6 +186,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="sources\Buffers\IndexBuffer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\Input\Event.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\Input\Input.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>

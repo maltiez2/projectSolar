@@ -87,25 +87,25 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Events\ApplicationEvent.h">
+    <ClInclude Include="sources\Input\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Events\Event.h">
+    <ClInclude Include="sources\Input\Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Events\KeyCodes.h">
+    <ClInclude Include="sources\Input\KeyCodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Events\KeyEvent.h">
+    <ClInclude Include="sources\Input\MouseCodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Events\MouseCodes.h">
+    <ClInclude Include="sources\Input\MouseEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Events\MouseEvent.h">
+    <ClInclude Include="sources\Input\ApplicationEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Events\Input.h">
+    <ClInclude Include="sources\Input\KeyEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -173,7 +173,10 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\Events\Input.cpp">
+    <ClCompile Include="sources\Input\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Input\Event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
