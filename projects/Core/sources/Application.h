@@ -41,7 +41,7 @@ namespace projectSolar
 
 		SLOT(DEBUG_MESSAGE, const char* message)
 		{
-			LOG_DEBUG("CLOSE_WINDOW", data->message);
+			LOG_DEBUG("DEBUG_MESSAGE: ", data->message);
 		}
 	};
 }

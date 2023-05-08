@@ -2,7 +2,7 @@
 
 #include "IndexBuffer.h"
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 IndexBuffer::IndexBuffer(const uint32_t* data, uint32_t count) :
 	m_count(count)

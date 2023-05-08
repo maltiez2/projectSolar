@@ -5,7 +5,7 @@
 
 #include <sstream>
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 
 	class KeyEvent : public InputEvent

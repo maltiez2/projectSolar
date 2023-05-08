@@ -3,7 +3,7 @@
 #include "VertexArray.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 VertexArray::VertexArray()
 {

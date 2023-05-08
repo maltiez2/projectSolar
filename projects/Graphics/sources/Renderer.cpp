@@ -3,7 +3,7 @@
 #include "Renderer.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 Renderer::Renderer()
 {

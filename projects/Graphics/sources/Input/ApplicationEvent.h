@@ -4,7 +4,7 @@
 
 #include <sstream>
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 
 	class WindowResizeEvent : public InputEvent

@@ -8,7 +8,7 @@
 #include <functional>
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	struct GuiProperties
 	{

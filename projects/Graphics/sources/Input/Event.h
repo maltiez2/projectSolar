@@ -17,7 +17,7 @@
 #define EVENT_CLASS_CATEGORY_IMPLEMENTATION(eventClass, category) int eventClass::getCategoryFlags() const { return category; }
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	enum class InputEventType
 	{

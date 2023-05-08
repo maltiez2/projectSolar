@@ -11,7 +11,7 @@
 #include <Eigen/Eigen>
 #include <memory>
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	class Window;
 	

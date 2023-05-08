@@ -2,6 +2,7 @@
 
 #include "Graphics.h"
 #include "Simulation.h"
+#include "Events/EventHandler.h"
 
 #include <vector>
 #include <map>
@@ -9,14 +10,14 @@
 
 namespace projectSolar
 {
-	class Layer
+	class Layer : public Events::EventHandler
 	{
 	public:
 		Layer() = default;
 		virtual ~Layer() = default;
 
 		virtual void draw() = 0;
-		virtual void onEvent(InputEvent* ev) = 0;
+		virtual void onEvent(Graphics::InputEvent* ev) = 0;
 	};
 
 	class LayersManager
@@ -26,7 +27,7 @@ namespace projectSolar
 		~LayersManager();
 
 		void draw();
-		bool onEvent(InputEvent* ev);
+		bool onEvent(Graphics::InputEvent* ev);
 
 		template<typename LayerType, typename ... Args>
 		Layer* add(const size_t& id, bool draw, const Args& ... args)
@@ -68,11 +69,11 @@ namespace projectSolar
 	class MapLayer : public Layer
 	{
 	public:
-		MapLayer(Renderer* centralRenderer, Simulation::SimulationRunner* simulation);
+		MapLayer(Graphics::Renderer* centralRenderer, Simulation::SimulationRunner* simulation);
 		~MapLayer() override;
 
 		void draw() override;
-		void onEvent(InputEvent* ev) override;
+		void onEvent(Graphics::InputEvent* ev) override;
 
 		void setMVP();
 		void setProj(const glm::mat4& proj);
@@ -90,19 +91,19 @@ namespace projectSolar
 
 		const char* shaderFile = "resources/shaders/map.shader";
 
-		Renderer& m_centralRenderer;
+		Graphics::Renderer& m_centralRenderer;
 		Simulation::SimulationRunner& m_simulation;
-		Shader m_shader;
-		VertexBufferLayout m_layout;
-		VertexArray m_vertexArray;
+		Graphics::Shader m_shader;
+		Graphics::VertexBufferLayout m_layout;
+		Graphics::VertexArray m_vertexArray;
 		std::vector<Point> m_buffer = {};
 		std::vector<uint32_t> m_indices = {};
 		glm::mat4 m_proj;
 		glm::mat4 m_model;
 		glm::mat4 m_view;
 
-		VertexBuffer* m_vertexBuffer;
-		IndexBuffer* m_indexBuffer;
+		Graphics::VertexBuffer* m_vertexBuffer;
+		Graphics::IndexBuffer* m_indexBuffer;
 
 		void updateData();
 	};

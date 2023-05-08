@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	using MouseCode = uint16_t;
 

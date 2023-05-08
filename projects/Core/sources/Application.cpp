@@ -117,7 +117,7 @@ void Application::run()
         if (debugWindow.closeApp)
         {
             //m_running = false;
-            EMIT_EVENT(Application, this, DEBUG_MESSAGE, " - test!");
+            EMIT_EVENT(Application, this, DEBUG_MESSAGE, "test message");
             EMIT_EVENT(Application, this, CLOSE_WINDOW);
         }
 

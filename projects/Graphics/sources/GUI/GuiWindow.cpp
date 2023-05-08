@@ -3,19 +3,21 @@
 #include "GuiWindow.h"
 
 
-projectSolar::NotificationWindow::NotificationWindow(const std::string& title, const std::string& message) :
+using namespace projectSolar::Graphics;
+
+NotificationWindow::NotificationWindow(const std::string& title, const std::string& message) :
 	m_title(title),
 	m_message(message)
 {
 }
-void projectSolar::NotificationWindow::show()
+void NotificationWindow::show()
 {
     ImGui::Begin(m_title.c_str(), &showFlag);
     ImGui::Text(m_message.c_str());
     ImGui::End();
 }
 
-void projectSolar::DebugWindow::show()
+void DebugWindow::show()
 {
     ImGui::Begin("Debug", &showFlag);
     ImGui::SliderFloat("Scale", &scale, 0.0f, 10.0f);
@@ -28,12 +30,12 @@ void projectSolar::DebugWindow::show()
     ImGui::End();
 }
 
-void projectSolar::DemoWindow::show()
+void DemoWindow::show()
 {
     ImGui::ShowDemoWindow(&showFlag);
 }
 
-void projectSolar::PropulsionControlWindow::show()
+void PropulsionControlWindow::show()
 {
     ImGui::Begin("Propulsion control", &showFlag);
     ImGui::Checkbox("Follow player", &followPlayer);

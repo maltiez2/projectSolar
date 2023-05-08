@@ -4,7 +4,7 @@
 #include "VertexBufferLayout.h"
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	class VertexArray
 	{

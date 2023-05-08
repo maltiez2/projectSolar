@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	class Shader
 	{

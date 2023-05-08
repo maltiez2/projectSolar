@@ -3,7 +3,7 @@
 #include "Shader.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 Shader::Shader(const std::string& filename) :
 	m_filename(filename)

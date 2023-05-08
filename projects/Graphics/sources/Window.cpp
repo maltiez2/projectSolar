@@ -3,7 +3,7 @@
 #include "Window.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 static void glfwErrorCallback(int error, const char* description)
 {

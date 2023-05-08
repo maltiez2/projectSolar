@@ -6,8 +6,6 @@
 
 #define PPCAT_NX(A, B) A ## B
 #define PPCAT(A, B) PPCAT_NX(A, B)
-
-
 #define SLOT(command, ...) enum : uint16_t { command = __LINE__ }; struct PPCAT(command, _DATA) {__VA_ARGS__;}; void PPCAT(command, _FUNC)(void* sender, PPCAT(command, _DATA)* data)
 #define EMIT_EVENT(destClass, dest, command, ...) auto* PPCAT(data, __LINE__) = new destClass::PPCAT(command, _DATA)({__VA_ARGS__}); (dest)->receive((void*)this, destClass::command, PPCAT(data, __LINE__))
 #define PROCESS_EVENT(sender, command, data) PPCAT(command, _FUNC)(sender, (PPCAT(command, _DATA)*)(data))

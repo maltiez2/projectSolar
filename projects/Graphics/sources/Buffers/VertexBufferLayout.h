@@ -5,7 +5,7 @@
 #include "Logger.h"
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	struct VertexBufferElement
 	{

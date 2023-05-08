@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	class GuiWindow
 	{

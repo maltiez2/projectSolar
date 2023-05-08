@@ -7,7 +7,7 @@
 #include "Window.h"
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	// InputEventsManager
 	InputEventsManager::InputEventsManager(Window* window) :

@@ -5,7 +5,7 @@
 #include "Shader.h"
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
 	class Renderer
 	{
