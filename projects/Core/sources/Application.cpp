@@ -16,6 +16,19 @@
 
 using namespace projectSolar;
 
+bool comparePositions(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2, const double& epsilon)
+{
+    for (uint8_t i = 0; i < 3; i++)
+    {
+        if (std::abs(p1[i] - p2[i]) > std::abs(p1[i]) * epsilon)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 struct Point
 {
     float x;
@@ -25,6 +38,7 @@ struct Point
 };
 
 Application::Application(Simulation::SimulationRunner& simulation, const WindowProperties& windowProps) :
+    EventHandler(1),
     m_simulation(simulation),
     m_window(new Window(windowProps))
 {
@@ -37,12 +51,10 @@ Application::~Application()
 
 void Application::run()
 {
-    LOG_INTT_CONSOLE("logs/log_imGuiTest.txt");
-
+    
+    
     Renderer centralRenderer;
     GuiWindowsManager guiWindows;
-
-    ApplicationHandler m_handler(this, 3);
     
     //TaskManager taskManager(&m_simulation, &guiWindows, m_window);
     
@@ -63,6 +75,7 @@ void Application::run()
 
     Eigen::Vector3d forceDirection(1.0, 0.0, 0.0);
     Eigen::Vector3d rotationAxis(0.0, 0.0, 1.0);
+    Eigen::Vector3d playerPosition = m_simulation.getData().propulsedData.getData()[0].position;
     float forceMagnitude = 1.0f;
 
     while (m_running)
@@ -86,9 +99,10 @@ void Application::run()
         glm::mat4 proj = glm::ortho(-1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getWidth(), -1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getHeight(), -1.0f, 1.0f);
         m_layers.get<MapLayer>(1)->setProj(proj);
         
-        if (propWindow.followPlayer)
+        if (propWindow.followPlayer && !comparePositions(playerPosition, player.position, 1e-5))
         {
-            EMIT_EVENT(&m_handler, APP_SET_MAP_VIEW, 1, (float)player.position[0], (float)player.position[1], (float)player.position[2]);
+            //EMIT_EVENT(&m_handler, APP_SET_MAP_VIEW, 1, (float)player.position[0], (float)player.position[1], (float)player.position[2]);
+            playerPosition = player.position;
         }
  
 
@@ -103,9 +117,11 @@ void Application::run()
         if (debugWindow.closeApp)
         {
             //m_running = false;
+            EMIT_EVENT(Application, this, DEBUG_MESSAGE, " - test!");
+            EMIT_EVENT(Application, this, CLOSE_WINDOW);
         }
 
-        processEvents();
+        processInputEvents();
 
         //taskManager.execute();
 
@@ -115,7 +131,7 @@ void Application::run()
     }
 }
 
-void Application::processEvents()
+void Application::processInputEvents()
 {
     auto& eventsManager = m_window->getEventsManager();
     while (!eventsManager.isEmpty())
@@ -124,3 +140,17 @@ void Application::processEvents()
         eventsManager.pop();
     }
 }
+
+void projectSolar::Application::processEvent(const Events::Event& ev)
+{
+    switch (ev.command)
+    {
+    case CLOSE_WINDOW:
+        return PROCESS_EVENT(ev.sender, CLOSE_WINDOW, ev.data);
+    case DEBUG_MESSAGE:
+        return PROCESS_EVENT(ev.sender, DEBUG_MESSAGE, ev.data);
+    default:
+        break;
+    }
+}
+
