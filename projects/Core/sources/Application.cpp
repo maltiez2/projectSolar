@@ -10,6 +10,8 @@
 #include <Eigen/Eigen>
 #include <functional>
 
+#include "Tasks/TaskManager.h"
+
 
 using namespace projectSolar;
 
@@ -38,6 +40,8 @@ void Application::run()
 
     Renderer centralRenderer;
     GuiWindowsManager guiWindows;
+    
+    TaskManager taskManager(&m_simulation, &guiWindows, m_window);
     
     m_layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
     m_layers.add<GuiLayer>(2, true, m_window, &guiWindows);
@@ -97,10 +101,12 @@ void Application::run()
 
         if (debugWindow.closeApp)
         {
-            m_running = false;
+            //m_running = false;
         }
 
         processEvents();
+
+        taskManager.execute();
     }
 }
 

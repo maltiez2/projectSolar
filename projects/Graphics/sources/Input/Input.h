@@ -3,6 +3,9 @@
 #include "Event.h"
 #include "KeyCodes.h"
 #include "MouseCodes.h"
+#include "ApplicationEvent.h"
+#include "MouseEvent.h"
+#include "KeyEvent.h"
 
 #include <queue>
 #include <Eigen/Eigen>

@@ -88,8 +88,6 @@ void Window::init(const WindowProperties& properties)
 	LOG_ASSERT(success, "Failed to initialize GLFW")
 
 	GLFWmonitor* monitor = setUpFullscreen();
-
-	
 	
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajorVersion);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinorVersion);
@@ -106,11 +104,8 @@ void Window::init(const WindowProperties& properties)
 	glfwMakeContextCurrent(m_window);
 	setVSync(properties.VSync);
 
-	if (int error = glewInit(); error != GLEW_OK)
-	{
-		LOG_ERROR("Error on glew init: ", error);
-		return;
-	}
+	int error = glewInit();
+	LOG_ASSERT(error == GLEW_OK, "Error on glew init: ", error)
 	LOG_INFO("GL version: ", (char*)glGetString(GL_VERSION));
 
 	m_eventsManager.setupCallbacks(); // need to be before setupImGui

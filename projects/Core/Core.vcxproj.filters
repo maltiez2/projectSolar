@@ -50,5 +50,8 @@
     <ClInclude Include="sources\ECS\Serialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sources\Tasks\TaskManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
