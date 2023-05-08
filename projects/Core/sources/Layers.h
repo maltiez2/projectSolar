@@ -10,10 +10,10 @@
 
 namespace projectSolar
 {
-	class Layer
+	class Layer : public EventHandler
 	{
 	public:
-		Layer() = default;
+		Layer();
 		virtual ~Layer() = default;
 
 		virtual void draw() = 0;
@@ -106,6 +106,11 @@ namespace projectSolar
 		Graphics::IndexBuffer* m_indexBuffer;
 
 		void updateData();
+
+	public:
+		SLOT_DECL(SET_PROJ, uint32_t width; uint32_t height; float scale);
+		SLOT_DECL(SET_VIEW, float x; float y; float z);
+		SLOT_DECL(SET_MODEL, float x; float y; float z);
 	};
 	class GuiLayer : public Layer
 	{

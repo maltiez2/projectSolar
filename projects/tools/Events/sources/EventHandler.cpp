@@ -11,10 +11,10 @@
 #include <vector>
 
 
-namespace projectSolar::Events
+namespace projectSolar
 {
 	// EventQueue
-	void EventQueue::push(const Event& ev)
+	void EventHandler::EventQueue::push(const Event& ev)
 	{
 		std::shared_lock stateLock(m_stateMutex);
 		if (m_state)
@@ -28,7 +28,7 @@ namespace projectSolar::Events
 			m_events_1.emplace(ev);
 		}
 	}
-	Event EventQueue::pop()
+	EventHandler::Event EventHandler::EventQueue::pop()
 	{
 		std::shared_lock stateLock(m_stateMutex);
 		if (m_state)
@@ -56,12 +56,12 @@ namespace projectSolar::Events
 			return ev;
 		}
 	}
-	void EventQueue::swap()
+	void EventHandler::EventQueue::swap()
 	{
 		std::unique_lock lock(m_stateMutex);
 		m_state = !m_state;
 	}
-	bool EventQueue::empty() const
+	bool EventHandler::EventQueue::empty() const
 	{
 		std::shared_lock stateLock(m_stateMutex);
 		if (m_state)
@@ -75,7 +75,7 @@ namespace projectSolar::Events
 			return m_events_0.empty();
 		}
 	}
-	size_t EventQueue::size() const
+	size_t EventHandler::EventQueue::size() const
 	{
 		std::shared_lock stateLock(m_stateMutex);
 		if (m_state)
@@ -98,18 +98,18 @@ namespace projectSolar::Events
 	}
 	EventHandler::~EventHandler()
 	{
-		for (Event ev = m_events.pop(); ev.command != UNKNOWN_COMMAND; ev = m_events.pop())
+		for (Event ev = m_events.pop(); ev.sender != nullptr; ev = m_events.pop())
 		{
 			delete(ev.data);
 		}
 		m_events.swap();
-		for (Event ev = m_events.pop(); ev.command != UNKNOWN_COMMAND; ev = m_events.pop())
+		for (Event ev = m_events.pop(); ev.sender != nullptr; ev = m_events.pop())
 		{
 			delete(ev.data);
 		}
 	}
 
-	void EventHandler::receive(void* sender, const uint16_t& command, void* data)
+	void EventHandler::receive(void* sender, EventFunc command, void* data)
 	{
 		LOG_ASSERT(command != UNKNOWN_COMMAND, "[EventHandler] UNKNOWN_COMMAND was received")
 			LOG_DEBUG("[EventHandler] receive - command: ", (int)command);
@@ -142,9 +142,10 @@ namespace projectSolar::Events
 	}
 	void EventHandler::process()
 	{
-		for (Event ev = m_events.pop(); ev.command != UNKNOWN_COMMAND; ev = m_events.pop())
+		for (Event ev = m_events.pop(); ev.sender != nullptr; ev = m_events.pop())
 		{
-			processEvent(ev);
+			auto command = ev.command;
+			(this->*command)(ev.sender, ev.data);
 			delete(ev.data);
 		}
 	}

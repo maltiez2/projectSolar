@@ -10,7 +10,7 @@
 
 namespace projectSolar
 {
-	class Application : public Events::EventHandler
+	class Application : public EventHandler
 	{
 	public:
 		
@@ -24,9 +24,6 @@ namespace projectSolar
 		LayersManager m_layers;
 		Graphics::Window* m_window;
 
-	protected:
-		void processEvent(const Events::Event& ev) override;
-
 	private:
 		bool m_running = true;
 
@@ -34,12 +31,12 @@ namespace projectSolar
 
 	public: // SLOTS
 
-		SLOT(CLOSE_WINDOW)
+		SLOT_DECL(CLOSE_WINDOW)
 		{
 			LOG_DEBUG("CLOSE_WINDOW");
 		}
 
-		SLOT(DEBUG_MESSAGE, const char* message)
+		SLOT_DECL(DEBUG_MESSAGE, const char* message)
 		{
 			LOG_DEBUG("DEBUG_MESSAGE: ", data->message);
 		}

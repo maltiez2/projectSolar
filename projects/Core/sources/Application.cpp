@@ -58,7 +58,7 @@ void Application::run()
     
     //TaskManager taskManager(&m_simulation, &guiWindows, m_window);
     
-    m_layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
+    MapLayer* mapLayer = (MapLayer*)m_layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
     m_layers.add<GuiLayer>(2, true, m_window, &guiWindows);
 
     // *** GUI ***
@@ -76,6 +76,9 @@ void Application::run()
     Eigen::Vector3d forceDirection(1.0, 0.0, 0.0);
     Eigen::Vector3d rotationAxis(0.0, 0.0, 1.0);
     Eigen::Vector3d playerPosition = m_simulation.getData().propulsedData.getData()[0].position;
+    const float scaleMult = 0.05f;
+    const float epsilon = 1e-5f;
+    float scale = 0.0f;
     float forceMagnitude = 1.0f;
 
     while (m_running)
@@ -95,13 +98,15 @@ void Application::run()
 
         // *** Central map setup ***
 
-        float scale = 0.05f * debugWindow.scale;
-        glm::mat4 proj = glm::ortho(-1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getWidth(), -1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getHeight(), -1.0f, 1.0f);
-        m_layers.get<MapLayer>(1)->setProj(proj);
-        
-        if (propWindow.followPlayer && !comparePositions(playerPosition, player.position, 1e-5))
+        if (std::abs(debugWindow.scale - scale) > scale * epsilon)
         {
-            //EMIT_EVENT(&m_handler, APP_SET_MAP_VIEW, 1, (float)player.position[0], (float)player.position[1], (float)player.position[2]);
+            scale = debugWindow.scale;
+            EMIT_EVENT(MapLayer, mapLayer, SET_PROJ, m_window->getWidth(), m_window->getHeight(), scale * scaleMult);
+        }
+        
+        if (propWindow.followPlayer && !comparePositions(playerPosition, player.position, epsilon))
+        {
+            EMIT_EVENT(MapLayer, mapLayer, SET_VIEW, (float)player.position[0], (float)player.position[1], (float)player.position[2]);
             playerPosition = player.position;
         }
  
@@ -138,19 +143,6 @@ void Application::processInputEvents()
     {
         m_layers.onEvent(eventsManager.front());
         eventsManager.pop();
-    }
-}
-
-void projectSolar::Application::processEvent(const Events::Event& ev)
-{
-    switch (ev.command)
-    {
-    case CLOSE_WINDOW:
-        return PROCESS_EVENT(ev.sender, CLOSE_WINDOW, ev.data);
-    case DEBUG_MESSAGE:
-        return PROCESS_EVENT(ev.sender, DEBUG_MESSAGE, ev.data);
-    default:
-        break;
     }
 }
 

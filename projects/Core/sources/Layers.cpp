@@ -4,6 +4,13 @@
 
 using namespace projectSolar;
 
+
+Layer::Layer() :
+    EventHandler(1)
+{
+}
+
+// Layers Manager
 LayersManager::~LayersManager()
 {
 	for (auto& pointer : m_layers)
@@ -57,7 +64,7 @@ Layer* LayersManager::detach(const std::size_t& id)
     return layer;
 }
 
-
+// Map Layer
 MapLayer::MapLayer(Graphics::Renderer* centralRenderer, Simulation::SimulationRunner* simulation) :
     m_centralRenderer(*centralRenderer),
     m_simulation(*simulation),
@@ -157,6 +164,25 @@ void MapLayer::updateData()
     }
 }
 
+SLOT_IMPL(SET_PROJ, MapLayer)
+{
+    LOG_DEBUG("[MapLayer] SET_PROJ: ", data->width, " : ", data->height, " - ", data->scale);
+    m_proj = glm::ortho(-1.0f * data->scale * (float)data->width, 1.0f * data->scale * (float)data->width, -1.0f * data->scale * (float)data->width, 1.0f * data->scale * (float)data->width, -1.0f, 1.0f);
+
+}
+SLOT_IMPL(SET_VIEW, MapLayer)
+{
+    LOG_DEBUG("[MapLayer] SET_VIEW: ", data->x, ", ", data->y, ", ", data->z);
+    m_view = glm::translate(glm::mat4(1.0f), glm::vec3(-data->x, -data->y, -data->z));
+}
+SLOT_IMPL(SET_MODEL, MapLayer)
+{
+    LOG_DEBUG("[MapLayer] SET_MODEL: ", data->x, ", ", data->y, ", ", data->z);
+    m_model = glm::translate(glm::mat4(1.0f), glm::vec3(data->x, data->y, data->z));
+}
+
+
+// GUI Layer
 GuiLayer::GuiLayer(Graphics::Window* window, Graphics::GuiWindowsManager* guiWindows, bool blockEvents) :
     m_renderer(*window, *guiWindows),
     m_blockEvents(blockEvents)
