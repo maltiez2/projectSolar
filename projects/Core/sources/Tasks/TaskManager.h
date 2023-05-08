@@ -2,6 +2,7 @@
 
 #include "Simulation.h"
 #include "Graphics.h"
+#include "Logger.h"
 
 #include <atomic>
 #include <queue>
@@ -90,6 +91,7 @@ namespace projectSolar
 			window(window)
 		{
 			current().push(initial, nullptr);
+			current().swap();
 		}
 		~TaskManager()
 		{
@@ -136,6 +138,7 @@ namespace projectSolar
 				current().swap();
 			}
 			swap();
+			current().swap();
 		}
 
 	private:
@@ -176,18 +179,21 @@ namespace projectSolar
 
 	void initial(void* manager, void* data)
 	{
+		LOG_DEBUG("[task] Initial");
 		((TaskManager*)manager)->pushCurrent(closeWindow, nullptr);
 	}
 	void closeWindow(void* manager, void* data)
 	{
+		((TaskManager*)manager)->pushFuture(closeWindow, nullptr);
 		DebugWindow* const guiWindow = ((TaskManager*)manager)->windows->get<DebugWindow>("debug");
 		if (guiWindow->closeApp)
 		{
+			LOG_DEBUG("[task] closeWindow - close");
 			glfwSetWindowShouldClose(((TaskManager*)manager)->window->getNativeWindow(), GL_TRUE);
 		}
 		else
 		{
-			((TaskManager*)manager)->pushFuture(closeWindow, nullptr);
+			LOG_DEBUG("[task] closeWindow - not close");
 		}
 	}
 }

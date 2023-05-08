@@ -166,6 +166,8 @@
     <ClInclude Include="sources\ECS\Components.h" />
     <ClInclude Include="sources\ECS\EntityComponentSystem.h" />
     <ClInclude Include="sources\ECS\Serialization.h" />
+    <ClInclude Include="sources\Events\EventHandler.h" />
+    <ClInclude Include="sources\Events\Events.h" />
     <ClInclude Include="sources\Layers.h" />
     <ClInclude Include="sources\pch.h" />
     <ClInclude Include="sources\Tasks\TaskManager.h" />

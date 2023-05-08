@@ -74,7 +74,10 @@ namespace projectSolar
 		void draw() override;
 		void onEvent(InputEvent* ev) override;
 
-		void setMVP(const glm::mat4& mvp);
+		void setMVP();
+		void setProj(const glm::mat4& proj);
+		void setModel(const glm::mat4& model);
+		void setView(const glm::mat4& view);
 
 	private:
 		struct Point
@@ -94,6 +97,9 @@ namespace projectSolar
 		VertexArray m_vertexArray;
 		std::vector<Point> m_buffer = {};
 		std::vector<uint32_t> m_indices = {};
+		glm::mat4 m_proj;
+		glm::mat4 m_model;
+		glm::mat4 m_view;
 
 		VertexBuffer* m_vertexBuffer;
 		IndexBuffer* m_indexBuffer;

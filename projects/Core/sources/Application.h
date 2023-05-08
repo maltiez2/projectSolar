@@ -16,10 +16,12 @@ namespace projectSolar
 
 		void run();
 
-	private:
+	
 		Simulation::SimulationRunner& m_simulation;
 		LayersManager m_layers;
 		Window* m_window;
+
+	private:
 		bool m_running = true;
 
 		void processEvents();

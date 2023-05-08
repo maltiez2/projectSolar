@@ -11,6 +11,7 @@
 #include <functional>
 
 #include "Tasks/TaskManager.h"
+#include "Events/EventHandler.h"
 
 
 using namespace projectSolar;
@@ -40,8 +41,10 @@ void Application::run()
 
     Renderer centralRenderer;
     GuiWindowsManager guiWindows;
+
+    ApplicationHandler m_handler(this, 3);
     
-    TaskManager taskManager(&m_simulation, &guiWindows, m_window);
+    //TaskManager taskManager(&m_simulation, &guiWindows, m_window);
     
     m_layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
     m_layers.add<GuiLayer>(2, true, m_window, &guiWindows);
@@ -74,22 +77,20 @@ void Application::run()
 
         if (debugWindow.runSimulation)
         {
-            m_simulation.run({ 10.0f, 5e-2 * debugWindow.timeScale, 0.3f, 60, 10, -0.1f});
+            m_simulation.run({ 10.0f, 5e-2 * debugWindow.timeScale, 0.5f, 144, 10, -0.1f});
         }
 
         // *** Central map setup ***
 
         float scale = 0.05f * debugWindow.scale;
         glm::mat4 proj = glm::ortho(-1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getWidth(), -1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getHeight(), -1.0f, 1.0f);
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-player.position[0], -player.position[1], 0));
-        if (!propWindow.followPlayer)
+        m_layers.get<MapLayer>(1)->setProj(proj);
+        
+        if (propWindow.followPlayer)
         {
-            view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+            EMIT_EVENT(&m_handler, APP_SET_MAP_VIEW, 1, (float)player.position[0], (float)player.position[1], (float)player.position[2]);
         }
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-        glm::mat4 mvp = proj * view * model;
-
-        m_layers.get<MapLayer>(1)->setMVP(mvp);
+ 
 
         // *** GUI setup ***
 
@@ -106,7 +107,11 @@ void Application::run()
 
         processEvents();
 
-        taskManager.execute();
+        //taskManager.execute();
+
+        //handler.send(&handler, Command::WND_WINDOW_CLOSE, nullptr);
+
+        m_running = !(bool)glfwWindowShouldClose(m_window->getNativeWindow());
     }
 }
 

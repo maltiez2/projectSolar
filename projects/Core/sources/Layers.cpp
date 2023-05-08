@@ -63,6 +63,10 @@ MapLayer::MapLayer(Renderer* centralRenderer, Simulation::SimulationRunner* simu
     m_simulation(*simulation),
     m_shader(shaderFile)
 {
+    m_proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+    m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    m_view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    
     updateData();
 
     m_vertexBuffer = new VertexBuffer(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
@@ -82,6 +86,8 @@ void MapLayer::draw()
 
     m_vertexBuffer->updateData(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
     m_shader.bind();
+    glm::mat4 MVP = m_proj * m_view * m_model;
+    m_shader.setUniformMat4f("u_MVP", MVP);
 
     m_centralRenderer.draw(m_vertexArray, *m_indexBuffer, m_shader);
 
@@ -94,11 +100,23 @@ void projectSolar::MapLayer::onEvent(InputEvent* ev)
 {
     LOG_DEBUG("[event] [MapLayer] ", ev->toString());
 }
-void projectSolar::MapLayer::setMVP(const glm::mat4& mvp)
+void projectSolar::MapLayer::setMVP()
 {
     m_shader.bind();
-    m_shader.setUniformMat4f("u_MVP", mvp);
+    m_shader.setUniformMat4f("u_MVP", m_proj * m_view * m_model);
     m_shader.unbind();
+}
+void projectSolar::MapLayer::setProj(const glm::mat4& proj)
+{
+    m_proj = proj;
+}
+void projectSolar::MapLayer::setModel(const glm::mat4& model)
+{
+    m_model = model;
+}
+void projectSolar::MapLayer::setView(const glm::mat4& view)
+{
+    m_view = view;
 }
 void MapLayer::updateData()
 {
