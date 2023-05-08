@@ -2,7 +2,7 @@
 
 #include "Graphics.h"
 #include "Simulation.h"
-#include "Events/EventHandler.h"
+#include "EventHandler.h"
 
 #include <vector>
 #include <map>
@@ -10,7 +10,7 @@
 
 namespace projectSolar
 {
-	class Layer : public Events::EventHandler
+	class Layer
 	{
 	public:
 		Layer() = default;
@@ -110,14 +110,14 @@ namespace projectSolar
 	class GuiLayer : public Layer
 	{
 	public:
-		GuiLayer(Window* window, GuiWindowsManager* guiWindows, bool blockEvents = true);
+		GuiLayer(Graphics::Window* window, Graphics::GuiWindowsManager* guiWindows, bool blockEvents = true);
 		~GuiLayer() override = default;
 
 		void draw() override;
-		void onEvent(InputEvent* ev) override;
+		void onEvent(Graphics::InputEvent* ev) override;
 
 	private:
-		GuiRenderer m_renderer;
+		Graphics::GuiRenderer m_renderer;
 		bool m_blockEvents;
 	};
 }

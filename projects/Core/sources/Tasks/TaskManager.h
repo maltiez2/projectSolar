@@ -81,11 +81,11 @@ namespace projectSolar
 	{
 	public:
 		Simulation::SimulationRunner* simulation;
-		GuiWindowsManager* windows;
-		Window* window;
+		Graphics::GuiWindowsManager* windows;
+		Graphics::Window* window;
 
 
-		explicit TaskManager(Simulation::SimulationRunner* simulation, GuiWindowsManager* windows, Window* window) :
+		explicit TaskManager(Simulation::SimulationRunner* simulation, Graphics::GuiWindowsManager* windows, Graphics::Window* window) :
 			simulation(simulation),
 			windows(windows),
 			window(window)
@@ -185,7 +185,7 @@ namespace projectSolar
 	void closeWindow(void* manager, void* data)
 	{
 		((TaskManager*)manager)->pushFuture(closeWindow, nullptr);
-		DebugWindow* const guiWindow = ((TaskManager*)manager)->windows->get<DebugWindow>("debug");
+		Graphics::DebugWindow* const guiWindow = ((TaskManager*)manager)->windows->get<Graphics::DebugWindow>("debug");
 		if (guiWindow->closeApp)
 		{
 			LOG_DEBUG("[task] closeWindow - close");

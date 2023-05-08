@@ -4,7 +4,7 @@
 #include "Layers.h"
 #include "Graphics.h"
 
-#include "Events/EventHandler.h"
+#include "EventHandler.h"
 
 #include <memory>
 
@@ -15,14 +15,14 @@ namespace projectSolar
 	public:
 		
 		
-		Application(Simulation::SimulationRunner& simulation, const WindowProperties& windowProps = WindowProperties());
+		Application(Simulation::SimulationRunner& simulation, const Graphics::WindowProperties& windowProps = Graphics::WindowProperties());
 		~Application();
 
 		void run();
 
 		Simulation::SimulationRunner& m_simulation;
 		LayersManager m_layers;
-		Window* m_window;
+		Graphics::Window* m_window;
 
 	protected:
 		void processEvent(const Events::Event& ev) override;

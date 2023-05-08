@@ -4,21 +4,21 @@
 
 using namespace projectSolar;
 
-projectSolar::LayersManager::~LayersManager()
+LayersManager::~LayersManager()
 {
 	for (auto& pointer : m_layers)
 	{
 		delete(pointer);
 	}
 }
-void projectSolar::LayersManager::draw()
+void LayersManager::draw()
 {
     for (auto& [id, layer] : m_attached)
     {
         layer->draw();
     }
 }
-bool projectSolar::LayersManager::onEvent(InputEvent* ev)
+bool LayersManager::onEvent(Graphics::InputEvent* ev)
 {
     for (auto it = m_attached.rbegin(); it != m_attached.rend(); ++it)
     {
@@ -30,7 +30,7 @@ bool projectSolar::LayersManager::onEvent(InputEvent* ev)
     }
     return false;
 }
-bool projectSolar::LayersManager::attach(const std::size_t& id, Layer* layer)
+bool LayersManager::attach(const std::size_t& id, Layer* layer)
 {
     if (m_attached.contains(id));
     {
@@ -42,7 +42,7 @@ bool projectSolar::LayersManager::attach(const std::size_t& id, Layer* layer)
     
     return true;
 }
-Layer* projectSolar::LayersManager::detach(const std::size_t& id)
+Layer* LayersManager::detach(const std::size_t& id)
 {
     if (!m_attached.contains(id))
     {
@@ -58,7 +58,7 @@ Layer* projectSolar::LayersManager::detach(const std::size_t& id)
 }
 
 
-MapLayer::MapLayer(Renderer* centralRenderer, Simulation::SimulationRunner* simulation) :
+MapLayer::MapLayer(Graphics::Renderer* centralRenderer, Simulation::SimulationRunner* simulation) :
     m_centralRenderer(*centralRenderer),
     m_simulation(*simulation),
     m_shader(shaderFile)
@@ -69,11 +69,11 @@ MapLayer::MapLayer(Renderer* centralRenderer, Simulation::SimulationRunner* simu
     
     updateData();
 
-    m_vertexBuffer = new VertexBuffer(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
+    m_vertexBuffer = new Graphics::VertexBuffer(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
     m_layout.push<float>(3);
     m_layout.push<uint32_t>(1);
     m_vertexArray.addBufer(*m_vertexBuffer, m_layout);
-    m_indexBuffer = new IndexBuffer(std::to_address(m_indices.begin()), m_indices.size());
+    m_indexBuffer = new Graphics::IndexBuffer(std::to_address(m_indices.begin()), m_indices.size());
 }
 MapLayer::~MapLayer()
 {
@@ -96,25 +96,25 @@ void MapLayer::draw()
     m_vertexBuffer->unbind();
     m_indexBuffer->unbind();
 }
-void projectSolar::MapLayer::onEvent(InputEvent* ev)
+void MapLayer::onEvent(Graphics::InputEvent* ev)
 {
     LOG_DEBUG("[event] [MapLayer] ", ev->toString());
 }
-void projectSolar::MapLayer::setMVP()
+void MapLayer::setMVP()
 {
     m_shader.bind();
     m_shader.setUniformMat4f("u_MVP", m_proj * m_view * m_model);
     m_shader.unbind();
 }
-void projectSolar::MapLayer::setProj(const glm::mat4& proj)
+void MapLayer::setProj(const glm::mat4& proj)
 {
     m_proj = proj;
 }
-void projectSolar::MapLayer::setModel(const glm::mat4& model)
+void MapLayer::setModel(const glm::mat4& model)
 {
     m_model = model;
 }
-void projectSolar::MapLayer::setView(const glm::mat4& view)
+void MapLayer::setView(const glm::mat4& view)
 {
     m_view = view;
 }
@@ -157,25 +157,25 @@ void MapLayer::updateData()
     }
 }
 
-projectSolar::GuiLayer::GuiLayer(Window* window, GuiWindowsManager* guiWindows, bool blockEvents) :
+GuiLayer::GuiLayer(Graphics::Window* window, Graphics::GuiWindowsManager* guiWindows, bool blockEvents) :
     m_renderer(*window, *guiWindows),
     m_blockEvents(blockEvents)
 {
 }
 
-void projectSolar::GuiLayer::draw()
+void GuiLayer::draw()
 {
     m_renderer.render();
 }
-void projectSolar::GuiLayer::onEvent(InputEvent* ev)
+void GuiLayer::onEvent(Graphics::InputEvent* ev)
 {
     if (m_blockEvents)
     {
         LOG_DEBUG("[event] [GuiLayer] ", ev->toString());
 
         ImGuiIO& io = ImGui::GetIO();
-        ev->handled |= ev->isInCategory(EventCategoryMouse) & io.WantCaptureMouse;
-        ev->handled |= ev->isInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+        ev->handled |= ev->isInCategory(Graphics::EventCategoryMouse) & io.WantCaptureMouse;
+        ev->handled |= ev->isInCategory(Graphics::EventCategoryKeyboard) & io.WantCaptureKeyboard;
     }
     
 }

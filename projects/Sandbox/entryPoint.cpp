@@ -8,6 +8,7 @@
 
 
 using namespace projectSolar::Simulation;
+using namespace projectSolar::Graphics;
 
 constexpr double gravitationalConstant = 1.0;
 constexpr size_t attractorsAmount = 15;
@@ -29,7 +30,7 @@ int main()
 	auto runner = SimulationRunner();
 	runnerDataSetup(runner);
 
-	projectSolar::WindowProperties windowProps;
+	WindowProperties windowProps;
 	windowProps.fullScreen = false;
 
 	auto* app = new projectSolar::Application(runner, windowProps);

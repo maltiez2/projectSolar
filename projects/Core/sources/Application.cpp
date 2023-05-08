@@ -11,7 +11,7 @@
 #include <functional>
 
 #include "Tasks/TaskManager.h"
-#include "Events/EventHandler.h"
+#include "EventHandler.h"
 
 
 using namespace projectSolar;
@@ -37,10 +37,10 @@ struct Point
     uint32_t type;
 };
 
-Application::Application(Simulation::SimulationRunner& simulation, const WindowProperties& windowProps) :
+Application::Application(Simulation::SimulationRunner& simulation, const Graphics::WindowProperties& windowProps) :
     EventHandler(1),
     m_simulation(simulation),
-    m_window(new Window(windowProps))
+    m_window(new Graphics::Window(windowProps))
 {
 }
 
@@ -53,8 +53,8 @@ void Application::run()
 {
     
     
-    Renderer centralRenderer;
-    GuiWindowsManager guiWindows;
+    Graphics::Renderer centralRenderer;
+    Graphics::GuiWindowsManager guiWindows;
     
     //TaskManager taskManager(&m_simulation, &guiWindows, m_window);
     
@@ -62,15 +62,15 @@ void Application::run()
     m_layers.add<GuiLayer>(2, true, m_window, &guiWindows);
 
     // *** GUI ***
-    guiWindows.add<NotificationWindow>("test", true, "Test window", "Test text of test window");
-    guiWindows.add<DebugWindow>("debug", true);
-    guiWindows.add<DemoWindow>("demo", false);
-    guiWindows.add<PropulsionControlWindow>("prop", true);
+    guiWindows.add<Graphics::NotificationWindow>("test", true, "Test window", "Test text of test window");
+    guiWindows.add<Graphics::DebugWindow>("debug", true);
+    guiWindows.add<Graphics::DemoWindow>("demo", false);
+    guiWindows.add<Graphics::PropulsionControlWindow>("prop", true);
 
-    const auto& guiWindow   = *guiWindows.get<NotificationWindow>("test");
-    const auto& debugWindow = *guiWindows.get<DebugWindow>("debug");
-          auto& demoWindow  = *guiWindows.get<DemoWindow>("demo");
-    const auto& propWindow  = *guiWindows.get<PropulsionControlWindow>("prop");
+    const auto& guiWindow   = *guiWindows.get<Graphics::NotificationWindow>("test");
+    const auto& debugWindow = *guiWindows.get<Graphics::DebugWindow>("debug");
+          auto& demoWindow  = *guiWindows.get<Graphics::DemoWindow>("demo");
+    const auto& propWindow  = *guiWindows.get<Graphics::PropulsionControlWindow>("prop");
     // ***********
 
     Eigen::Vector3d forceDirection(1.0, 0.0, 0.0);
