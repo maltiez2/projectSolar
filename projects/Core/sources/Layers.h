@@ -111,6 +111,8 @@ namespace projectSolar
 		SLOT_DECL(SET_PROJ, uint32_t width; uint32_t height; float scale);
 		SLOT_DECL(SET_VIEW, float x; float y; float z);
 		SLOT_DECL(SET_MODEL, float x; float y; float z);
+		SLOT_DECL(TRANSLATE_VIEW, float x; float y; float z);
+		SLOT_DECL(TRANSLATE_MODEL, float x; float y; float z);
 	};
 	class GuiLayer : public Layer
 	{

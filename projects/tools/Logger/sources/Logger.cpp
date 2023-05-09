@@ -28,10 +28,6 @@ namespace projectSolar
 		spdlog::flush_every(std::chrono::seconds(flushEvery_seconds));
 		m_spdLogger->info("log started");
 	}
-	Logger::~Logger()
-	{
-
-	}
 
 	Logger& Logger::get()
 	{

@@ -105,7 +105,7 @@ void MapLayer::draw()
 }
 void MapLayer::onEvent(Graphics::InputEvent* ev)
 {
-    LOG_DEBUG("[event] [MapLayer] ", ev->toString());
+    //LOG_DEBUG("[event] [MapLayer] ", ev->toString());
 }
 void MapLayer::setMVP()
 {
@@ -167,8 +167,9 @@ void MapLayer::updateData()
 SLOT_IMPL(SET_PROJ, MapLayer)
 {
     LOG_DEBUG("[MapLayer] SET_PROJ: ", data->width, " : ", data->height, " - ", data->scale);
-    m_proj = glm::ortho(-1.0f * data->scale * (float)data->width, 1.0f * data->scale * (float)data->width, -1.0f * data->scale * (float)data->width, 1.0f * data->scale * (float)data->width, -1.0f, 1.0f);
-
+    float width = data->scale * (float)data->width;
+    float height = data->scale * (float)data->height;
+    m_proj = glm::ortho(-0.5f * width, 0.5f * width, -0.5f * height, 0.5f * height, -1.0f, 1.0f);
 }
 SLOT_IMPL(SET_VIEW, MapLayer)
 {
@@ -180,7 +181,16 @@ SLOT_IMPL(SET_MODEL, MapLayer)
     LOG_DEBUG("[MapLayer] SET_MODEL: ", data->x, ", ", data->y, ", ", data->z);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(data->x, data->y, data->z));
 }
-
+SLOT_IMPL(TRANSLATE_VIEW, MapLayer)
+{
+    LOG_DEBUG("[MapLayer] TRANSLATE_VIEW: ", data->x, ", ", data->y, ", ", data->z);
+    m_view = glm::translate(m_view, glm::vec3(-data->x, -data->y, -data->z));
+}
+SLOT_IMPL(TRANSLATE_MODEL, MapLayer)
+{
+    LOG_DEBUG("[MapLayer] TRANSLATE_MODEL: ", data->x, ", ", data->y, ", ", data->z);
+    m_model = glm::translate(m_model, glm::vec3(data->x, data->y, data->z));
+}
 
 // GUI Layer
 GuiLayer::GuiLayer(Graphics::Window* window, Graphics::GuiWindowsManager* guiWindows, bool blockEvents) :
@@ -197,7 +207,7 @@ void GuiLayer::onEvent(Graphics::InputEvent* ev)
 {
     if (m_blockEvents)
     {
-        LOG_DEBUG("[event] [GuiLayer] ", ev->toString());
+        //LOG_DEBUG("[event] [GuiLayer] ", ev->toString());
 
         ImGuiIO& io = ImGui::GetIO();
         ev->handled |= ev->isInCategory(Graphics::EventCategoryMouse) & io.WantCaptureMouse;

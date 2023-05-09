@@ -31,14 +31,7 @@ namespace projectSolar
 
 	public: // SLOTS
 
-		SLOT_DECL(CLOSE_WINDOW)
-		{
-			LOG_DEBUG("CLOSE_WINDOW");
-		}
-
-		SLOT_DECL(DEBUG_MESSAGE, const char* message)
-		{
-			LOG_DEBUG("DEBUG_MESSAGE: ", data->message);
-		}
+		SLOT_DECL(CLOSE_WINDOW);
+		SLOT_DECL(DEBUG_MESSAGE, std::string message);
 	};
 }

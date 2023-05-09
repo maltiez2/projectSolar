@@ -6,6 +6,8 @@
 #include "Simulation.h"
 #include "Graphics.h"
 
+#include "SubscriptionManager.h"
+
 
 using namespace projectSolar::Simulation;
 using namespace projectSolar::Graphics;
