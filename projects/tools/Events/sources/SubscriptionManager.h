@@ -7,6 +7,7 @@
 #include <functional>
 #include <shared_mutex>
 #include <unordered_map>
+#include <semaphore>
 #include <barrier>
 
 #define SUBSCRIBE(event, slot, receiver) SubscriptionManager::subscribe(SubscriptionManager::event, receiver, (EventHandler::EventFunc)(&slot))
@@ -42,7 +43,7 @@ namespace projectSolar
 		
 		// *** Workers
 		std::barrier<std::_No_completion_function> m_workersBarrier;
-		std::barrier<std::_No_completion_function> m_masterBarrier;
+		std::counting_semaphore<1> m_masterSemaphore;
 		std::thread m_master;
 		std::vector<std::thread> m_workers;
 		bool m_killThreads = false;

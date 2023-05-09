@@ -9,7 +9,7 @@ namespace projectSolar
 {
 	EventHandler::EventHandler(const size_t& threadsNumber = 1) :
 		m_workersBarrier(threadsNumber + 1),
-		m_masterBarrier(2),
+		m_masterSemaphore(0),
 		m_master(&EventHandler::master, this)
 	{
 		for (size_t i = 0; i < threadsNumber; i++)
@@ -30,7 +30,7 @@ namespace projectSolar
 		}
 
 		m_killThreads = true;
-		m_masterBarrier.arrive_and_wait();
+		m_masterSemaphore.release();
 		for (size_t i = 0; i < m_workers.size(); i++)
 		{
 			m_workers[i].join();
@@ -47,13 +47,13 @@ namespace projectSolar
 
 	void EventHandler::processEvents()
 	{
-		m_masterBarrier.arrive();
+		m_masterSemaphore.release();
 	}
 	void EventHandler::master()
 	{
 		while (!m_killThreads)
 		{
-			m_masterBarrier.arrive_and_wait();
+			m_masterSemaphore.acquire();
 
 			if (m_killThreads)
 			{

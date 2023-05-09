@@ -34,7 +34,7 @@ namespace projectSolar
 
 	SubscriptionManager::SubscriptionManager() :
 		m_workersBarrier(s_threadsNumber + 1),
-		m_masterBarrier(2),
+		m_masterSemaphore(0),
 		m_master(&SubscriptionManager::master, this)
 	{
 		for (size_t i = 0; i < s_threadsNumber; i++)
@@ -55,7 +55,7 @@ namespace projectSolar
 		}
 
 		m_killThreads = true;
-		m_masterBarrier.arrive_and_wait();
+		m_masterSemaphore.release();
 		for (size_t i = 0; i < m_workers.size(); i++)
 		{
 			m_workers[i].join();
@@ -89,7 +89,7 @@ namespace projectSolar
 				continue;
 			}
 			memcpy(copy, data, size);
-			LOG_WARN("SubscriptionManager::receiveImpl - send command: ", eventId);
+			//LOG_WARN("SubscriptionManager::receiveImpl - send command: ", eventId);
 			SEND_COMMAND((EventHandler*)receiver, command, copy);
 		}
 		delete(data);
@@ -97,13 +97,13 @@ namespace projectSolar
 
 	void SubscriptionManager::processEvents()
 	{
-		m_masterBarrier.arrive();
+		m_masterSemaphore.release();
 	}
 	void SubscriptionManager::master()
 	{
 		while (!m_killThreads)
 		{
-			m_masterBarrier.arrive_and_wait();
+			m_masterSemaphore.acquire();
 
 			if (m_killThreads)
 			{
@@ -131,7 +131,6 @@ namespace projectSolar
 			while (!m_subsciptionsQueue.empty())
 			{
 				Subsctibtion subscription = m_subsciptionsQueue.pop();
-				LOG_INFO("SubscriptionManager::process - queue size: ", m_subsciptionsQueue.size(), ", event: ", (int)subscription.eventId);
 				receiveImpl(subscription.eventId, subscription.data, subscription.size);
 			}
 

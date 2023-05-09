@@ -127,7 +127,7 @@ namespace projectSolar
             {
                 //SEND_EVENT(Application, this, DEBUG_MESSAGE, "test message");
                 //SEND_EVENT(Application, this, CLOSE_WINDOW);
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 1e6; i++)
                 {
                     EMIT_EVENT(DEBUG_MESSAGE, "debug message event #" + std::to_string(i));
                 }
@@ -166,6 +166,6 @@ namespace projectSolar
         static std::atomic<int> counter;
         counter++;
         int copy = counter;
-        LOG_DEBUG("DEBUG_MESSAGE: ", data->message, " - ", copy);
+        LOG_INFO("DEBUG_MESSAGE: ", data->message, " - ", copy);
     }
 }

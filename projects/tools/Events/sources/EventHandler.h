@@ -6,6 +6,7 @@
 #include <thread>
 #include <vector>
 #include <barrier>
+#include <semaphore>
 
 #define PPCAT_NX(A, B) A ## B
 #define PPCAT(A, B) PPCAT_NX(A, B)
@@ -37,7 +38,7 @@ namespace projectSolar
 	private:
 		// *** Workers
 		std::barrier<std::_No_completion_function> m_workersBarrier;
-		std::barrier<std::_No_completion_function> m_masterBarrier;
+		std::counting_semaphore<1> m_masterSemaphore;
 		std::thread m_master;
 		std::vector<std::thread> m_workers;
 		bool m_killThreads = false;
