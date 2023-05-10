@@ -24,15 +24,20 @@ namespace projectSolar::ECS
 	{
 		return (uint64_t)value;
 	}
+	
 
 	// ENTITY MANAGER
+	EntityManager::EntityManager()
+	{
+	}
+	
 	errno_t EntityManager::save(std::string_view filePath) const
 	{
-		return ECS::Serializer::serialize<ECS_ALL_COMPONENTS>(entities, filePath);
+		return ECS::Serializer::serialize<ECS_ALL_COMPONENTS>(registry, filePath);
 	}
 	errno_t EntityManager::load(std::string_view filePath)
 	{
-		entities.clear();
-		return ECS::Serializer::deserialize<ECS_ALL_COMPONENTS>(entities, filePath);
+		registry.clear();
+		return ECS::Serializer::deserialize<ECS_ALL_COMPONENTS>(registry, filePath);
 	}
 }

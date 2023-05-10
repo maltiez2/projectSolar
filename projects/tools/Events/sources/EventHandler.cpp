@@ -7,73 +7,62 @@
 
 namespace projectSolar
 {
-	EventHandler::EventHandler(const size_t& threadsNumber = 1) :
-		m_workersBarrier(threadsNumber + 1),
-		m_masterSemaphore(0),
-		m_master(&EventHandler::master, this)
+	EventHandler::EventHandler(const size_t& threadsNumber = 1)
 	{
 		for (size_t i = 0; i < threadsNumber; i++)
 		{
-			m_workers.emplace_back(&EventHandler::worker, this);
+			m_workersSemaphores.emplace_back(new std::binary_semaphore(0));
+			m_workers.emplace_back(&EventHandler::worker, this, i);
 		}
 	}
 	EventHandler::~EventHandler()
 	{
 		m_killThreads = true;
-		m_masterSemaphore.release();
+		realeseWorkers();
 		for (size_t i = 0; i < m_workers.size(); i++)
 		{
 			m_workers[i].join();
 		}
-		m_master.join();
+		for (std::binary_semaphore* semaphore : m_workersSemaphores)
+		{
+			delete(semaphore);
+		}
 	}
 
 	void EventHandler::receive(EventFunc command, void* data)
 	{
 		m_events.push({ command, data });
-		processEvents();
+		realeseWorkers();
 	}
 
-	void EventHandler::processEvents()
+	void EventHandler::realeseWorkers()
 	{
-		m_masterSemaphore.release();
-	}
-	void EventHandler::master()
-	{
-		while (!m_killThreads)
+		for (size_t i = 0; i < m_workersSemaphores.size(); i++)
 		{
-			m_masterSemaphore.acquire();
-
-			if (m_killThreads)
-			{
-				m_workersBarrier.arrive_and_wait();
-				m_workersBarrier.arrive_and_wait();
-				break;
-			}
-
-			m_events.swap();
-
-			while (!m_events.empty())
-			{
-				m_workersBarrier.arrive_and_wait();
-				m_workersBarrier.arrive_and_wait();
-				m_events.swap();
-			}
+			m_workersSemaphores[i]->release();
 		}
 	}
-	void EventHandler::worker()
+	void EventHandler::worker(size_t id)
 	{
 		while (!m_killThreads)
 		{
-			m_workersBarrier.arrive_and_wait();
-
 			while (!m_events.empty())
 			{
 				Event ev = m_events.pop();
-				ev.command(this, ev.data);
+				if (ev.command != nullptr)
+				{
+					ev.command(this, ev.data);
+				}
 			}
 
-			m_workersBarrier.arrive_and_wait();
+			if (m_events.emptyAfterSwapIfEmpty())
+			{
+				m_workersSemaphores[id]->acquire();
+			}
+			else
+			{
+				realeseWorkers();
+			}
 		}
 	}
 }

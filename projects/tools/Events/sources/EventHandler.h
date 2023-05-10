@@ -5,7 +5,6 @@
 #include <queue>
 #include <thread>
 #include <vector>
-#include <barrier>
 #include <semaphore>
 
 // @TODO From Darian
@@ -50,26 +49,18 @@ namespace projectSolar
 		};
 		
 		explicit EventHandler(const size_t& threadsNumber);
-		virtual ~EventHandler();
+		~EventHandler();
 
 		void receive(EventFunc command, void* data);
 	
 	private:
-		// *** Workers
-		std::barrier<std::_No_completion_function> m_workersBarrier;
-		std::counting_semaphore<1> m_masterSemaphore;
-		std::thread m_master;
+		DoubleBufferedQueue<Event> m_events;
+
+		std::vector<std::binary_semaphore*> m_workersSemaphores;
 		std::vector<std::thread> m_workers;
 		bool m_killThreads = false;
 
-		void processEvents();
-		void master();
-		void worker();
-		// ***
-		
-		DoubleBufferedQueue<Event> m_events;
-
-		void startProcessing();
-		void process();
+		void realeseWorkers();
+		void worker(size_t id);
 	};
 }

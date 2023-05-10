@@ -21,10 +21,10 @@ namespace projectSolar
 	{
 		get().unsubscribeImpl(receiver, eventId);
 	}
-	void SubscriptionManager::receive(uint16_t eventId, void* data, const size_t& size)
+	void SubscriptionManager::receive(uint16_t eventId, void* data)
 	{
-		get().m_subsciptionsQueue.push({ eventId, data, size });
-		get().processEvents();
+		get().m_subsciptionsQueue.push({ eventId, data });
+		get().realeseWorkers();
 	}
 	SubscriptionManager& SubscriptionManager::get()
 	{
@@ -32,35 +32,57 @@ namespace projectSolar
 		return instance;
 	}
 
-	SubscriptionManager::SubscriptionManager() :
-		m_workersBarrier(s_threadsNumber + 1),
-		m_masterSemaphore(0),
-		m_master(&SubscriptionManager::master, this)
+	void SubscriptionManager::realeseWorkers()
+	{
+		for (size_t i = 0; i < m_workersSemaphores.size(); i++)
+		{
+			m_workersSemaphores[i]->release();
+		}
+	}
+	void SubscriptionManager::worker(size_t id)
+	{
+		while (!m_killThreads)
+		{
+			while (!m_subsciptionsQueue.empty())
+			{
+				Subsctibtion subscription = m_subsciptionsQueue.pop();
+				if (subscription.eventId != UNKNOWN_EVENT)
+				{
+					receiveImpl(subscription.eventId, subscription.data);
+				}
+			}
+
+			if (m_subsciptionsQueue.emptyAfterSwapIfEmpty())
+			{
+				m_workersSemaphores[id]->acquire();
+			}
+			else
+			{
+				realeseWorkers();
+			}
+		}
+	}
+
+	SubscriptionManager::SubscriptionManager()
 	{
 		for (size_t i = 0; i < s_threadsNumber; i++)
 		{
-			m_workers.emplace_back(&SubscriptionManager::worker, this);
+			m_workersSemaphores.emplace_back(new std::binary_semaphore(0));
+			m_workers.emplace_back(&SubscriptionManager::worker, this, i);
 		}
 	}
 	SubscriptionManager::~SubscriptionManager()
 	{
-		for (Subsctibtion subscription = m_subsciptionsQueue.pop(); subscription.eventId != UNKNOWN_EVENT; subscription = m_subsciptionsQueue.pop())
-		{
-			delete(subscription.data);
-		}
-		m_subsciptionsQueue.swap();
-		for (Subsctibtion subscription = m_subsciptionsQueue.pop(); subscription.eventId != UNKNOWN_EVENT; subscription = m_subsciptionsQueue.pop())
-		{
-			delete(subscription.data);
-		}
-
 		m_killThreads = true;
-		m_masterSemaphore.release();
+		realeseWorkers();
 		for (size_t i = 0; i < m_workers.size(); i++)
 		{
 			m_workers[i].join();
 		}
-		m_master.join();
+		for (std::binary_semaphore* semaphore : m_workersSemaphores)
+		{
+			delete(semaphore);
+		}
 	}
 
 	void SubscriptionManager::subscribeImpl(uint16_t eventId, void* receiver, EventHandler::EventFunc command)
@@ -77,10 +99,11 @@ namespace projectSolar
 		std::unique_lock eventLock(m_mutexes[eventId]);
 		m_subscriptions[eventId].erase(receiver);
 	}
-	void SubscriptionManager::receiveImpl(uint16_t eventId, void* data, const size_t& size)
+	void SubscriptionManager::receiveImpl(uint16_t eventId, void* data)
 	{
 		std::shared_lock eventLock(m_mutexes[eventId]);
 		size_t left = m_subscriptions[eventId].size();
+		LOG_INFO("[SubscriptionManager] Subscribers number: ", left, ", event: ", eventId);
 		for (auto [receiver, command] : m_subscriptions[eventId])
 		{
 			if (--left == 0)
@@ -98,53 +121,11 @@ namespace projectSolar
 		switch (eventId)
 		{
 		EVENT_DATA_COPY(DEBUG_MESSAGE);
+		EVENT_DATA_COPY(SIM_DATA_UPDATE);
 		
 		default:
 			LOG_ASSERT(false, "[SubscriptionManager] Copy function is not specified for event: ", eventId);
 			return nullptr;
-		}
-	}
-
-	void SubscriptionManager::processEvents()
-	{
-		m_masterSemaphore.release();
-	}
-	void SubscriptionManager::master()
-	{
-		while (!m_killThreads)
-		{
-			m_masterSemaphore.acquire();
-
-			if (m_killThreads)
-			{
-				m_workersBarrier.arrive_and_wait();
-				m_workersBarrier.arrive_and_wait();
-				break;
-			}
-
-			m_subsciptionsQueue.swap();
-
-			while (!m_subsciptionsQueue.empty())
-			{
-				m_workersBarrier.arrive_and_wait();
-				m_workersBarrier.arrive_and_wait();
-				m_subsciptionsQueue.swap();
-			}
-		}
-	}
-	void SubscriptionManager::worker()
-	{
-		while (!m_killThreads)
-		{
-			m_workersBarrier.arrive_and_wait();
-			
-			while (!m_subsciptionsQueue.empty())
-			{
-				Subsctibtion subscription = m_subsciptionsQueue.pop();
-				receiveImpl(subscription.eventId, subscription.data, subscription.size);
-			}
-
-			m_workersBarrier.arrive_and_wait();
 		}
 	}
 }

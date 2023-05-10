@@ -26,9 +26,15 @@ namespace projectSolar::Simulation
 			float stepsDiffBias = -0.1f;
 		};
 
+		struct Performance
+		{
+			float stepsPerSecond;
+			uint16_t subStepsNumber;
+		};
+
 		SimulationRunner();
 
-		float run(const Params& params);
+		Performance run(const Params& params);
 		DataManager& getData();
 
 	private:

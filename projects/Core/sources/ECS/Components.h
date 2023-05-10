@@ -29,9 +29,31 @@ namespace projectSolar
 
 	namespace Components
 	{
+		struct GameSettings
+		{
+			float simulationLoadFactor;
+			uint16_t simulationInitialStepsNumber;
+			float simulationStepsAdjustBias;
+		};
+
+		struct VideoSettings
+		{
+			uint32_t width;
+			uint32_t height;
+			bool fullScreen;
+			uint8_t targetFPS;
+		};
+
+		struct SimulationPerformance
+		{
+			float stepsPerSecond;
+			uint16_t subStepsNumber;
+		};
+		
 		struct Universe
 		{
 			double gravitationalConstant;
+			double timeStep;
 		};
 		
 		struct Object

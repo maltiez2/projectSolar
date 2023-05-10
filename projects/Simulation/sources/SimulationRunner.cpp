@@ -111,7 +111,7 @@ namespace projectSolar::Simulation
 		m_simulation_nBody(m_simulationData)
 	{
 	}
-	float SimulationRunner::run(const Params& params)
+	SimulationRunner::Performance SimulationRunner::run(const Params& params)
 	{
 		uint16_t stepsNumber = m_frameRateController.onRunStart(params);
 
@@ -123,7 +123,7 @@ namespace projectSolar::Simulation
 
 		float secondsElapsed = m_frameRateController.onRunEnd();
 
-		return secondsElapsed;
+		return {1.0f / secondsElapsed, stepsNumber };
 	}
 	DataManager& SimulationRunner::getData()
 	{

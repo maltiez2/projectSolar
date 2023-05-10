@@ -40,11 +40,11 @@ namespace projectSolar
     };
 
     Application::Application(Simulation::SimulationRunner& simulation, const Graphics::WindowProperties& windowProps) :
-        EventHandler(1),
+        EventHandler(8),
         m_simulation(simulation),
         m_window(new Graphics::Window(windowProps))
     {
-        projectSolar::SubscriptionManager::init(16);
+        projectSolar::SubscriptionManager::init(8);
     }
 
     Application::~Application()
@@ -95,6 +95,7 @@ namespace projectSolar
             if (debugWindow.runSimulation)
             {
                 m_simulation.run({ 10.0f, 5e-2 * debugWindow.timeScale, 0.5f, 144, 10, -0.1f });
+                EMIT_EVENT(SIM_DATA_UPDATE);
             }
 
             // *** Central map setup ***
@@ -126,11 +127,7 @@ namespace projectSolar
             
             if (debugWindow.closeApp)
             {  
-                SEND_EVENT(Application, this, DEBUG_MESSAGE, "test msg");
-                for (int i = 0; i < 1e5; i++)
-                {
-                    EMIT_EVENT(DEBUG_MESSAGE, "debug message event #" + std::to_string(i));
-                }
+                SEND_EVENT(Application, this, CLOSE_WINDOW);
             }
 
             processInputEvents();
@@ -147,6 +144,14 @@ namespace projectSolar
         auto& eventsManager = m_window->getEventsManager();
         while (!eventsManager.isEmpty())
         {
+            if (eventsManager.front()->getEventType() == Graphics::InputEventType::WindowResize)
+            {
+                const auto* const eventObj = (Graphics::WindowResizeEvent*)eventsManager.front();
+                EMIT_EVENT(WINDOW_RESIZE, eventObj->getWidth(), eventObj->getHeight());
+                eventsManager.pop();
+                continue;
+            }
+            
             m_layers.onEvent(eventsManager.front());
             eventsManager.pop();
         }
@@ -154,20 +159,27 @@ namespace projectSolar
 
     SLOT_IMPL(Application, CLOSE_WINDOW)
     {
-        LOG_DEBUG("CLOSE_WINDOW");
-        m_running = false;
+        LOG_WARN("CLOSE_WINDOW");
+        
+        for (int i = 0; i < 1e5; i++)
+        {
+            //SEND_EVENT(Application, this, DEBUG_MESSAGE, "debug message event #" + std::to_string(i));
+            EMIT_EVENT(DEBUG_MESSAGE, "debug message event #" + std::to_string(i));
+        }
+        
+        //m_running = false;
     }
     SLOT_IMPL(Application, DEBUG_MESSAGE)
     {
         //LOG_INFO("DEBUG_MESSAGE: ", data->message);
         //return;
         
-        static std::atomic<int> counter;
+        /*static std::atomic<int> counter;
         counter++;
         int copy = counter;
         if (copy % 1000 == 0)
         {
             LOG_INFO("DEBUG_MESSAGE #", copy);
-        }
+        }*/
     }
 }

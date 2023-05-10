@@ -99,6 +99,49 @@ namespace projectSolar
 				return m_events_0.size();
 			}
 		}
+		bool swapIfEmpty()
+		{
+			std::unique_lock lock(m_stateMutex);
+			if (m_state)
+			{
+				if (m_events_1.empty())
+				{
+					m_state = false;
+					return true;
+				}
+			}
+			else
+			{
+				if (m_events_0.empty())
+				{
+					m_state = true;
+					return true;
+				}
+			}
+			return false;
+		}
+		bool emptyAfterSwapIfEmpty()
+		{
+			std::unique_lock lock(m_stateMutex);
+			if (m_state)
+			{
+				if (m_events_1.empty())
+				{
+					m_state = false;
+					return m_events_0.empty();
+				}
+			}
+			else
+			{
+				if (m_events_0.empty())
+				{
+					m_state = true;
+					return m_events_1.empty();
+				}
+			}
+
+			return false;
+		}
 
 	private:
 		std::queue<DataType> m_events_0;

@@ -3,9 +3,11 @@
 #include "Graphics.h"
 #include "Simulation.h"
 #include "EventHandler.h"
+#include "SubscriptionManager.h"
 
 #include <vector>
 #include <map>
+#include <shared_mutex>
 
 
 namespace projectSolar
@@ -70,7 +72,7 @@ namespace projectSolar
 	{
 	public:
 		MapLayer(Graphics::Renderer* centralRenderer, Simulation::SimulationRunner* simulation);
-		~MapLayer() override;
+		~MapLayer();
 
 		void draw() override;
 		void onEvent(Graphics::InputEvent* ev) override;
@@ -107,7 +109,7 @@ namespace projectSolar
 
 		void updateData();
 
-	public:
+	public: // SLOTS
 		SLOT_DECL(SET_PROJ, uint32_t width; uint32_t height; float scale);
 		SLOT_DECL(SET_VIEW, float x; float y; float z);
 		SLOT_DECL(SET_MODEL, float x; float y; float z);
@@ -118,7 +120,7 @@ namespace projectSolar
 	{
 	public:
 		GuiLayer(Graphics::Window* window, Graphics::GuiWindowsManager* guiWindows, bool blockEvents = true);
-		~GuiLayer() override = default;
+		~GuiLayer() = default;
 
 		void draw() override;
 		void onEvent(Graphics::InputEvent* ev) override;
