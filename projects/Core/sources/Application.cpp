@@ -123,10 +123,11 @@ namespace projectSolar
             // *** Test ***
 
             
+            
             if (debugWindow.closeApp)
-            {
-                SEND_EVENT(Application, this, DEBUG_MESSAGE, "test message");
-                for (int i = 0; i < 1e3; i++)
+            {  
+                SEND_EVENT(Application, this, DEBUG_MESSAGE, "test msg");
+                for (int i = 0; i < 1e5; i++)
                 {
                     EMIT_EVENT(DEBUG_MESSAGE, "debug message event #" + std::to_string(i));
                 }
@@ -151,16 +152,22 @@ namespace projectSolar
         }
     }
 
-    SLOT_IMPL(CLOSE_WINDOW, Application)
+    SLOT_IMPL(Application, CLOSE_WINDOW)
     {
         LOG_DEBUG("CLOSE_WINDOW");
         m_running = false;
     }
-    SLOT_IMPL(DEBUG_MESSAGE, Application)
+    SLOT_IMPL(Application, DEBUG_MESSAGE)
     {
+        //LOG_INFO("DEBUG_MESSAGE: ", data->message);
+        //return;
+        
         static std::atomic<int> counter;
         counter++;
         int copy = counter;
-        LOG_INFO("DEBUG_MESSAGE: ", data->message, " - ", copy);
+        if (copy % 1000 == 0)
+        {
+            LOG_INFO("DEBUG_MESSAGE #", copy);
+        }
     }
 }

@@ -164,29 +164,29 @@ void MapLayer::updateData()
     }
 }
 
-SLOT_IMPL(SET_PROJ, MapLayer)
+SLOT_IMPL(MapLayer, SET_PROJ)
 {
     LOG_DEBUG("[MapLayer] SET_PROJ: ", data->width, " : ", data->height, " - ", data->scale);
     float width = data->scale * (float)data->width;
     float height = data->scale * (float)data->height;
     m_proj = glm::ortho(-0.5f * width, 0.5f * width, -0.5f * height, 0.5f * height, -1.0f, 1.0f);
 }
-SLOT_IMPL(SET_VIEW, MapLayer)
+SLOT_IMPL(MapLayer, SET_VIEW)
 {
     LOG_DEBUG("[MapLayer] SET_VIEW: ", data->x, ", ", data->y, ", ", data->z);
     m_view = glm::translate(glm::mat4(1.0f), glm::vec3(-data->x, -data->y, -data->z));
 }
-SLOT_IMPL(SET_MODEL, MapLayer)
+SLOT_IMPL(MapLayer, SET_MODEL)
 {
     LOG_DEBUG("[MapLayer] SET_MODEL: ", data->x, ", ", data->y, ", ", data->z);
     m_model = glm::translate(glm::mat4(1.0f), glm::vec3(data->x, data->y, data->z));
 }
-SLOT_IMPL(TRANSLATE_VIEW, MapLayer)
+SLOT_IMPL(MapLayer, TRANSLATE_VIEW)
 {
     LOG_DEBUG("[MapLayer] TRANSLATE_VIEW: ", data->x, ", ", data->y, ", ", data->z);
     m_view = glm::translate(m_view, glm::vec3(-data->x, -data->y, -data->z));
 }
-SLOT_IMPL(TRANSLATE_MODEL, MapLayer)
+SLOT_IMPL(MapLayer, TRANSLATE_MODEL)
 {
     LOG_DEBUG("[MapLayer] TRANSLATE_MODEL: ", data->x, ", ", data->y, ", ", data->z);
     m_model = glm::translate(m_model, glm::vec3(data->x, data->y, data->z));

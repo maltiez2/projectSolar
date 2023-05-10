@@ -13,7 +13,7 @@
 #define SUBSCRIBE(receiverClass, receiverPtr, eventId, command) SubscriptionManager::subscribe(SubscriptionManager::eventId, receiverPtr, [](void* receiver, void* data) {\
 		((receiverClass*)receiver)->command((receiverClass::PPCAT(command, _DATA)*)data);\
 		delete((receiverClass::PPCAT(command, _DATA)*)data);})
-#define EVENT_DECL(command, ...) enum : uint16_t {command = __LINE__}; struct PPCAT(command, _DATA) {__VA_ARGS__;}
+#define EVENT_DECL(eventId, ...) enum : uint16_t {eventId = __LINE__}; struct PPCAT(eventId, _DATA) {__VA_ARGS__;}
 #define EVENT_DATA_COPY(eventId) case eventId: return new PPCAT(eventId, _DATA)(*(PPCAT(eventId, _DATA)*)data)
 #define EMIT_EVENT(eventId, ...) auto* PPCAT(data, __LINE__) = new SubscriptionManager::PPCAT(eventId, _DATA)({__VA_ARGS__}); SubscriptionManager::receive(SubscriptionManager::eventId, PPCAT(data, __LINE__), sizeof(SubscriptionManager::PPCAT(eventId, _DATA)))
 
