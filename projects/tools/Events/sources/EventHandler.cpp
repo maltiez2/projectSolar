@@ -19,16 +19,6 @@ namespace projectSolar
 	}
 	EventHandler::~EventHandler()
 	{
-		for (Event ev = m_events.pop(); ev.sender != nullptr; ev = m_events.pop())
-		{
-			delete(ev.data);
-		}
-		m_events.swap();
-		for (Event ev = m_events.pop(); ev.sender != nullptr; ev = m_events.pop())
-		{
-			delete(ev.data);
-		}
-
 		m_killThreads = true;
 		m_masterSemaphore.release();
 		for (size_t i = 0; i < m_workers.size(); i++)
@@ -38,10 +28,9 @@ namespace projectSolar
 		m_master.join();
 	}
 
-	void EventHandler::receive(void* sender, EventFunc command, void* data)
+	void EventHandler::receive(EventFunc command, void* data)
 	{
-		LOG_ASSERT(command != UNKNOWN_COMMAND, "[EventHandler] UNKNOWN_COMMAND was received")
-		m_events.push({ sender, command, data });
+		m_events.push({ command, data });
 		processEvents();
 	}
 
@@ -81,9 +70,7 @@ namespace projectSolar
 			while (!m_events.empty())
 			{
 				Event ev = m_events.pop();
-				auto command = ev.command;
-				(this->*command)(ev.sender, ev.data);
-				delete(ev.data);
+				ev.command(this, ev.data);
 			}
 
 			m_workersBarrier.arrive_and_wait();

@@ -80,19 +80,29 @@ namespace projectSolar
 	void SubscriptionManager::receiveImpl(uint16_t eventId, void* data, const size_t& size)
 	{
 		std::shared_lock eventLock(m_mutexes[eventId]);
+		size_t left = m_subscriptions[eventId].size();
 		for (auto [receiver, command] : m_subscriptions[eventId])
 		{
-			void* copy = malloc(size);
-			if (copy == nullptr)
+			if (--left == 0)
 			{
-				LOG_ASSERT(false, "Malloc returned nullptr in 'SubscriptionManager::receiveImpl'");
+				SEND_COMMAND((EventHandler*)receiver, command, data);
 				continue;
 			}
-			memcpy(copy, data, size);
-			//LOG_WARN("SubscriptionManager::receiveImpl - send command: ", eventId);
+
+			void* copy = copyData(eventId, data);
 			SEND_COMMAND((EventHandler*)receiver, command, copy);
 		}
-		delete(data);
+	}
+	void* SubscriptionManager::copyData(const uint16_t& eventId, void* data)
+	{
+		switch (eventId)
+		{
+		EVENT_DATA_COPY(DEBUG_MESSAGE);
+		
+		default:
+			LOG_ASSERT(false, "[SubscriptionManager] Copy function is not specified for event: ", eventId);
+			return nullptr;
+		}
 	}
 
 	void SubscriptionManager::processEvents()

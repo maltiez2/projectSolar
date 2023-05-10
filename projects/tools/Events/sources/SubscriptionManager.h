@@ -10,8 +10,11 @@
 #include <semaphore>
 #include <barrier>
 
-#define SUBSCRIBE(event, slot, receiver) SubscriptionManager::subscribe(SubscriptionManager::event, receiver, (EventHandler::EventFunc)(&slot))
+#define SUBSCRIBE(receiverClass, receiverPtr, eventId, command) SubscriptionManager::subscribe(SubscriptionManager::eventId, receiverPtr, [](void* receiver, void* data) {\
+		((receiverClass*)receiver)->command((receiverClass::PPCAT(command, _DATA)*)data);\
+		delete((receiverClass::PPCAT(command, _DATA)*)data);})
 #define EVENT_DECL(command, ...) enum : uint16_t {command = __LINE__}; struct PPCAT(command, _DATA) {__VA_ARGS__;}
+#define EVENT_DATA_COPY(eventId) case eventId: return new PPCAT(eventId, _DATA)(*(PPCAT(eventId, _DATA)*)data)
 #define EMIT_EVENT(eventId, ...) auto* PPCAT(data, __LINE__) = new SubscriptionManager::PPCAT(eventId, _DATA)({__VA_ARGS__}); SubscriptionManager::receive(SubscriptionManager::eventId, PPCAT(data, __LINE__), sizeof(SubscriptionManager::PPCAT(eventId, _DATA)))
 
 namespace projectSolar
@@ -67,6 +70,7 @@ namespace projectSolar
 		void subscribeImpl(uint16_t eventId, void* receiver, EventHandler::EventFunc command);
 		void unsubscribeImpl(void* receiver, uint16_t eventId);
 		void receiveImpl(uint16_t eventId, void* data, const size_t& length);
+		void* copyData(const uint16_t& eventId, void* data);
 		// ***
 	};
 }

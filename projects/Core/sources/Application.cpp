@@ -54,13 +54,10 @@ namespace projectSolar
 
     void Application::run()
     {
-        SubscriptionManager::subscribe(SubscriptionManager::DEBUG_MESSAGE, this, (EventHandler::EventFunc)(&Application::DEBUG_MESSAGE));
-        SUBSCRIBE(DEBUG_MESSAGE, Application::DEBUG_MESSAGE, this);
+        SUBSCRIBE(Application, this, DEBUG_MESSAGE, DEBUG_MESSAGE);
 
         Graphics::Renderer centralRenderer;
         Graphics::GuiWindowsManager guiWindows;
-
-        //TaskManager taskManager(&m_simulation, &guiWindows, m_window);
 
         MapLayer* mapLayer = (MapLayer*)m_layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
         m_layers.add<GuiLayer>(2, true, m_window, &guiWindows);
@@ -123,21 +120,19 @@ namespace projectSolar
 
             m_layers.draw();
 
+            // *** Test ***
+
+            
             if (debugWindow.closeApp)
             {
-                //SEND_EVENT(Application, this, DEBUG_MESSAGE, "test message");
-                //SEND_EVENT(Application, this, CLOSE_WINDOW);
-                for (int i = 0; i < 1e6; i++)
+                SEND_EVENT(Application, this, DEBUG_MESSAGE, "test message");
+                for (int i = 0; i < 1e3; i++)
                 {
                     EMIT_EVENT(DEBUG_MESSAGE, "debug message event #" + std::to_string(i));
                 }
             }
 
             processInputEvents();
-
-            //taskManager.execute();
-
-            //handler.send(&handler, Command::WND_WINDOW_CLOSE, nullptr);
 
             if (glfwWindowShouldClose(m_window->getNativeWindow()))
             {
