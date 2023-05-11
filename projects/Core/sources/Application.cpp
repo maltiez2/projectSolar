@@ -44,7 +44,6 @@ namespace projectSolar
     };
 
     Application::Application(std::shared_ptr<Simulation::SimulationRunner> simulation, std::shared_ptr<ECS::EntityManager> entities) :
-        EventHandler(8),
         m_simulation(simulation),
         m_enitites(entities)
     {
@@ -96,11 +95,8 @@ namespace projectSolar
 
             if (debugWindow.runSimulation)
             {
-                ObM::get().managerSimulation->run();
-                //m_simulation->run({ 10.0f, 5e-2 * debugWindow.timeScale, 0.5f, 144, 10, -0.1f });
-                auto perf = ObM::get().managerSimulation->getPerformance();
-                std::string mess = "SPS: " + std::to_string(perf.stepsPerSecond) + ", subSteps: " + std::to_string(perf.subStepsNumber);
-                SEND_EVENT(Application, this, DEBUG_MESSAGE, mess);
+                auto perf = ObM::get().managerSimulation->run();
+                LOG_INFO("[Application] Simulation performance - milliseconds per step: ", 1e3f * perf.secondsPerStep, ", substeps per step: ", perf.subStepsNumber);
             }
 
             // *** Central map setup ***
@@ -133,8 +129,8 @@ namespace projectSolar
             
             
             if (debugWindow.closeApp)
-            {  
-                SEND_EVENT(Application, this, CLOSE_WINDOW);
+            {
+                m_running = false;
             }
 
             processInputEvents();
@@ -154,14 +150,5 @@ namespace projectSolar
             m_layers.onEvent(eventsManager.front());
             eventsManager.pop();
         }
-    }
-
-    SLOT_IMPL(Application, CLOSE_WINDOW)
-    {
-        m_running = false;
-    }
-    SLOT_IMPL(Application, DEBUG_MESSAGE)
-    {
-        LOG_INFO("DEBUG_MESSAGE: ", data->message);
     }
 }

@@ -15,13 +15,15 @@ namespace projectSolar::GameLogic
 		m_perorfmace = ObM::get().managerECS->registry.create();
 		ObM::get().managerECS->registry.emplace<Components::SimulationPerformance>(m_perorfmace, 0.0f, 0ui16);
 	}
-	void SimulationManager::run()
+	Components::SimulationPerformance SimulationManager::run()
 	{
 		auto performance = m_simulation->run(getRunParams());
 
 		setPerformance(performance);
 
-		EMIT_EVENT(SIM_DATA_UPDATE);
+		//EMIT_EVENT(SIM_DATA_UPDATE);
+
+		return { performance.secondsPerStep, performance.subStepsNumber };
 	}
 	Simulation::SimulationRunner::Params SimulationManager::getRunParams()
 	{
@@ -36,7 +38,7 @@ namespace projectSolar::GameLogic
 	{
 		ObM::get().managerECS->registry.patch<Components::SimulationPerformance>(m_perorfmace, [performance](Components::SimulationPerformance& settings)
 			{
-				settings.stepsPerSecond = performance.stepsPerSecond;
+				settings.secondsPerStep = performance.secondsPerStep;
 				settings.subStepsNumber = performance.subStepsNumber;
 			}
 		);

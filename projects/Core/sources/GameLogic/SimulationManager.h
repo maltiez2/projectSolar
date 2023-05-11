@@ -16,7 +16,7 @@ namespace projectSolar::GameLogic
 		SimulationManager(std::shared_ptr<Simulation::SimulationRunner> simulationRunner, const size_t& threadsNumber = 1);
 		~SimulationManager() = default;
 
-		void run();
+		Components::SimulationPerformance run();
 
 		Simulation::SimulationRunner::Params getRunParams();
 

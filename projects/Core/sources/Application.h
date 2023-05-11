@@ -11,7 +11,7 @@
 
 namespace projectSolar
 {
-	class Application : public EventHandler
+	class Application
 	{
 	public:
 		std::shared_ptr<Simulation::SimulationRunner> m_simulation;
@@ -29,10 +29,5 @@ namespace projectSolar
 		bool m_running = true;
 
 		void processInputEvents();
-
-	public: // SLOTS
-
-		SLOT_DECL(CLOSE_WINDOW);
-		SLOT_DECL(DEBUG_MESSAGE, std::string message);
 	};
 }

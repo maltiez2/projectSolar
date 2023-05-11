@@ -28,7 +28,7 @@ namespace projectSolar::Simulation
 
 		struct Performance
 		{
-			float stepsPerSecond;
+			float secondsPerStep;
 			uint16_t subStepsNumber;
 		};
 
