@@ -64,16 +64,8 @@ void Window::setFont(const std::string& font)
 }
 void Window::setSize(uint32_t width, uint32_t height)
 {
-	int currentWidth;
-	int currentHeight;
-	glfwGetWindowSize(m_window, &currentWidth, &currentHeight);
-	if (width != currentWidth || height != currentHeight)
-	{
-		glfwSetWindowSize(m_window, width, height);
-	}
 	m_properties.width = width;
 	m_properties.height = height;
-	LOG_DEBUG("Set size");
 }
 
 void Window::init(const WindowProperties& properties)

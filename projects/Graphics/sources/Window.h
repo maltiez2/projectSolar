@@ -22,7 +22,7 @@ namespace projectSolar::Graphics
 		uint32_t height     = 900;
 		 int32_t monitor    = -1;
 		bool VSync          = true;
-		bool fullScreen     = true;
+		bool fullScreen     = false;
 		InputEventsManager* eventsManager = nullptr;
 
 		GuiProperties guiProperties;

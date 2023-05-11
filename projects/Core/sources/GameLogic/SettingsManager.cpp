@@ -9,7 +9,7 @@ namespace projectSolar::GameLogic
 	{
 		m_currentGameSettings = m_entityManager.registry.create();
 		m_currentVideoSettings = m_entityManager.registry.create();
-		m_entityManager.registry.emplace<Components::GameSettings>(m_currentVideoSettings, gameParams);
+		m_entityManager.registry.emplace<Components::GameSettings>(m_currentGameSettings, gameParams);
 		m_entityManager.registry.emplace<Components::VideoSettings>(m_currentVideoSettings, videoParams);
 	}
 

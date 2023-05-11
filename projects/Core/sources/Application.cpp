@@ -3,20 +3,24 @@
 #include "Graphics.h"
 #include "Simulation.h"
 #include "Application.h"
-#include "Layers.h"
+#include "Layers/Layers.h"
+#include "Layers/GuiLayer.h"
+#include "Layers/MapLayer.h"
+#include "GameLogic/Managers.h"
 
 #include <string>
 #include <vector>
 #include <Eigen/Eigen>
 #include <functional>
 
-#include "Tasks/TaskManager.h"
 #include "EventHandler.h"
 #include "SubscriptionManager.h"
+#include "ObjectManager.h"
 
 
 namespace projectSolar
 {
+    using ObM = ObjectManager;
 
     bool comparePositions(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2, const double& epsilon)
     {
@@ -39,48 +43,46 @@ namespace projectSolar
         uint32_t type;
     };
 
-    Application::Application(Simulation::SimulationRunner& simulation, const Graphics::WindowProperties& windowProps) :
+    Application::Application(std::shared_ptr<Simulation::SimulationRunner> simulation, std::shared_ptr<ECS::EntityManager> entities) :
         EventHandler(8),
         m_simulation(simulation),
-        m_window(new Graphics::Window(windowProps))
+        m_enitites(entities)
     {
-        projectSolar::SubscriptionManager::init(8);
-    }
+        m_window = std::make_shared<Graphics::Window>();
 
-    Application::~Application()
-    {
-        delete(m_window);
+        ObjectManager::init();
+
+        auto centralRenderer = std::make_shared<Graphics::Renderer>();
+        auto guiWindows = std::make_shared<Graphics::GuiWindowsManager>();
+
+        ObM::get().layerMap = m_layers.add<Layers::MapLayer>(1, true, centralRenderer, m_simulation);
+        ObM::get().layerGui = m_layers.add<Layers::GuiLayer>(2, true, m_window, guiWindows);
+
+        ObM::get().managerECS = std::make_shared<ECS::EntityManager>();
+        ObM::get().managerSimulation = std::make_shared<GameLogic::SimulationManager>(simulation);
     }
 
     void Application::run()
     {
-        SUBSCRIBE(Application, this, DEBUG_MESSAGE, DEBUG_MESSAGE);
-
-        Graphics::Renderer centralRenderer;
-        Graphics::GuiWindowsManager guiWindows;
-
-        MapLayer* mapLayer = (MapLayer*)m_layers.add<MapLayer>(1, true, &centralRenderer, &m_simulation);
-        m_layers.add<GuiLayer>(2, true, m_window, &guiWindows);
-
         // *** GUI ***
-        guiWindows.add<Graphics::NotificationWindow>("test", true, "Test window", "Test text of test window");
-        guiWindows.add<Graphics::DebugWindow>("debug", true);
-        guiWindows.add<Graphics::DemoWindow>("demo", false);
-        guiWindows.add<Graphics::PropulsionControlWindow>("prop", true);
+        ObM::get().layerGui->getWindowsManager()->add<Graphics::NotificationWindow>("test", true, "Test window", "Test text of test window");
+        ObM::get().layerGui->getWindowsManager()->add<Graphics::DebugWindow>("debug", true);
+        ObM::get().layerGui->getWindowsManager()->add<Graphics::DemoWindow>("demo", false);
+        ObM::get().layerGui->getWindowsManager()->add<Graphics::PropulsionControlWindow>("prop", true);
 
-        const auto& guiWindow = *guiWindows.get<Graphics::NotificationWindow>("test");
-        const auto& debugWindow = *guiWindows.get<Graphics::DebugWindow>("debug");
-        auto& demoWindow = *guiWindows.get<Graphics::DemoWindow>("demo");
-        const auto& propWindow = *guiWindows.get<Graphics::PropulsionControlWindow>("prop");
+        const auto& guiWindow   = *ObM::get().layerGui->getWindowsManager()->get<Graphics::NotificationWindow>("test");
+        const auto& debugWindow = *ObM::get().layerGui->getWindowsManager()->get<Graphics::DebugWindow>("debug");
+              auto& demoWindow  = *ObM::get().layerGui->getWindowsManager()->get<Graphics::DemoWindow>("demo");
+        const auto& propWindow  = *ObM::get().layerGui->getWindowsManager()->get<Graphics::PropulsionControlWindow>("prop");
         // ***********
 
         Eigen::Vector3d forceDirection(1.0, 0.0, 0.0);
         Eigen::Vector3d rotationAxis(0.0, 0.0, 1.0);
-        Eigen::Vector3d playerPosition = m_simulation.getData().propulsedData.getData()[0].position;
+        Eigen::Vector3d playerPosition = m_simulation->getData().propulsedData.getData()[0].position;
         const float scaleMult = 0.05f;
         const float epsilon = 1e-5f;
-        float scale = 0.0f;
-        float forceMagnitude = 1.0f;
+              float scale = 0.0f;
+              float forceMagnitude = 1.0f;
 
         while (m_running)
         {
@@ -88,29 +90,34 @@ namespace projectSolar
 
             // *** Data setup ***
 
-            auto& player = m_simulation.getData().propulsedData.getData()[0];
+            auto& player = m_simulation->getData().propulsedData.getData()[0];
             Eigen::AngleAxisd rotation(propWindow.direction, rotationAxis);
             player.propulsion = rotation * forceDirection * forceMagnitude * propWindow.magnitude;
 
             if (debugWindow.runSimulation)
             {
-                m_simulation.run({ 10.0f, 5e-2 * debugWindow.timeScale, 0.5f, 144, 10, -0.1f });
-                EMIT_EVENT(SIM_DATA_UPDATE);
+                ObM::get().managerSimulation->run();
+                //m_simulation->run({ 10.0f, 5e-2 * debugWindow.timeScale, 0.5f, 144, 10, -0.1f });
+                auto perf = ObM::get().managerSimulation->getPerformance();
+                std::string mess = "SPS: " + std::to_string(perf.stepsPerSecond) + ", subSteps: " + std::to_string(perf.subStepsNumber);
+                SEND_EVENT(Application, this, DEBUG_MESSAGE, mess);
             }
 
             // *** Central map setup ***
 
-            if (std::abs(debugWindow.scale - scale) > scale * epsilon)
-            {
-                scale = debugWindow.scale;
-                SEND_EVENT(MapLayer, mapLayer, SET_PROJ, m_window->getWidth(), m_window->getHeight(), scale * scaleMult);
-            }
 
-            if (propWindow.followPlayer && !comparePositions(playerPosition, player.position, epsilon))
+            float scale = 0.05f * debugWindow.scale;
+            glm::mat4 proj = glm::ortho(-1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getWidth(), -1.0f * scale * (float)m_window->getHeight(), 1.0f * scale * (float)m_window->getHeight(), -1.0f, 1.0f);
+            glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-player.position[0], -player.position[1], 0));
+            if (!propWindow.followPlayer)
             {
-                SEND_EVENT(MapLayer, mapLayer, SET_VIEW, (float)player.position[0], (float)player.position[1], (float)player.position[2]);
-                playerPosition = player.position;
+                view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
             }
+            glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+            
+            ObM::get().layerMap->setProj(proj);
+            ObM::get().layerMap->setView(view);
+            ObM::get().layerMap->setModel(model);
 
 
             // *** GUI setup ***
@@ -144,14 +151,6 @@ namespace projectSolar
         auto& eventsManager = m_window->getEventsManager();
         while (!eventsManager.isEmpty())
         {
-            if (eventsManager.front()->getEventType() == Graphics::InputEventType::WindowResize)
-            {
-                const auto* const eventObj = (Graphics::WindowResizeEvent*)eventsManager.front();
-                EMIT_EVENT(WINDOW_RESIZE, eventObj->getWidth(), eventObj->getHeight());
-                eventsManager.pop();
-                continue;
-            }
-            
             m_layers.onEvent(eventsManager.front());
             eventsManager.pop();
         }
@@ -159,27 +158,10 @@ namespace projectSolar
 
     SLOT_IMPL(Application, CLOSE_WINDOW)
     {
-        LOG_WARN("CLOSE_WINDOW");
-        
-        for (int i = 0; i < 1e5; i++)
-        {
-            //SEND_EVENT(Application, this, DEBUG_MESSAGE, "debug message event #" + std::to_string(i));
-            EMIT_EVENT(DEBUG_MESSAGE, "debug message event #" + std::to_string(i));
-        }
-        
-        //m_running = false;
+        m_running = false;
     }
     SLOT_IMPL(Application, DEBUG_MESSAGE)
     {
-        //LOG_INFO("DEBUG_MESSAGE: ", data->message);
-        //return;
-        
-        /*static std::atomic<int> counter;
-        counter++;
-        int copy = counter;
-        if (copy % 1000 == 0)
-        {
-            LOG_INFO("DEBUG_MESSAGE #", copy);
-        }*/
+        LOG_INFO("DEBUG_MESSAGE: ", data->message);
     }
 }

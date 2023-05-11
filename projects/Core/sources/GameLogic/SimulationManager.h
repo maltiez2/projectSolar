@@ -5,22 +5,26 @@
 #include "Simulation.h"
 #include "Logger.h"
 
+#include <memory>
+
 
 namespace projectSolar::GameLogic
 {
 	class SimulationManager : public EventHandler
 	{
 	public:
-		SimulationManager(Simulation::SimulationRunner& simulationRunner, ECS::EntityManager& entityManager, const size_t& threadsNumber = 1);
+		SimulationManager(std::shared_ptr<Simulation::SimulationRunner> simulationRunner, const size_t& threadsNumber = 1);
 		~SimulationManager() = default;
 
 		void run();
 
-		entt::entity getPerformance();
+		Simulation::SimulationRunner::Params getRunParams();
+
+		const Components::SimulationPerformance& getPerformance() const;
 
 	private:
-		ECS::EntityManager& m_entityManager;
-		Simulation::SimulationRunner& m_simulationRunner;
+		std::shared_ptr<Simulation::SimulationRunner> m_simulation;
+		
 		entt::entity m_perorfmace;
 
 		void setPerformance(const Simulation::SimulationRunner::Performance& performance);

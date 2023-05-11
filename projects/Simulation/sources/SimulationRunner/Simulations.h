@@ -19,8 +19,8 @@ namespace projectSolar::Simulation
 	public:
 		struct SimulationParams
 		{
-			double gravitationalConstant;
-			double stepSize;
+			double gravitationalConstant = 1.0;
+			double stepSize = 1.0;
 			uint8_t splittingFactor = 10;
 			uint8_t unusedCores = 1;
 		};

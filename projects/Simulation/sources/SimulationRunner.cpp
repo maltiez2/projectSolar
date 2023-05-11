@@ -115,6 +115,8 @@ namespace projectSolar::Simulation
 	{
 		uint16_t stepsNumber = m_frameRateController.onRunStart(params);
 
+		LOG_DEBUG("[SimulationRunner] G = ", params.gravitationalConstant);
+
 		for (uint16_t index = 0; index < stepsNumber; index++)
 		{
 			m_simulation_nBody.run({ params.gravitationalConstant, params.stepSize / stepsNumber, 5, 1 });
@@ -123,7 +125,7 @@ namespace projectSolar::Simulation
 
 		float secondsElapsed = m_frameRateController.onRunEnd();
 
-		return {1.0f / secondsElapsed, stepsNumber };
+		return { 1.0f / secondsElapsed, stepsNumber };
 	}
 	DataManager& SimulationRunner::getData()
 	{

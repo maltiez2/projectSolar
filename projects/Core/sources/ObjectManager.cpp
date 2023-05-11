@@ -1,8 +1,8 @@
-#include "Objectmanager.h"
+#include "ObjectManager.h"
 
 namespace projectSolar
 {
-	ObjectManager& ObjectManager::getInstance()
+	ObjectManager& ObjectManager::get()
 	{
 		static ObjectManager instance;
 		return instance;
@@ -14,11 +14,6 @@ namespace projectSolar
 		if (initialized)
 		{
 			return;
-		}
-		ObjectManager& inst = getInstance();
-		for (uint8_t i = 0; i < MAX_OBJECTS_NUMBER; i++)
-		{
-			inst.m_objects[i] = nullptr;
 		}
 		initialized = true;
 		return;

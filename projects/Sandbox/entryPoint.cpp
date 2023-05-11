@@ -29,15 +29,13 @@ int main()
 	LOG_INTT_CONSOLE("logs/log_sandbox.txt");
 	LOG_DEBUG("[sandbox] Sandbox started");
 
-	auto runner = SimulationRunner();
-	runnerDataSetup(runner);
+	auto simulation = std::make_shared<SimulationRunner>();
+	auto ECS = std::make_shared<projectSolar::ECS::EntityManager>();
 
-	WindowProperties windowProps;
-	windowProps.fullScreen = false;
+	runnerDataSetup(*simulation);
 
-	auto* app = new projectSolar::Application(runner, windowProps);
+	auto app = std::make_unique<projectSolar::Application>(simulation, ECS);
 	app->run();
-	delete(app);
 
 
 	LOG_DEBUG("[sandbox] Sandbox finished");

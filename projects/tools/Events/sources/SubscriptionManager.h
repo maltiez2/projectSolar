@@ -46,8 +46,8 @@ namespace projectSolar
 		inline static size_t s_threadsNumber = 1;
 		
 		// *** Workers
-		std::vector<std::binary_semaphore*> m_workersSemaphores;
-		std::vector<std::thread> m_workers;
+		std::vector<std::binary_semaphore*> m_workersSemaphores = {};
+		std::vector<std::thread> m_workers = {};
 		bool m_killThreads = false;
 
 		void realeseWorkers();

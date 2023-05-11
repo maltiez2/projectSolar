@@ -18,11 +18,11 @@ namespace projectSolar::Simulation
 	public:
 		struct Params
 		{
-			double gravitationalConstant;
-			double stepSize;
-			float framePeriodFactor;
-			uint8_t framesPerSecond;
-			uint16_t defaultStepsNumber;
+			double gravitationalConstant = 1.0;
+			double stepSize = 1.0;
+			float framePeriodFactor = 0.5;
+			uint8_t framesPerSecond = 60;
+			uint16_t defaultStepsNumber = 1;
 			float stepsDiffBias = -0.1f;
 		};
 

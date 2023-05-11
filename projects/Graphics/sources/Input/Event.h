@@ -4,7 +4,7 @@
 
 #include <functional>
 
-#define BIT(x) (1 << x)
+#define BIT(x) (1 << (x))
 #define BIND_EVENT_FUNC(x) std::bind(&x, this, std::placeholders::_1)
 #define EVENT_CLASS_TYPE_DECLARATION(type) static InputEventType getStaticType();\
 								virtual InputEventType getEventType() const override;\
