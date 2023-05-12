@@ -8,6 +8,9 @@
 
 #include "SubscriptionManager.h"
 
+#include "Prototypes.h"
+
+#include <shared_mutex>
 
 using namespace projectSolar::Simulation;
 using namespace projectSolar::Graphics;
@@ -23,12 +26,34 @@ constexpr double initSpeed = 5.0;
 constexpr double initOrbit = 5.0;
 
 void runnerDataSetup(SimulationRunner& runner);
+void appRun();
+
+using namespace projectSolar::Prototypes;
 
 int main()
 {
 	LOG_INTT_CONSOLE("logs/log_sandbox.txt");
 	LOG_DEBUG("[sandbox] Sandbox started");
+	
+	TestEventHandler test(2, 1 << 24);
 
+	int counter = 0;
+	while (true)
+	{
+		counter++;
+		SEND_EVENT(TestEventHandler::TEST_MSG, &test, 8, "Test msg");
+		if (counter > 100)
+		{
+			break;
+		}
+	}
+
+	LOG_DEBUG("[sandbox] Sandbox finished");
+	return 0;
+}
+
+void appRun()
+{
 	auto simulation = std::make_shared<SimulationRunner>();
 	auto ECS = std::make_shared<projectSolar::ECS::EntityManager>();
 
@@ -36,10 +61,6 @@ int main()
 
 	auto app = std::make_unique<projectSolar::Application>(simulation, ECS);
 	app->run();
-
-
-	LOG_DEBUG("[sandbox] Sandbox finished");
-	return 0;
 }
 
 void runnerDataSetup(SimulationRunner& runner)

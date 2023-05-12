@@ -1,5 +1,3 @@
-#pragma once
-
 #include "EventHandler.h"
 
 #include "Logger.h" 

@@ -23,7 +23,7 @@
 #define PPCAT(A, B) PPCAT_NX(A, B)
 #define SLOT_DECL(command, ...) struct PPCAT(command, _DATA) {__VA_ARGS__;}; void command(PPCAT(command, _DATA)* data)
 #define SLOT_IMPL(namespc, command) void namespc::command(PPCAT(command, _DATA)* data)
-#define SEND_COMMAND(dest, command, inputData) (dest)->receive(command, data)
+#define SEND_COMMAND(dest, command, inputData) (dest)->receive(command, inputData)
 #define SEND_EVENT(destClass, dest, command, ...) \
 	auto* PPCAT(data, __LINE__) = new destClass::PPCAT(command, _DATA)({__VA_ARGS__});\
 	(dest)->receive(\
@@ -36,7 +36,7 @@
 
 
 namespace projectSolar
-{
+{		
 	class EventHandler
 	{
 	public:
