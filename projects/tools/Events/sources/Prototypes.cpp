@@ -24,9 +24,9 @@ namespace projectSolar::Prototypes
 			LOG_ASSERT(buffer->front != nullptr, "Unsuccessful buffer 'malloc'");
 
 			buffer->back = buffer->front + size + 1;
-			buffer->max = size + 1;
 
-			reset(buffer);
+			buffer->head = buffer->front;
+			buffer->tail = buffer->front;
 
 			return buffer;
 		}
@@ -37,13 +37,6 @@ namespace projectSolar::Prototypes
 			free(buffer->front);
 			free(buffer);
 		}
-		void reset(Buffer* buffer)
-		{
-			LOG_ASSERT(buffer, "NULL buffer");
-
-			buffer->head = buffer->front;
-			buffer->tail = buffer->front;
-		}
 		void clear(Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail)
 		{
 			std::unique_lock hLock(*head);
@@ -52,7 +45,7 @@ namespace projectSolar::Prototypes
 			buffer->tail = buffer->front;
 		}
 
-		// 'buffer->head != buffer->tail' on not empty should be enforced by size constrains
+		// 'buffer->head != buffer->tail' on not empty should be enforced by size constrains inside these functions:
 		void put(Buffer* buffer, const uint8_t* data, const uint8_t dataType, const uint8_t size, std::shared_mutex* head, std::shared_mutex* tail)
 		{
 			LOG_ASSERT(buffer, "NULL buffer");
@@ -189,7 +182,7 @@ namespace projectSolar::Prototypes
 			std::shared_lock tLock(*tail);
 			if (buffer->tail == buffer->head)
 			{
-				return buffer->max;
+				return buffer->back - buffer->front;
 			}
 			if (buffer->tail > buffer->head)
 			{
@@ -318,9 +311,13 @@ namespace projectSolar::Prototypes
 		}
 	}
 
-	projectSolar::Prototypes::SubscriptionManager::SubscriptionManager(const size_t& workersNumber, const size_t& bufferSize) :
+	SubscriptionManager::SubscriptionManager(const size_t& workersNumber, const size_t& bufferSize) :
 		EventHandler(workersNumber, bufferSize)
 	{
+	}
+	SubscriptionManager::~SubscriptionManager()
+	{
+		destroyWorkers();
 	}
 
 	void SubscriptionManager::processEvent(uint8_t eventType, uint8_t* data)

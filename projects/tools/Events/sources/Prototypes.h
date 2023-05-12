@@ -35,14 +35,13 @@ namespace projectSolar::Prototypes
 			uint8_t* back;
 			uint8_t* head;
 			uint8_t* tail;
-			size_t max;
 		};
 
 		Buffer* create(const size_t size);
 		void destroy(Buffer* buffer);
-		void reset(Buffer* buffer);
 		void clear(Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
 
+		// Only POD data
 		void put(Buffer* buffer, const uint8_t* data, const uint8_t dataType, const uint8_t size, std::shared_mutex* head, std::shared_mutex* tail);
 		bool pop(Buffer* buffer, uint8_t* data, uint8_t& dataType, uint8_t& size, std::shared_mutex* head, std::shared_mutex* tail);
 
@@ -103,21 +102,21 @@ namespace projectSolar::Prototypes
 	class SubscriptionManager : public EventHandler
 	{
 	public:
-		SubscriptionManager(const size_t& workersNumber, const size_t& bufferSize);
-		~SubscriptionManager() override = default;
+		SubscriptionManager(const size_t& workersNumber = 1, const size_t& bufferSize = RingBuffer::MAX_BUFFER_SIZE);
+		~SubscriptionManager() override;
 
 
 		EVENT_DECL(TEST_MSG, 2, uint8_t size; char message[128]);
 
 
 		template<typename SubscriberType>
-		void subscribe(uint8_t eventId, std::shared_ptr<SubscriberType> subscriber)
+		void subscribe(uint8_t eventId, const std::shared_ptr<SubscriberType>& subscriber)
 		{
 			std::unique_lock writeLock(m_subsritpionMutex);
 			m_subscriptions[eventId].push_back(std::dynamic_pointer_cast<EventHandler>(subscriber));
 		}
 		template<typename SubscriberType>
-		void unsubscribe(uint8_t eventId, std::shared_ptr<SubscriberType> subscriber)
+		void unsubscribe(uint8_t eventId, const std::shared_ptr<SubscriberType>& subscriber)
 		{
 			std::unique_lock writeLock(m_subsritpionMutex);
 			std::shared_ptr<EventHandler> ptr = std::dynamic_pointer_cast<EventHandler>(subscriber);

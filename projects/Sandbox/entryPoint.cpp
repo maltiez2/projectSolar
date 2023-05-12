@@ -11,6 +11,9 @@
 #include "Prototypes.h"
 
 #include <shared_mutex>
+#include <chrono>
+#include <thread>
+
 
 using namespace projectSolar::Simulation;
 using namespace projectSolar::Graphics;
@@ -35,18 +38,22 @@ int main()
 	LOG_INTT_CONSOLE("logs/log_sandbox.txt");
 	LOG_DEBUG("[sandbox] Sandbox started");
 	
-	TestEventHandler test(2, 1 << 24);
+	SubscriptionManager sub(2, 1 << 24);
 
-	int counter = 0;
-	while (true)
+	std::shared_ptr<TestEventHandler> test_0 = std::make_shared<TestEventHandler>(2, 1 << 24);
+	std::shared_ptr<TestEventHandler> test_1 = std::make_shared<TestEventHandler>(2, 1 << 24);
+
+	sub.subscribe(SubscriptionManager::TEST_MSG, test_0);
+	sub.subscribe(SubscriptionManager::TEST_MSG, test_1);
+
+	//std::this_thread::sleep_for(std::chrono::seconds(1));
+
+	for (int i = 0; i < 100; i++)
 	{
-		counter++;
-		SEND_EVENT(TestEventHandler::TEST_MSG, &test, 8, "Test msg");
-		if (counter > 100)
-		{
-			break;
-		}
+		SEND_EVENT(SubscriptionManager::TEST_MSG, &sub, 8, "Test msg");
 	}
+
+	//std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	LOG_DEBUG("[sandbox] Sandbox finished");
 	return 0;
