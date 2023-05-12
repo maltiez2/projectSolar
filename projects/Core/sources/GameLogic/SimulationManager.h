@@ -10,23 +10,21 @@
 
 namespace projectSolar::GameLogic
 {
-	class SimulationManager : public EventHandler
+	class SimulationManager : public Events::EventHandler
 	{
 	public:
 		SimulationManager(std::shared_ptr<Simulation::SimulationRunner> simulationRunner, const size_t& threadsNumber = 1);
-		~SimulationManager() = default;
+		~SimulationManager() override;
 
 		Components::SimulationPerformance run();
-
-		Simulation::SimulationRunner::Params getRunParams();
-
 		const Components::SimulationPerformance& getPerformance() const;
+		Simulation::SimulationRunner::Params getRunParams() const;
 
 	private:
-		std::shared_ptr<Simulation::SimulationRunner> m_simulation;
+		void processEvent(uint8_t eventType, uint8_t* data) override;
 		
-		entt::entity m_perorfmace;
-
+		std::shared_ptr<Simulation::SimulationRunner> m_simulation;
+		entt::entity m_perorfmace;	
 		void setPerformance(const Simulation::SimulationRunner::Performance& performance);
 	};
 }

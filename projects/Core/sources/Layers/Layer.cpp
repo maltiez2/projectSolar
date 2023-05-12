@@ -5,10 +5,6 @@
 
 namespace projectSolar::Layers
 {
-    Layer::Layer() :
-        EventHandler(1)
-    {
-    }
 
     // Layers Manager
     void LayersManager::draw()

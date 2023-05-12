@@ -23,9 +23,18 @@ Window::~Window()
 
 void Window::startFrame()
 {
-	glfwPollEvents();
 	glfwSwapBuffers(m_window);
 	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void projectSolar::Graphics::Window::finishFrame()
+{
+	glfwPollEvents();
+}
+
+bool projectSolar::Graphics::Window::ifClose()
+{
+	return glfwWindowShouldClose(m_window);
 }
 
 uint32_t Window::getWidth() const

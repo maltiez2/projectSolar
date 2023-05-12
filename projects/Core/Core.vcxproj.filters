@@ -18,7 +18,7 @@
     <ClCompile Include="sources\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\Layers\Layers.cpp">
+    <ClCompile Include="sources\Layers\Layer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\pch.cpp">
@@ -27,16 +27,7 @@
     <ClCompile Include="sources\ECS\EntityComponentSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\GameLogic\PlayerManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\GameLogic\UniverseManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sources\GameLogic\SimulationManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\GameLogic\SettingsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\Layers\GuiLayer.cpp">
@@ -45,7 +36,13 @@
     <ClCompile Include="sources\Layers\MapLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\ObjectManager.cpp">
+    <ClCompile Include="sources\GameLogic\CommunicationManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\GameLogic\GuiManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\GameLogic\MapManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,7 +53,7 @@
     <ClInclude Include="include\Core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Layers\Layers.h">
+    <ClInclude Include="sources\Layers\Layer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\pch.h">
@@ -71,16 +68,7 @@
     <ClInclude Include="sources\ECS\Serialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\GameLogic\PlayerManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\GameLogic\UniverseManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sources\GameLogic\SimulationManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\GameLogic\SettingsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\GameLogic\Managers.h">
@@ -92,7 +80,16 @@
     <ClInclude Include="sources\Layers\GuiLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\ObjectManager.h">
+    <ClInclude Include="sources\GameLogic\CommunicationManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\GameLogic\GuiManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\GameLogic\MapManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Layers\Layers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

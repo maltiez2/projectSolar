@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Layers.h"
+#include "Layer.h"
 #include "Graphics.h"
+#include "GameLogic/CommunicationManager.h"
 
 #include <memory>
 
@@ -11,8 +12,8 @@ namespace projectSolar::Layers
 	class GuiLayer : public Layer
 	{
 	public:
-		GuiLayer(std::shared_ptr<Graphics::Window> window, std::shared_ptr<Graphics::GuiWindowsManager> guiWindows, bool blockEvents = true);
-		~GuiLayer() = default;
+		GuiLayer(std::shared_ptr<Graphics::Window> window, bool blockEvents = true);
+		~GuiLayer() override = default;
 
 		void draw() override;
 		void onEvent(Graphics::InputEvent* ev) override;
@@ -20,7 +21,7 @@ namespace projectSolar::Layers
 		std::shared_ptr<Graphics::GuiWindowsManager> getWindowsManager();
 
 	private:
-		std::shared_ptr<Graphics::GuiWindowsManager> m_windowsManager;
+		std::shared_ptr<Graphics::GuiWindowsManager> m_windowsManager = std::make_shared<Graphics::GuiWindowsManager>();
 		Graphics::GuiRenderer m_renderer;
 		bool m_blockEvents;
 	};

@@ -6,10 +6,6 @@
 #include "Simulation.h"
 #include "Graphics.h"
 
-#include "SubscriptionManager.h"
-
-#include "Prototypes.h"
-
 #include <shared_mutex>
 #include <chrono>
 #include <thread>
@@ -31,29 +27,12 @@ constexpr double initOrbit = 5.0;
 void runnerDataSetup(SimulationRunner& runner);
 void appRun();
 
-using namespace projectSolar::Prototypes;
-
 int main()
 {
 	LOG_INTT_CONSOLE("logs/log_sandbox.txt");
 	LOG_DEBUG("[sandbox] Sandbox started");
 	
-	SubscriptionManager sub(2, 1 << 24);
-
-	std::shared_ptr<TestEventHandler> test_0 = std::make_shared<TestEventHandler>(2, 1 << 24);
-	std::shared_ptr<TestEventHandler> test_1 = std::make_shared<TestEventHandler>(2, 1 << 24);
-
-	sub.subscribe(SubscriptionManager::TEST_MSG, test_0);
-	sub.subscribe(SubscriptionManager::TEST_MSG, test_1);
-
-	//std::this_thread::sleep_for(std::chrono::seconds(1));
-
-	for (int i = 0; i < 100; i++)
-	{
-		SEND_EVENT(SubscriptionManager::TEST_MSG, &sub, 8, "Test msg");
-	}
-
-	//std::this_thread::sleep_for(std::chrono::seconds(1));
+	appRun();
 
 	LOG_DEBUG("[sandbox] Sandbox finished");
 	return 0;

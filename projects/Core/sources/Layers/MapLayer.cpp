@@ -26,6 +26,7 @@ namespace projectSolar::Layers
     void MapLayer::draw()
     {
         updateData();
+        updateMVP();
 
         m_vertexBuffer->updateData(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
         m_shader->bind();
@@ -38,23 +39,49 @@ namespace projectSolar::Layers
         m_indexBuffer->unbind();
         m_vertexArray->unbind();
         m_shader->unbind();
+
+        EMIT_EVENT(MAP_DRAWN);
     }
     void MapLayer::onEvent(Graphics::InputEvent* ev)
     {
-        //LOG_DEBUG("[event] [MapLayer] ", ev->toString());
+        switch (ev->getEventType())
+        {
+        case Graphics::InputEventType::WindowResize:
+        {
+            auto eventData = (Graphics::WindowResizeEvent*)ev;
+            setResolution(eventData->getWidth(), eventData->getHeight());
+            break;
+        }
+        default:
+            break;
+        }
     }
-    void MapLayer::setProj(const glm::mat4& proj)
+    void MapLayer::setCameraPosition(float x, float y, float z)
     {
-        m_proj = proj;
+        m_currentCamera.position.x = x;
+        m_currentCamera.position.y = y;
+        m_currentCamera.position.z = z;
     }
-    void MapLayer::setModel(const glm::mat4& model)
+    void MapLayer::setResolution(uint32_t width, uint32_t height)
     {
-        m_model = model;
+        m_currentCamera.resolution.x = (float)width;
+        m_currentCamera.resolution.y = (float)height;
     }
-    void MapLayer::setView(const glm::mat4& view)
+    void MapLayer::setCameraScale(float scale)
     {
-        m_view = view;
+        m_currentCamera.scale = scale;
     }
+    void MapLayer::moveCameraPosition(float x, float y, float z)
+    {
+        m_currentCamera.position.x += x;
+        m_currentCamera.position.y += y;
+        m_currentCamera.position.z += z;
+    }
+    void MapLayer::moveCameraScale(float scaleDelta)
+    {
+        m_currentCamera.scale += scaleDelta;
+    }
+
     void MapLayer::updateData()
     {
         auto& dataManager = m_simulation->getData();
@@ -94,33 +121,14 @@ namespace projectSolar::Layers
             m_buffer[propulsesIndex + i] = Point((float)element.position[0], (float)element.position[1], (float)element.position[2], 2);
         }
     }
+    void MapLayer::updateMVP()
+    {
+        m_proj = glm::ortho(
+            -0.5f * m_currentCamera.scale * m_currentCamera.resolution.x, 0.5f * m_currentCamera.scale * m_currentCamera.resolution.x,
+            -0.5f * m_currentCamera.scale * m_currentCamera.resolution.y, 0.5f * m_currentCamera.scale * m_currentCamera.resolution.y,
+            -1.0f * m_currentCamera.scale, 1.0f * m_currentCamera.scale
+        );
 
-    SLOT_IMPL(MapLayer, SET_PROJ)
-    {
-        LOG_WARN("[MapLayer] SET_PROJ: ", data->width, " : ", data->height, " - ", data->scale);
-        float width = data->scale * (float)data->width;
-        float height = data->scale * (float)data->height;
-        LOG_WARN("[MapLayer] SET_PROJ scaled: ", width, " : ", height);
-        m_proj = glm::ortho(-0.5f * width, 0.5f * width, -0.5f * height, 0.5f * height, -1.0f, 1.0f);
-    }
-    SLOT_IMPL(MapLayer, SET_VIEW)
-    {
-        LOG_WARN("[MapLayer] SET_VIEW: ", data->x, ", ", data->y, ", ", data->z);
-        m_view = glm::translate(glm::mat4(1.0f), glm::vec3(-data->x, -data->y, -data->z));
-    }
-    SLOT_IMPL(MapLayer, SET_MODEL)
-    {
-        LOG_WARN("[MapLayer] SET_MODEL: ", data->x, ", ", data->y, ", ", data->z);
-        m_model = glm::translate(glm::mat4(1.0f), glm::vec3(data->x, data->y, data->z));
-    }
-    SLOT_IMPL(MapLayer, TRANSLATE_VIEW)
-    {
-        LOG_WARN("[MapLayer] TRANSLATE_VIEW: ", data->x, ", ", data->y, ", ", data->z);
-        m_view = glm::translate(m_view, glm::vec3(-data->x, -data->y, -data->z));
-    }
-    SLOT_IMPL(MapLayer, TRANSLATE_MODEL)
-    {
-        LOG_WARN("[MapLayer] TRANSLATE_MODEL: ", data->x, ", ", data->y, ", ", data->z);
-        m_model = glm::translate(m_model, glm::vec3(data->x, data->y, data->z));
+        m_view = glm::translate(glm::mat4(1.0f), -1.0f * m_currentCamera.position);
     }
 }

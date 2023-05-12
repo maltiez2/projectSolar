@@ -1,60 +1,77 @@
 #pragma once
 
-#include "DoubleBufferedQueue.h"
-
-#include <queue>
-#include <thread>
-#include <vector>
+#include <memory>
+#include <shared_mutex>
 #include <semaphore>
+#include <vector>
+#include <array>
 
-// @TODO From Darian
-//Personally, I use type erased lambda wrapper functions that accept void payloads,
-//I force clean - up to occur inside of them, 
-//require trivially relocatable payloads and lambda captures,
-//and allocate all payloads in a ring buffer
-//
-//+ [](void* body, void* payload) {
-//	(*static_cast<Lambda*>(body))(*static_cast<Payload*>(payload));
-//}
-//
-// the body is tightly allocated with other handlers, and the payload is linearly allocated into a ring buffer
 
 #define PPCAT_NX(A, B) A ## B
 #define PPCAT(A, B) PPCAT_NX(A, B)
-#define SLOT_DECL(command, ...) struct PPCAT(command, _DATA) {__VA_ARGS__;}; void command(PPCAT(command, _DATA)* data)
-#define SLOT_IMPL(namespc, command) void namespc::command(PPCAT(command, _DATA)* data)
-#define SEND_COMMAND(dest, command, inputData) (dest)->receive(command, inputData)
-#define SEND_EVENT(destClass, dest, command, ...) \
-	auto* PPCAT(data, __LINE__) = new destClass::PPCAT(command, _DATA)({__VA_ARGS__});\
-	(dest)->receive(\
-	[](void* receiver, void* data)\
-	{\
-		((destClass*)receiver)->command((destClass::PPCAT(command, _DATA)*)data);\
-		delete((destClass::PPCAT(command, _DATA)*)data);\
-	},\
-	PPCAT(data, __LINE__))
+#define EVENT_DECL(eventName, eventId, ...) enum : uint8_t {eventName = eventId}; struct PPCAT(eventName, _DATA) {__VA_ARGS__;}
+#define EVENTS_DEF_UNKNOWN() case 0: LOG_ASSERT(false, "Unknown event type") {
+#define EVENTS_DEF_DEFAULT() break; } default:
+#define EVENT_DEF(eventName) break; } case eventName: { PPCAT(eventName, _DATA)& eventData = *(PPCAT(eventName, _DATA)*)data
+#define SEND_EVENT(eventName, destClass, dest, ...) destClass::PPCAT(eventName, _DATA) PPCAT(data, __LINE__)({ __VA_ARGS__ }); (dest)->receiveEvent(destClass::eventName, PPCAT(data, __LINE__))
+#define SUBSCRIPTION_DEF(eventName) case eventName: { PPCAT(eventName, _DATA)& eventData = *(PPCAT(eventName, _DATA)*)data; std::shared_lock readLock(m_subsritpionMutex); for (auto subscriber : m_subscriptions[eventName]) {subscriber->receiveEvent(eventName, eventData);}} break
+#define SUBSCRIPTION_DEF_DEFAULT default: LOG_ERROR("[SubscriptionManager] Unknown subsricption event"); break
 
 
-namespace projectSolar
-{		
+namespace projectSolar::Events
+{
+	constexpr uint8_t MAX_EVENT_ID = 255;
+	constexpr uint8_t MAX_EVENT_DATA_SIZE = 255;
+
+	namespace RingBuffer
+	{
+		constexpr size_t MAX_BUFFER_SIZE = 1i64 << 25; // 16 Mb
+
+		struct Buffer
+		{
+			uint8_t* front;
+			uint8_t* back;
+			uint8_t* head;
+			uint8_t* tail;
+		};
+
+		Buffer* create(const size_t size);
+		void destroy(Buffer* buffer);
+		void clear(Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
+
+		// Only POD data
+		void put(Buffer* buffer, const uint8_t* data, const uint8_t dataType, const uint8_t size, std::shared_mutex* head, std::shared_mutex* tail);
+		bool pop(Buffer* buffer, uint8_t* data, uint8_t& dataType, uint8_t& size, std::shared_mutex* head, std::shared_mutex* tail);
+
+		bool splited(const Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
+		size_t left(const Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
+		bool empty(const Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
+		bool full(const Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
+	}
+
+	// Only POD data in events
 	class EventHandler
 	{
 	public:
-		using EventFunc = void(*)(void* receiver, void* data);
+		EventHandler(const size_t& workersNumber = 1, const size_t& bufferSize = RingBuffer::MAX_BUFFER_SIZE);
+		virtual ~EventHandler();
 
-		struct Event
+		// Accepts only POD as 'data'!
+		template<typename DataType>
+		void receiveEvent(uint8_t eventType, DataType& data)
 		{
-			EventHandler::EventFunc command = nullptr;
-			void* data = nullptr;
-		};
-		
-		explicit EventHandler(const size_t& threadsNumber);
-		~EventHandler();
+			uint8_t size = sizeof(DataType);
+			RingBuffer::put(m_buffer, (uint8_t*)&data, eventType, sizeof(DataType), &m_headMutex, &m_tailMutex);
+			realeseWorkers();
+		}
 
-		void receive(EventFunc command, void* data);
-	
-	private:
-		DoubleBufferedQueue<Event> m_events;
+	protected:
+		void destroyWorkers();
+		virtual void processEvent(uint8_t eventType, uint8_t* data) = 0;
+
+		RingBuffer::Buffer* m_buffer;
+		std::shared_mutex m_headMutex;
+		std::shared_mutex m_tailMutex;
 
 		std::vector<std::binary_semaphore*> m_workersSemaphores;
 		std::vector<std::thread> m_workers;
@@ -62,5 +79,37 @@ namespace projectSolar
 
 		void realeseWorkers();
 		void worker(size_t id);
+	};
+
+	// Only POD data in events
+	class SubscriptionManager : public EventHandler
+	{
+	public:
+		SubscriptionManager(const size_t& workersNumber = 1, const size_t& bufferSize = RingBuffer::MAX_BUFFER_SIZE);
+		~SubscriptionManager() override;
+
+		template<typename SubscriberType>
+		void subscribe(uint8_t eventId, const std::shared_ptr<SubscriberType>& subscriber)
+		{
+			std::unique_lock writeLock(m_subsritpionMutex);
+			m_subscriptions[eventId].push_back(std::dynamic_pointer_cast<EventHandler>(subscriber));
+		}
+		template<typename SubscriberType>
+		void unsubscribe(uint8_t eventId, const std::shared_ptr<SubscriberType>& subscriber)
+		{
+			std::unique_lock writeLock(m_subsritpionMutex);
+			std::shared_ptr<EventHandler> ptr = std::dynamic_pointer_cast<EventHandler>(subscriber);
+			for (size_t index = 0; index < m_subscriptions[eventId].size(); index++)
+			{
+				while (m_subscriptions[eventId][index] == ptr && m_subscriptions[eventId].size() > index)
+				{
+					m_subscriptions[eventId].erase(m_subscriptions[eventId].begin() + index);
+				}
+			}
+		}
+
+	protected:
+		std::array<std::vector<std::shared_ptr<EventHandler>>, MAX_EVENT_ID + 1> m_subscriptions;
+		std::shared_mutex m_subsritpionMutex;
 	};
 }

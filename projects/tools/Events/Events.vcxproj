@@ -139,17 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="sources\Prototypes.cpp" />
     <ClCompile Include="sources\EventHandler.cpp" />
-    <ClCompile Include="sources\EventHandlerAdvanced.cpp" />
-    <ClCompile Include="sources\SubscriptionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sources\DoubleBufferedQueue.h" />
-    <ClInclude Include="sources\Prototypes.h" />
     <ClInclude Include="sources\EventHandler.h" />
-    <ClInclude Include="sources\EventHandlerAdvanced.h" />
-    <ClInclude Include="sources\SubscriptionManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,14 +14,11 @@
 #include <functional>
 
 #include "EventHandler.h"
-#include "SubscriptionManager.h"
-#include "ObjectManager.h"
+#include "GameLogic/CommunicationManager.h"
 
 
 namespace projectSolar
 {
-    using ObM = ObjectManager;
-
     bool comparePositions(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2, const double& epsilon)
     {
         for (uint8_t i = 0; i < 3; i++)
@@ -47,98 +44,51 @@ namespace projectSolar
         m_simulation(simulation),
         m_enitites(entities)
     {
+        m_eventHandler = std::make_shared<ApplicationEventHandler>(*this);
         m_window = std::make_shared<Graphics::Window>();
 
-        ObjectManager::init();
+        Com::init(16);
 
         auto centralRenderer = std::make_shared<Graphics::Renderer>();
         auto guiWindows = std::make_shared<Graphics::GuiWindowsManager>();
 
-        ObM::get().layerMap = m_layers.add<Layers::MapLayer>(1, true, centralRenderer, m_simulation);
-        ObM::get().layerGui = m_layers.add<Layers::GuiLayer>(2, true, m_window, guiWindows);
+        auto mapLayer = m_layers.add<Layers::MapLayer>(1, true, centralRenderer, m_simulation);
+        auto guiLayer = m_layers.add<Layers::GuiLayer>(2, true, m_window);
 
-        ObM::get().managerECS = std::make_shared<ECS::EntityManager>();
-        ObM::get().managerSimulation = std::make_shared<GameLogic::SimulationManager>(simulation);
+        Com::get().Application = m_eventHandler;
+        Com::get().ECS         = std::make_shared<ECS::EntityManager>();
+        Com::get().simulation  = std::make_shared<GameLogic::SimulationManager>(simulation);
+        Com::get().GUI         = std::make_shared<GameLogic::GuiManager>(guiLayer);
+        Com::get().Map         = std::make_shared<GameLogic::MapManager>(mapLayer);
+
+        Com::subsribeOnEvent(Com::SIMULATION_UPDATED, Com::get().GUI);
+        Com::subsribeOnEvent(Com::GUI_UPDATED, Com::get().GUI);
+
+        mapLayer->setResolution(m_window->getWidth(), m_window->getHeight());
+        m_simulationParams = Com::get().simulation->getRunParams();
     }
 
     void Application::run()
     {
-        // *** GUI ***
-        ObM::get().layerGui->getWindowsManager()->add<Graphics::NotificationWindow>("test", true, "Test window", "Test text of test window");
-        ObM::get().layerGui->getWindowsManager()->add<Graphics::DebugWindow>("debug", true);
-        ObM::get().layerGui->getWindowsManager()->add<Graphics::DemoWindow>("demo", false);
-        ObM::get().layerGui->getWindowsManager()->add<Graphics::PropulsionControlWindow>("prop", true);
-
-        const auto& guiWindow   = *ObM::get().layerGui->getWindowsManager()->get<Graphics::NotificationWindow>("test");
-        const auto& debugWindow = *ObM::get().layerGui->getWindowsManager()->get<Graphics::DebugWindow>("debug");
-              auto& demoWindow  = *ObM::get().layerGui->getWindowsManager()->get<Graphics::DemoWindow>("demo");
-        const auto& propWindow  = *ObM::get().layerGui->getWindowsManager()->get<Graphics::PropulsionControlWindow>("prop");
-        // ***********
-
-        Eigen::Vector3d forceDirection(1.0, 0.0, 0.0);
-        Eigen::Vector3d rotationAxis(0.0, 0.0, 1.0);
-        Eigen::Vector3d playerPosition = m_simulation->getData().propulsedData.getData()[0].position;
-        const float scaleMult = 0.05f;
-        const float epsilon = 1e-5f;
-              float scale = 0.0f;
-              float forceMagnitude = 1.0f;
-
+        EMIT_EVENT(SIMULATION_UPDATED);
+        EMIT_EVENT(GUI_UPDATED);
+        
         while (m_running)
         {
             m_window->startFrame();
 
-            // *** Data setup ***
-
-            auto& player = m_simulation->getData().propulsedData.getData()[0];
-            Eigen::AngleAxisd rotation(propWindow.direction, rotationAxis);
-            player.propulsion = rotation * forceDirection * forceMagnitude * propWindow.magnitude;
-
-            if (debugWindow.runSimulation)
+            if (m_simulating)
             {
-                auto perf = ObM::get().managerSimulation->run();
-                LOG_INFO("[Application] Simulation performance - milliseconds per step: ", 1e3f * perf.secondsPerStep, ", substeps per step: ", perf.subStepsNumber);
+                auto performance = m_simulation->run(m_simulationParams);
+                LOG_DEBUG("[Application] Simulation sub steps: ", performance.subStepsNumber);
+                EMIT_EVENT(SIMULATION_UPDATED, performance.secondsPerStep, performance.subStepsNumber);
             }
-
-            // *** Central map setup ***
-
-
-            float scale = 0.05f * debugWindow.scale;
-            glm::mat4 proj = glm::ortho(-1.0f * scale * (float)m_window->getWidth(), 1.0f * scale * (float)m_window->getWidth(), -1.0f * scale * (float)m_window->getHeight(), 1.0f * scale * (float)m_window->getHeight(), -1.0f, 1.0f);
-            glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-player.position[0], -player.position[1], 0));
-            if (!propWindow.followPlayer)
-            {
-                view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-            }
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-            
-            ObM::get().layerMap->setProj(proj);
-            ObM::get().layerMap->setView(view);
-            ObM::get().layerMap->setModel(model);
-
-
-            // *** GUI setup ***
-
-            demoWindow.showFlag = debugWindow.showDemoWindow;
-
-            // *** Draw ***
 
             m_layers.draw();
 
-            // *** Test ***
-
-            
-            
-            if (debugWindow.closeApp)
-            {
-                m_running = false;
-            }
+            m_window->finishFrame();
 
             processInputEvents();
-
-            if (glfwWindowShouldClose(m_window->getNativeWindow()))
-            {
-                m_running = false;
-            }
         }
     }
 
@@ -147,8 +97,52 @@ namespace projectSolar
         auto& eventsManager = m_window->getEventsManager();
         while (!eventsManager.isEmpty())
         {
+            if (eventsManager.front()->getEventType() == Graphics::InputEventType::WindowClose)
+            {
+                m_running = false;
+                return;
+            }
+            
             m_layers.onEvent(eventsManager.front());
             eventsManager.pop();
+        }
+    }
+
+    ApplicationEventHandler::ApplicationEventHandler(Application& app) :
+        m_app(app)
+    {
+    }
+    ApplicationEventHandler::~ApplicationEventHandler()
+    {
+        destroyWorkers();
+    }
+    void ApplicationEventHandler::processEvent(uint8_t eventType, uint8_t* data)
+    {
+        switch (eventType)
+        {
+            EVENTS_DEF_UNKNOWN();
+            EVENT_DEF(SET_RUN_SIMULATION);
+            {
+                m_app.m_simulating = eventData.run;
+            }
+            EVENT_DEF(CLOSE_WINDOW);
+            {
+                m_app.m_running = false;
+            }
+            EVENT_DEF(SET_SIMULATION_STEP);
+            {
+                m_app.m_simulationParams.stepSize = eventData.stepSize;
+            }
+            EVENT_DEF(SET_SIMULATION_LOAD);
+            {
+                m_app.m_simulationParams.framePeriodFactor = eventData.framePeriodFactor;
+            }
+            EVENT_DEF(SET_SIMULATION_FPS);
+            {
+                m_app.m_simulationParams.framePeriodFactor = eventData.framesPerSecond;
+            }
+            EVENTS_DEF_DEFAULT();
+            break;
         }
     }
 }

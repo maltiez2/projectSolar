@@ -4,16 +4,19 @@
 
 namespace projectSolar::Layers
 {
-    GuiLayer::GuiLayer(std::shared_ptr<Graphics::Window> window, std::shared_ptr<Graphics::GuiWindowsManager> guiWindows, bool blockEvents) :
-        m_windowsManager(guiWindows),
-        m_renderer(*window, *guiWindows),
+    GuiLayer::GuiLayer(std::shared_ptr<Graphics::Window> window, bool blockEvents) :
+        m_renderer(*window, *m_windowsManager),
         m_blockEvents(blockEvents)
     {
+
     }
 
     void GuiLayer::draw()
     {
         m_renderer.render();
+
+        EMIT_EVENT(GUI_DRAWN);
+        EMIT_EVENT(GUI_UPDATED);
     }
     void GuiLayer::onEvent(Graphics::InputEvent* ev)
     {

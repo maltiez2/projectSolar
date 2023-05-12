@@ -149,17 +149,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="sources\ECS\EntityComponentSystem.cpp" />
-    <ClCompile Include="sources\GameLogic\PlayerManager.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="sources\GameLogic\SettingsManager.cpp" />
+    <ClCompile Include="sources\GameLogic\GuiManager.cpp" />
+    <ClCompile Include="sources\GameLogic\MapManager.cpp" />
     <ClCompile Include="sources\GameLogic\SimulationManager.cpp" />
-    <ClCompile Include="sources\GameLogic\UniverseManager.cpp" />
     <ClCompile Include="sources\Layers\GuiLayer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="sources\Layers\Layers.cpp">
+    <ClCompile Include="sources\Layers\Layer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -167,7 +164,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="sources\ObjectManager.cpp" />
+    <ClCompile Include="sources\GameLogic\CommunicationManager.cpp" />
     <ClCompile Include="sources\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -181,15 +178,15 @@
     <ClInclude Include="sources\ECS\Components.h" />
     <ClInclude Include="sources\ECS\EntityComponentSystem.h" />
     <ClInclude Include="sources\ECS\Serialization.h" />
+    <ClInclude Include="sources\GameLogic\GuiManager.h" />
     <ClInclude Include="sources\GameLogic\Managers.h" />
-    <ClInclude Include="sources\GameLogic\PlayerManager.h" />
-    <ClInclude Include="sources\GameLogic\SettingsManager.h" />
+    <ClInclude Include="sources\GameLogic\MapManager.h" />
     <ClInclude Include="sources\GameLogic\SimulationManager.h" />
-    <ClInclude Include="sources\GameLogic\UniverseManager.h" />
     <ClInclude Include="sources\Layers\GuiLayer.h" />
     <ClInclude Include="sources\Layers\Layers.h" />
+    <ClInclude Include="sources\Layers\Layer.h" />
     <ClInclude Include="sources\Layers\MapLayer.h" />
-    <ClInclude Include="sources\ObjectManager.h" />
+    <ClInclude Include="sources\GameLogic\CommunicationManager.h" />
     <ClInclude Include="sources\pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

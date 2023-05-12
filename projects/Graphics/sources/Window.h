@@ -36,6 +36,8 @@ namespace projectSolar::Graphics
 		~Window();
 
 		void startFrame();
+		void finishFrame();
+		bool ifClose();
 
 		// Getters
 		GLFWwindow* getNativeWindow();
