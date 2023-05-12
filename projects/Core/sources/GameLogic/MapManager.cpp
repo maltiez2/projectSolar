@@ -18,6 +18,8 @@ namespace projectSolar::GameLogic
 			}
 			EVENT_DEF(SET_CAMERA_ON);
 			{
+				LOG_DEBUG("Camera set on: ", eventData.id);
+				
 				switch (eventData.object)
 				{
 				case Objects::CENTRE:

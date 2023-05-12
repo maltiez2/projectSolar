@@ -34,12 +34,3 @@ void DemoWindow::show()
 {
     ImGui::ShowDemoWindow(&showFlag);
 }
-
-void PropulsionControlWindow::show()
-{
-    ImGui::Begin("Propulsion control", &showFlag);
-    ImGui::Checkbox("Follow player", &followPlayer);
-    ImGui::SliderFloat("Direction", &direction, 0.0f, 2.0f * 3.1415f);
-    ImGui::SliderFloat("Magnitude", &magnitude, 0.0f, 1.0f);
-    ImGui::End();
-}

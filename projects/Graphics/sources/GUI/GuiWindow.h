@@ -50,16 +50,4 @@ namespace projectSolar::Graphics
 
 		void show() override;
 	};
-	class PropulsionControlWindow : public GuiWindow
-	{
-	public:
-		PropulsionControlWindow() = default;
-		~PropulsionControlWindow() override = default;
-
-		void show() override;
-
-		float direction = 0.0;
-		float magnitude = 0.0;
-		bool followPlayer = true;
-	};
 }

@@ -24,6 +24,7 @@ namespace projectSolar::GameLogic
 	private:
 		void setUpGUI();
 		void processEvent(uint8_t eventType, uint8_t* data) override;
+		void updateWidnowsInteraction();
 
 		std::shared_ptr<Layers::GuiLayer> m_layer;
 		std::shared_ptr<Graphics::GuiWindowsManager> m_windows;

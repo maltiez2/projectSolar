@@ -2,6 +2,7 @@
 
 #include "MapManager.h"
 #include "Application.h"
+#include "Windows/Windows.h"
 
 namespace projectSolar::GameLogic
 {
@@ -12,18 +13,24 @@ namespace projectSolar::GameLogic
 			EVENTS_DEF_UNKNOWN();
 			EVENT_DEF(SIMULATION_UPDATED);
 			{
-				if (m_windows->get<Graphics::PropulsionControlWindow>("prop")->followPlayer)
+				if (m_windows->get<Windows::Debug>("debug")->followPlayer)
 				{
 					SEND_EVENT(SET_CAMERA_ON, MapManager, Com::get().Map, MapManager::Objects::PROPULSED, 0);
+				}
+				else
+				{
+					SEND_EVENT(SET_CAMERA_ON, MapManager, Com::get().Map, MapManager::Objects::ATTRACTOR, 0);
 				}
 			}
 			EVENT_DEF(GUI_UPDATED);
 			{
-				float scale = (float)m_windows->get<Graphics::DebugWindow>("debug")->scale * 0.05f;
+				float scale = m_windows->get<Windows::Debug>("debug")->scale * 0.05f;
 				SEND_EVENT(SET_CAMERA_SCALE, MapManager, Com::get().Map, scale);
 
-				bool runSimulation = m_windows->get<Graphics::DebugWindow>("debug")->runSimulation;
+				bool runSimulation = m_windows->get<Windows::Debug>("debug")->runSimulation;
 				SEND_EVENT(SET_RUN_SIMULATION, ApplicationEventHandler, Com::get().Application, runSimulation);
+
+				updateWidnowsInteraction();
 			}
 			EVENTS_DEF_DEFAULT();
 			break;
@@ -32,10 +39,17 @@ namespace projectSolar::GameLogic
 
 	void GuiManager::setUpGUI()
 	{
-		m_windows->add<Graphics::NotificationWindow>("test", false, "Test window", "Test text of test window");
-		m_windows->add<Graphics::DebugWindow>("debug", true);
+		m_windows->add<Windows::Debug>("debug", true);
 		m_windows->add<Graphics::DemoWindow>("demo", false);
-		m_windows->add<Graphics::PropulsionControlWindow>("prop", true);
+		m_windows->add<Windows::PropulsionControl>("prop", true);
+	}
+
+	void GuiManager::updateWidnowsInteraction()
+	{
+		if (m_windows->get<Windows::Debug>("debug")->showDemoWindow)
+		{
+			m_windows->show("demo", true);
+		}
 	}
 	
 	GuiManager::GuiManager(std::shared_ptr<Layers::GuiLayer> layer, const size_t& threadsNumber) :

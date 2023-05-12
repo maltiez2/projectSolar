@@ -80,7 +80,7 @@ namespace projectSolar
             if (m_simulating)
             {
                 auto performance = m_simulation->run(m_simulationParams);
-                LOG_DEBUG("[Application] Simulation sub steps: ", performance.subStepsNumber);
+                //LOG_DEBUG("[Application] Simulation sub steps: ", performance.subStepsNumber);
                 EMIT_EVENT(SIMULATION_UPDATED, performance.secondsPerStep, performance.subStepsNumber);
             }
 

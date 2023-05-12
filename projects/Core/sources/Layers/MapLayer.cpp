@@ -66,6 +66,7 @@ namespace projectSolar::Layers
     {
         m_currentCamera.resolution.x = (float)width;
         m_currentCamera.resolution.y = (float)height;
+        LOG_DEBUG("Resolution set at:", width, ", ", height);
     }
     void MapLayer::setCameraScale(float scale)
     {
