@@ -1,68 +1,60 @@
 #pragma once
 
-#include "SimulationRunner/DoubleBufferedContainer.h"
-#include "SimulationRunner/DataManager.h"
-#include "SimulationRunner/Simulations.h"
-#include "SimulationRunner/Solvers.h"
+#include "DoubleBufferedContainer.h"
 
+#include <shared_mutex>
+#include <barrier>
+#include <memory>
+#include <thread>
 #include <queue>
-#include <chrono>
-
-
-
+#include <mutex>
 
 namespace projectSolar::Simulation
 {	
+	struct Task
+	{
+		size_t start;
+		size_t last;
+
+		size_t size() const;
+	};
+
+	struct RunParams
+	{
+		size_t granularity;
+		size_t minimumSize;
+	};
+
+	class Simulation
+	{
+	public:
+		Simulation() = default;
+		virtual ~Simulation() = default;
+
+		virtual void run(Task task) = 0;
+		virtual void swapData() = 0;
+
+		double stepSize;
+	};
+	
 	class SimulationRunner
 	{
 	public:
-		struct Params
-		{
-			double gravitationalConstant = 1.0;
-			double stepSize = 1.0;
-			float framePeriodFactor = 0.5;
-			uint8_t framesPerSecond = 60;
-			uint16_t defaultStepsNumber = 1;
-			float stepsDiffBias = -0.1f;
-		};
-
-		struct Performance
-		{
-			float secondsPerStep;
-			uint16_t subStepsNumber;
-		};
-
 		SimulationRunner();
+		~SimulationRunner();
 
-		Performance run(const Params& params);
-		DataManager& getData();
+		void run(const RunParams& params, std::shared_ptr<Simulation> simulation, const std::vector<Task>& order);
 
 	private:
-		class frameRateConsistensyController
-		{
-		public:
-			struct Params
-			{
-				uint16_t stepsNumber;
-				uint8_t framesPerSecond;
-				float stepsPerSecond;
-				float excessTime;
-			};
+		uint8_t m_concurrency = (uint8_t)std::thread::hardware_concurrency();
+		std::shared_ptr<Simulation> m_currentSimulation;
+		std::vector<std::thread> m_workers;
+		std::barrier<std::_No_completion_function> m_workersBarrier;
+		std::queue<Task> m_taskQueue;
+		std::mutex m_queueMutex;
+		bool m_killThreads = false;
 
-			uint16_t onRunStart(const SimulationRunner::Params& runnerParams);
-			float onRunEnd();
-
-		private:
-			const uint8_t m_maxGrowFactor = 10;
-			const uint8_t m_queieSize = 10;
-			std::queue<Params> m_results = {};
-			std::chrono::time_point<std::chrono::steady_clock> m_startTimepoint;
-			uint16_t m_currentStepNumber;
-			SimulationRunner::Params m_currentRunnerParams;
-		};
-		
-		DataManager m_simulationData;
-		NBodySimulation m_simulation_nBody;
-		frameRateConsistensyController m_frameRateController;
+		void worker(uint8_t id);
+		void distributeTasks(const RunParams& params, std::vector<Task> order);
 	};
 }

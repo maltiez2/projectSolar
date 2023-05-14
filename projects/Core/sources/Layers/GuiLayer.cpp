@@ -11,7 +11,7 @@ namespace projectSolar::Layers
 
     }
 
-    void GuiLayer::draw()
+    void GuiLayer::process()
     {
         m_renderer.render();
 

@@ -5,10 +5,22 @@
 
 #include <stdio.h>
 #include <Eigen/Eigen>
+#include <Eigen/Sparse>
+
+#include <array>
+#include <vector>
 
 
 namespace projectSolar::Simulation
 {
+	enum ObjectType : uint8_t
+	{
+		ATTRACTOR = 0,
+		ATTRACTANT,
+		PROPULSED,
+		MAX_OBJ_TYPES
+	};
+	
 	struct AttractorData
 	{
 		double mass;
@@ -29,13 +41,24 @@ namespace projectSolar::Simulation
 		Eigen::Vector3d propulsion;
 	};
 
+	struct ColliisionDataType
+	{
+		double mass;
+		double radius;
+	};
+
 
 	class DataManager
 	{
 	public:
 		DoubleBuffVector<AttractorData>  attractorsData;
+		DoubleBuffVector<ColliisionDataType>  attractorsColliisionDataType;
+
 		DoubleBuffVector<AttractantData> attractantsData;
+		DoubleBuffVector<ColliisionDataType>  attractantsColliisionDataType;
+		
 		DoubleBuffVector<PropulsedData>  propulsedData;
+		DoubleBuffVector<ColliisionDataType>  propulsedColliisionDataType;
 
 		void swap();
 

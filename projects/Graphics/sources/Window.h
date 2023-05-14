@@ -43,6 +43,7 @@ namespace projectSolar::Graphics
 		GLFWwindow* getNativeWindow();
 		uint32_t    getWidth() const;
 		uint32_t    getHeight() const;
+		uint32_t    getFPS() const;
 		bool        isVSync() const;
 		InputEventsManager& getEventsManager();
 		InputManager& getInputManager();
@@ -69,6 +70,7 @@ namespace projectSolar::Graphics
 
 		void setupImGui(const GuiProperties& properties);
 		GLFWmonitor* setUpFullscreen();
+		GLFWmonitor* getMonitor() const;
 	};
 }
 

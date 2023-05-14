@@ -9,22 +9,12 @@
 #include <shared_mutex>
 #include <chrono>
 #include <thread>
+#include <cmath>
 
 
-using namespace projectSolar::Simulation;
-using namespace projectSolar::Graphics;
+using namespace projectSolar;
 
-constexpr double gravitationalConstant = 1.0;
-constexpr size_t attractorsAmount = 15;
-constexpr size_t attractantsAmount = 50;
-constexpr double bigMass = 1e1;
-constexpr double mediumMass = 1e-2;
-constexpr double smallerMass = 1e-5;
-constexpr double smallestMass = 1e-7;
-constexpr double initSpeed = 5.0;
-constexpr double initOrbit = 5.0;
-
-void runnerDataSetup(SimulationRunner& runner);
+void setupData(Simulation::DoubleBuffVector<Simulation::Motion::Data>& data);
 void appRun();
 
 int main()
@@ -40,45 +30,36 @@ int main()
 
 void appRun()
 {
-	auto simulation = std::make_shared<SimulationRunner>();
-	auto ECS = std::make_shared<projectSolar::ECS::EntityManager>();
+	auto ECS = std::make_shared<ECS::EntityManager>();
 
-	runnerDataSetup(*simulation);
-
-	auto app = std::make_unique<projectSolar::Application>(simulation, ECS);
+	auto app = std::make_unique<Application>(ECS);
+	Simulation::DoubleBuffVector<Simulation::Motion::Data>& data = app->DEBUG_getSimData();
+	setupData(data);
 	app->run();
 }
 
-void runnerDataSetup(SimulationRunner& runner)
+void setupData(Simulation::DoubleBuffVector<Simulation::Motion::Data>& data)
 {
-	auto& data = runner.getData();
+	const size_t objectsNumber = 36;
+	const double bigMass = 1e0;
+	const double smallMass = 1e-3;
+	const double initOrbit = 1.0;
+	const double initSpeed = 1.0;
 
-	double angleForSmall = 2 * M_PI / (double)attractantsAmount;
-	double angleForMedium = 2 * M_PI / (double)attractorsAmount;
+	double angle = 2 * M_PI / (double)objectsNumber;
 	Eigen::Vector3d radiusVector{ initOrbit, 0, 0 };
 	Eigen::Vector3d velocityVector{ 0, initSpeed, 0 };
 	Eigen::Vector3d rotationAxis{ 0, 0, 1 };
-
-	data.attractorsData.reserve(attractorsAmount);
-	data.attractantsData.reserve(attractantsAmount);
-
-	data.attractorsData.addElement({ bigMass, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 } });
-
-	for (size_t index = 1; index < attractorsAmount; index++)
-	{
-		Eigen::AngleAxisd rotation(angleForMedium * (double)index, rotationAxis);
-		data.attractorsData.addElement({ mediumMass, rotation * radiusVector, rotation * velocityVector });
-	}
-
-	for (size_t index = 0; index < attractantsAmount; index++)
-	{
-		Eigen::AngleAxisd rotation(angleForSmall * (double)index, rotationAxis);
-
-		data.attractantsData.addElement({ rotation * ((index + 2) * radiusVector), rotation * (velocityVector / (index + 2)) * 2.0 });
-	}
-
 	Eigen::Vector3d nullVector(0.0, 0.0, 0.0);
-	data.propulsedData.addElement({ radiusVector, velocityVector, nullVector });
+	
+	data.reserve(objectsNumber + 2);
+	data.addElement({ bigMass, nullVector, nullVector, nullVector });
+	data.addElement({ smallMass, 4.0 * radiusVector, 0.5 * velocityVector, nullVector });
 
-	data.save("test_data");
+	for (size_t index = 0; index < objectsNumber; index++)
+	{
+		Eigen::AngleAxisd rotation(angle * (double)index, rotationAxis);
+		data.addElement({ smallMass, rotation * radiusVector, rotation * velocityVector, nullVector });
+	}
+
 }

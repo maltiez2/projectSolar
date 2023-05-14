@@ -15,11 +15,11 @@ namespace projectSolar::GameLogic
 			{
 				if (m_windows->get<Windows::Debug>("debug")->followPlayer)
 				{
-					SEND_EVENT(SET_CAMERA_ON, MapManager, Com::get().Map, MapManager::Objects::PROPULSED, 0);
+					SEND_EVENT(SET_CAMERA_ON, MapManager, Com::get().Map, 1);
 				}
 				else
 				{
-					SEND_EVENT(SET_CAMERA_ON, MapManager, Com::get().Map, MapManager::Objects::ATTRACTOR, 0);
+					SEND_EVENT(RESET_CAMERA, MapManager, Com::get().Map);
 				}
 			}
 			EVENT_DEF(GUI_UPDATED);

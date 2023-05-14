@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ECS/EntityComponentSystem.h"
 #include "EventHandler.h"
-#include "Simulation.h"
+#include "Layers/SimulationLayer.h"
 #include "Logger.h"
 
 #include <memory>
+#include <vector>
 
 
 namespace projectSolar::GameLogic
@@ -13,18 +13,26 @@ namespace projectSolar::GameLogic
 	class SimulationManager : public Events::EventHandler
 	{
 	public:
-		SimulationManager(std::shared_ptr<Simulation::SimulationRunner> simulationRunner, const size_t& threadsNumber = 1);
+		enum : size_t
+		{
+			GRAVITY_SIM,
+			MOTION_SIM
+		};
+		
+		SimulationManager(std::shared_ptr<Layers::SimLayer> layer, const size_t& threadsNumber = 1);
 		~SimulationManager() override;
 
-		Components::SimulationPerformance run();
-		const Components::SimulationPerformance& getPerformance() const;
-		Simulation::SimulationRunner::Params getRunParams() const;
+		std::vector<Simulation::Motion::Data>& getMotionData();
+
+		EVENT_DECL(SET_SIM_STEP, 11, double stepSize);
+		EVENT_DECL(SET_SIM_LOAD, 12, double timeRestrinctionSeconds);
+		EVENT_DECL(NEW_DATA_ADDED, 19, size_t totalDataSize);
 
 	private:
+		std::shared_ptr<Layers::SimLayer> m_layer;
+
 		void processEvent(uint8_t eventType, uint8_t* data) override;
+		void constructSimulations();
 		
-		std::shared_ptr<Simulation::SimulationRunner> m_simulation;
-		entt::entity m_perorfmace;	
-		void setPerformance(const Simulation::SimulationRunner::Performance& performance);
 	};
 }

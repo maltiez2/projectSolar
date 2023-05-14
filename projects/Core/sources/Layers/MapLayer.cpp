@@ -1,20 +1,19 @@
 #include "pch.h"
 
 #include "MapLayer.h"
+#include "GameLogic/SimulationManager.h"
 
 namespace projectSolar::Layers
 {
-    MapLayer::MapLayer(std::shared_ptr<Graphics::Renderer> centralRenderer, std::shared_ptr<Simulation::SimulationRunner> simulation) :
-        m_centralRenderer(centralRenderer),
-        m_simulation(simulation)
+    MapLayer::MapLayer(std::shared_ptr<Graphics::Renderer> centralRenderer) :
+        m_centralRenderer(centralRenderer)
     {
-        m_proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
-        m_view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-        m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-
+    }
+    void MapLayer::process() // @TODO redo all these buffers stuff
+    {
         updateData();
-
-        m_shader = std::make_shared<Graphics::Shader>(c_shaderFile);
+        updateMVP();
+    
         m_vertexBuffer = std::make_shared<Graphics::VertexBuffer>(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
         m_layout = std::make_shared<Graphics::VertexBufferLayout>();
         m_layout->push<float>(3);
@@ -22,18 +21,12 @@ namespace projectSolar::Layers
         m_vertexArray = std::make_shared<Graphics::VertexArray>();
         m_vertexArray->addBufer(*m_vertexBuffer, *m_layout);
         m_indexBuffer = std::make_shared<Graphics::IndexBuffer>(std::to_address(m_indices.begin()), (uint32_t)m_indices.size());
-    }
-    void MapLayer::draw()
-    {
-        updateData();
-        updateMVP();
-
-        m_vertexBuffer->updateData(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
+        m_shader = std::make_shared<Graphics::Shader>(c_shaderFile);
         m_shader->bind();
         glm::mat4 MVP = m_proj * m_view * m_model;
         m_shader->setUniformMat4f("u_MVP", MVP);
 
-        m_centralRenderer->draw(*m_vertexArray, *m_indexBuffer, *m_shader);
+        m_centralRenderer->draw(*m_vertexArray, *m_indexBuffer, *m_shader, (uint32_t)m_indices.size());
 
         m_vertexBuffer->unbind();
         m_indexBuffer->unbind();
@@ -82,17 +75,21 @@ namespace projectSolar::Layers
     {
         m_currentCamera.scale += scaleDelta;
     }
+    void MapLayer::setCameraOn(size_t motionDataIndex)
+    {
+        auto& data = Com::get().simulation->getMotionData();
+        
+        LOG_ASSERT(data.size() > motionDataIndex, "[MapLayer] Motion data size is less then ", motionDataIndex);
+        auto& position = data[motionDataIndex];
+        setCameraPosition((float)position.position[0], (float)position.position[1], (float)position.position[2]);
+    }
 
     void MapLayer::updateData()
     {
-        auto& dataManager = m_simulation->getData();
+        auto& data = Com::get().simulation->getMotionData();
 
-        size_t attractantsIndex = dataManager.attractorsData.size();
-        size_t propulsesIndex = dataManager.attractantsData.size() + attractantsIndex;
-        size_t bufferSize = dataManager.propulsedData.size() + propulsesIndex;
-
-        m_buffer.resize(bufferSize);
-        m_indices.resize(bufferSize);
+        m_buffer.resize(data.size());
+        m_indices.resize(data.size());
 
         LOG_ASSERT((m_indices.size() < (1ui64 << 16)), "[MapLayer] updateData - m_indices size is greater then max uint16_t")
         for (size_t i = 0; i < m_indices.size(); i++)
@@ -100,26 +97,22 @@ namespace projectSolar::Layers
             m_indices[i] = (uint16_t)i;
         }
 
-        auto& atorData = dataManager.attractorsData.getData();
-        for (size_t i = 0; i < atorData.size(); i++)
+        for (size_t i = 0; i <= 0; i++)
         {
-            auto& element = atorData[i];
+            auto& element = data[i];
+            m_buffer[i] = Point((float)element.position[0], (float)element.position[1], (float)element.position[2], 1);
+        }
+
+        for (size_t i = 1; i <= 1; i++)
+        {
+            auto& element = data[i];
+            m_buffer[i] = Point((float)element.position[0], (float)element.position[1], (float)element.position[2], 2);
+        }
+
+        for (size_t i = 2; i < data.size(); i++)
+        {
+            auto& element = data[i];
             m_buffer[i] = Point((float)element.position[0], (float)element.position[1], (float)element.position[2], 0);
-        }
-
-        auto& atantData = dataManager.attractantsData.getData();
-        for (size_t i = 0; i < atantData.size(); i++)
-        {
-            auto& element = atantData[i];
-            m_buffer[attractantsIndex + i] = Point((float)element.position[0], (float)element.position[1], (float)element.position[2], 1);
-
-        }
-
-        auto& propData = dataManager.propulsedData.getData();
-        for (size_t i = 0; i < propData.size(); i++)
-        {
-            auto& element = propData[i];
-            m_buffer[propulsesIndex + i] = Point((float)element.position[0], (float)element.position[1], (float)element.position[2], 2);
         }
     }
     void MapLayer::updateMVP()

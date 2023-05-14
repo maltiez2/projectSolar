@@ -1,17 +1,17 @@
 #include "pch.h"
 
-#include "Layers.h"
+#include "Layer.h"
 
 
 namespace projectSolar::Layers
 {
 
     // Layers Manager
-    void LayersManager::draw()
+    void LayersManager::process()
     {
         for (const auto& [id, layer] : m_attached)
         {
-            layer->draw();
+            layer->process();
         }
     }
     bool LayersManager::onEvent(Graphics::InputEvent* ev)

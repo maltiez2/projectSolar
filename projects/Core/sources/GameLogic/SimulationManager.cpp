@@ -4,52 +4,51 @@
 namespace projectSolar::GameLogic
 {
 	
-	SimulationManager::SimulationManager(std::shared_ptr<Simulation::SimulationRunner> simulationRunner, const size_t& threadsNumber) :
+	SimulationManager::SimulationManager(std::shared_ptr<Layers::SimLayer> layer, const size_t& threadsNumber) :
 		EventHandler(threadsNumber),
-		m_simulation(simulationRunner)
+		m_layer(layer)
 	{
+		constructSimulations();
 	}
 	SimulationManager::~SimulationManager()
 	{
 		destroyWorkers();
 	}
 
-	Components::SimulationPerformance SimulationManager::run()
-	{
-		auto performance = m_simulation->run(getRunParams());
-
-		setPerformance(performance);
-
-		EMIT_EVENT(SIMULATION_UPDATED, performance.secondsPerStep, performance.subStepsNumber);
-
-		return { performance.secondsPerStep, performance.subStepsNumber };
-	}
-	Simulation::SimulationRunner::Params SimulationManager::getRunParams() const
-	{
-		return { 10.0f, 5e-2, 0.5f, 144, 10, -0.1f };
-	}
-	const Components::SimulationPerformance& SimulationManager::getPerformance() const
-	{
-		return Com::get().ECS->registry.get<Components::SimulationPerformance>(m_perorfmace);
-	}
-
-	void SimulationManager::setPerformance(const Simulation::SimulationRunner::Performance& performance)
-	{
-		/*Com::get().ECS->registry.patch<Components::SimulationPerformance>(m_perorfmace, [performance](Components::SimulationPerformance& settings)
-			{
-				settings.secondsPerStep = performance.secondsPerStep;
-				settings.subStepsNumber = performance.subStepsNumber;
-			}
-		);*/
-	}
-
 	void SimulationManager::processEvent(uint8_t eventType, uint8_t* data)
 	{
 		switch (eventType)
 		{
-			EVENTS_DEF_UNKNOWN()
-			EVENTS_DEF_DEFAULT()
+			EVENTS_DEF_UNKNOWN();
+			EVENT_DEF(SET_SIM_STEP);
+			{
+				m_layer->setStepSize(eventData.stepSize);
+			}
+			EVENT_DEF(SET_SIM_LOAD);
+			{
+				m_layer->setTimeRest(eventData.timeRestrinctionSeconds);
+			}
+			EVENT_DEF(NEW_DATA_ADDED);
+			{
+				m_layer->setSimOrder(MOTION_SIM, { {0, eventData.totalDataSize - 1} });
+				m_layer->setSimOrder(GRAVITY_SIM, { {0, eventData.totalDataSize - 1} });
+			}
+			EVENTS_DEF_DEFAULT();
 				break;
 		}
+	}
+
+	void SimulationManager::constructSimulations()
+	{
+		auto motionSim = m_layer->add<Simulation::Motion>(MOTION_SIM, Simulation::Motion::Params());
+		auto gravSim = m_layer->add<Simulation::Gravity>(GRAVITY_SIM, Simulation::Gravity::Params(), &motionSim->data);
+
+		m_layer->setSimOrder(MOTION_SIM, { {} });
+		m_layer->setSimOrder(GRAVITY_SIM, { {} });
+	}
+
+	std::vector<Simulation::Motion::Data>& SimulationManager::getMotionData()
+	{
+		return m_layer->get<Simulation::Motion>(MOTION_SIM)->data.getData();
 	}
 }

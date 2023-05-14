@@ -18,25 +18,11 @@ namespace projectSolar::GameLogic
 			}
 			EVENT_DEF(SET_CAMERA_ON);
 			{
-				LOG_DEBUG("Camera set on: ", eventData.id);
-				
-				switch (eventData.object)
-				{
-				case Objects::CENTRE:
-					m_layer->setCameraPosition(0, 0, 0);
-					break;
-				case Objects::ATTRACTOR:
-					m_layer->setCameraOn<Components::Attractor>(eventData.id);
-					break;
-				case Objects::ATTRACTANT:
-					m_layer->setCameraOn<Components::Attractant>(eventData.id);
-					break;
-				case Objects::PROPULSED:
-					m_layer->setCameraOn<Components::Propulsed>(eventData.id);
-					break;
-				default:
-					LOG_ASSERT(false, "[MapManager] Unknown object type to follow");
-				}
+				m_layer->setCameraOn(eventData.id);
+			}
+			EVENT_DEF(RESET_CAMERA);
+			{
+				m_layer->setCameraPosition(0, 0, 0);
 			}
 			EVENT_DEF(SET_CAMERA_SCALE);
 			{

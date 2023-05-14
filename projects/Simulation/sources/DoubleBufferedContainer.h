@@ -216,9 +216,9 @@ namespace projectSolar::Simulation
 		}
 
 	private:
-		std::vector<DataType> m_evenData;
-		std::vector<DataType> m_oddData;
-		std::set<size_t> m_invalidElemetns;
+		std::vector<DataType> m_evenData = {};
+		std::vector<DataType> m_oddData = {};
+		std::set<size_t> m_invalidElemetns = {};
 		bool m_parity = false;
 		size_t m_size = 0;
 	};

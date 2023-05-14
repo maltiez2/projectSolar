@@ -19,9 +19,6 @@ namespace projectSolar
 
 		EVENT_DECL(CLOSE_WINDOW, 10);
 		EVENT_DECL(SET_RUN_SIMULATION, 11, bool run);
-		EVENT_DECL(SET_SIMULATION_STEP, 12, double stepSize);
-		EVENT_DECL(SET_SIMULATION_LOAD, 13, float framePeriodFactor;);
-		EVENT_DECL(SET_SIMULATION_FPS, 14, uint8_t framesPerSecond);
 
 	private:
 		Application& m_app;
@@ -32,24 +29,38 @@ namespace projectSolar
 	class Application
 	{
 	public:
-		Application(std::shared_ptr<Simulation::SimulationRunner> simulation, std::shared_ptr<ECS::EntityManager> entities);
+		Application(std::shared_ptr<ECS::EntityManager> entities);
 		~Application() = default;
+
+		enum DefaultLayers : size_t
+		{
+			SIM_LAYER_ID = 1,
+			MAP_LAYER_ID,
+			GUI_LAYER_ID
+		};
 
 		void run();
 
+		Simulation::DoubleBuffVector<Simulation::Motion::Data>& DEBUG_getSimData();
+
 	private:
 		std::shared_ptr<ApplicationEventHandler> m_eventHandler;
-		std::shared_ptr<Simulation::SimulationRunner> m_simulation;
 		std::shared_ptr<ECS::EntityManager> m_enitites;
 		std::shared_ptr<Graphics::Window> m_window;
 		Layers::LayersManager m_layers;
-
-		Simulation::SimulationRunner::Params m_simulationParams;
+		
+		std::shared_ptr<Layers::SimLayer> m_simLayer;
+		std::shared_ptr<Layers::MapLayer> m_mapLayer;
+		std::shared_ptr<Layers::GuiLayer> m_guiLayer;
 
 		bool m_running = true;
-		bool m_simulating = false;
+		bool m_simAttached = false;
+
+		uint32_t m_targetFPS = 30;
+		float m_simLoad = 0.5;
 
 		void processInputEvents();
+		void processAppCondition();
 
 		friend ApplicationEventHandler;
 	};

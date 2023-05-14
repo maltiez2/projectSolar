@@ -32,7 +32,7 @@ namespace projectSolar
 	{
 	public:
 		// EVENTS
-		EVENT_DECL(SIMULATION_UPDATED, 1, float secondsPerStep; uint16_t subSteps);
+		EVENT_DECL(SIMULATION_UPDATED, 1, float secondsPerStep; size_t stepsPerFrame);
 		EVENT_DECL(GUI_DRAWN, 2);
 		EVENT_DECL(MAP_DRAWN, 3);
 		EVENT_DECL(GUI_UPDATED, 4);

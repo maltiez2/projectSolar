@@ -10,6 +10,19 @@ static void glfwErrorCallback(int error, const char* description)
 	LOG_ERROR("[OpenGL] (", error, "): ", description);
 }
 
+static void glErrorCallback(
+	GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam
+)
+{
+	LOG_ERROR("[OpenGL] (", source,":", type,":", id, "): ", message);
+}
+
 Window::Window(const WindowProperties& properties) :
 	m_eventsManager(this),
 	m_inputManager(this)
@@ -44,6 +57,12 @@ uint32_t Window::getWidth() const
 uint32_t Window::getHeight() const
 {
 	return m_properties.height;
+}
+uint32_t Window::getFPS() const
+{
+	GLFWmonitor* monitor = getMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	return mode->refreshRate;
 }
 GLFWwindow* Window::getNativeWindow()
 {
@@ -83,7 +102,6 @@ void Window::init(const WindowProperties& properties)
 	
 	m_properties = properties;
 	m_properties.eventsManager = &m_eventsManager;
-
 	glfwSetErrorCallback(glfwErrorCallback);
 	int success = glfwInit();
 	LOG_ASSERT(success, "Failed to initialize GLFW")
@@ -108,6 +126,8 @@ void Window::init(const WindowProperties& properties)
 	int error = glewInit();
 	LOG_ASSERT(error == GLEW_OK, "Error on glew init: ", error)
 	LOG_INFO("GL version: ", (char*)glGetString(GL_VERSION));
+
+	glDebugMessageCallback(glErrorCallback, this);
 
 	m_eventsManager.setupCallbacks(); // need to be before setupImGui
 	setupImGui(properties.guiProperties);
@@ -155,18 +175,7 @@ GLFWmonitor* Window::setUpFullscreen()
 		return nullptr;
 	}
 	
-	int count;
-	GLFWmonitor* monitor;
-	GLFWmonitor** monitors = glfwGetMonitors(&count);
-	if (m_properties.monitor < 0 || m_properties.monitor >= count)
-	{
-		monitor = glfwGetPrimaryMonitor();
-	}
-	else
-	{
-		monitor = monitors[m_properties.monitor];
-	}
-
+	GLFWmonitor* monitor = getMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
@@ -178,4 +187,17 @@ GLFWmonitor* Window::setUpFullscreen()
 	m_properties.height = mode->height;
 
 	return monitor;
+}
+GLFWmonitor* Window::getMonitor() const
+{
+	int count;
+	GLFWmonitor** monitors = glfwGetMonitors(&count);
+	if (m_properties.monitor < 0 || m_properties.monitor >= count)
+	{
+		return glfwGetPrimaryMonitor();
+	}
+	else
+	{
+		return monitors[m_properties.monitor];
+	}
 }

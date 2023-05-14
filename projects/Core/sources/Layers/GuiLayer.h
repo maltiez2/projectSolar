@@ -15,7 +15,7 @@ namespace projectSolar::Layers
 		GuiLayer(std::shared_ptr<Graphics::Window> window, bool blockEvents = true);
 		~GuiLayer() override = default;
 
-		void draw() override;
+		void process() override;
 		void onEvent(Graphics::InputEvent* ev) override;
 
 		std::shared_ptr<Graphics::GuiWindowsManager> getWindowsManager();

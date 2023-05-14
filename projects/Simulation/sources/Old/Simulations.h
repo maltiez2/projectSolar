@@ -29,4 +29,18 @@ namespace projectSolar::Simulation
 
 		void run(SimulationParams params);
 	};
+
+	class BasicCollisionSimulation : public BaseSimulation
+	{
+	public:
+		struct SimulationParams
+		{
+			uint8_t splittingFactor = 10;
+			uint8_t unusedCores = 1;
+		};
+
+		explicit BasicCollisionSimulation(DataManager& dataManager);
+
+		void run(SimulationParams params);
+	};
 }
