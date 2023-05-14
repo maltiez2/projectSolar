@@ -36,6 +36,9 @@ namespace projectSolar
 		EVENT_DECL(GUI_DRAWN, 2);
 		EVENT_DECL(MAP_DRAWN, 3);
 		EVENT_DECL(GUI_UPDATED, 4);
+		EVENT_DECL(COMPONENT_CREATED, 5, uint16_t componentType; uint32_t entity);
+		EVENT_DECL(COMPONENT_UPDATED, 6, uint16_t componentType; uint32_t entity);
+		EVENT_DECL(COMPONENT_REMOVED, 7, uint16_t componentType; uint32_t entity);
 		//
 		
 		std::shared_ptr<ApplicationEventHandler> Application;

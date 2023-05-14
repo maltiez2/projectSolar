@@ -7,6 +7,7 @@ namespace projectSolar::ECS
 	EntityId::EntityId() :
 		value((entt::entity)0)
 	{
+		Components::init();
 	}
 	EntityId::EntityId(const entt::entity& input) :
 		value(input)
@@ -27,17 +28,17 @@ namespace projectSolar::ECS
 	
 
 	// ENTITY MANAGER
-	EntityManager::EntityManager()
+	EntityComponentSystem::EntityComponentSystem()
 	{
 	}
 	
-	errno_t EntityManager::save(std::string_view filePath) const
+	errno_t EntityComponentSystem::save(std::string_view filePath) const
 	{
-		return ECS::Serializer::serialize<ECS_ALL_COMPONENTS>(registry, filePath);
+		return ECS::Serializer::serialize<ECS_ALL_COMPONENTS>(m_registry, filePath);
 	}
-	errno_t EntityManager::load(std::string_view filePath)
+	errno_t EntityComponentSystem::load(std::string_view filePath)
 	{
-		registry.clear();
-		return ECS::Serializer::deserialize<ECS_ALL_COMPONENTS>(registry, filePath);
+		m_registry.clear();
+		return ECS::Serializer::deserialize<ECS_ALL_COMPONENTS>(m_registry, filePath);
 	}
 }
