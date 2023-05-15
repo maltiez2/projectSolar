@@ -1,6 +1,9 @@
 #include "pch.h"
 
 #include "Window.h"
+#include "Input/Input.h"
+
+#include "../vendor/opengl/imgui_impl_glfw.h"
 
 
 using namespace projectSolar::Graphics;
@@ -23,10 +26,11 @@ static void glErrorCallback(
 	LOG_ERROR("[OpenGL] (", source,":", type,":", id, "): ", message);
 }
 
-Window::Window(const WindowProperties& properties) :
-	m_eventsManager(this),
-	m_inputManager(this)
+Window::Window(const WindowProperties& properties)
 {
+	m_eventsManager = std::make_shared<InputEventsManager>(this);
+	m_inputManager = std::make_shared<InputManager>(this);
+	
 	init(properties);
 }
 Window::~Window()
@@ -74,11 +78,11 @@ bool Window::isVSync() const
 }
 InputEventsManager& Window::getEventsManager()
 {
-	return m_eventsManager;
+	return *m_eventsManager;
 }
 InputManager& Window::getInputManager()
 {
-	return m_inputManager;
+	return *m_inputManager;
 }
 
 void Window::setVSync(bool enabled)
@@ -101,7 +105,7 @@ void Window::init(const WindowProperties& properties)
 	LOG_DEBUG("Window initialization started");
 	
 	m_properties = properties;
-	m_properties.eventsManager = &m_eventsManager;
+	m_properties.eventsManager = std::to_address(m_eventsManager);
 	glfwSetErrorCallback(glfwErrorCallback);
 	int success = glfwInit();
 	LOG_ASSERT(success, "Failed to initialize GLFW")
@@ -129,7 +133,7 @@ void Window::init(const WindowProperties& properties)
 
 	glDebugMessageCallback(glErrorCallback, this);
 
-	m_eventsManager.setupCallbacks(); // need to be before setupImGui
+	m_eventsManager->setupCallbacks(); // need to be before setupImGui
 	setupImGui(properties.guiProperties);
 
 	glEnable(GL_BLEND);

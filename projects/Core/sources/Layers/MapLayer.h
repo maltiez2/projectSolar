@@ -1,18 +1,23 @@
 #pragma once
 #pragma once
 
-#include "Graphics.h"
-#include "Simulation.h"
-#include "EventHandler.h"
-#include "ECS/Components.h"
 #include "Layer.h"
-#include "GameLogic/CommunicationManager.h"
 
 #include <vector>
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+namespace projectSolar::Graphics
+{
+	class Renderer;
+	class VertexBufferLayout;
+	class Shader;
+	class VertexArray;
+	class VertexBuffer;
+	class IndexBuffer;
+	class InputEvent;
+}
 
 namespace projectSolar::Layers
 {
@@ -23,7 +28,7 @@ namespace projectSolar::Layers
 		~MapLayer() override = default;
 
 		void process() override;
-		void onEvent(Graphics::InputEvent* ev) override;
+		void onEvent(projectSolar::Graphics::InputEvent* ev) override;
 
 		void setCameraPosition(float x, float y, float z);
 		void setResolution(uint32_t width, uint32_t height);
@@ -52,13 +57,13 @@ namespace projectSolar::Layers
 
 		const char* c_shaderFile = "resources/shaders/map.shader";
 
-		std::shared_ptr<Graphics::Renderer> m_centralRenderer = std::make_shared<Graphics::Renderer>();
+		std::shared_ptr<projectSolar::Graphics::Renderer> m_centralRenderer = std::make_shared<projectSolar::Graphics::Renderer>();
 
-		std::shared_ptr<Graphics::VertexBufferLayout> m_layout;
-		std::shared_ptr<Graphics::Shader>		m_shader;
-		std::shared_ptr<Graphics::VertexArray>	m_vertexArray;
-		std::shared_ptr<Graphics::VertexBuffer>	m_vertexBuffer;
-		std::shared_ptr<Graphics::IndexBuffer>	m_indexBuffer;
+		std::shared_ptr<projectSolar::Graphics::VertexBufferLayout> m_layout;
+		std::shared_ptr<projectSolar::Graphics::Shader>		m_shader;
+		std::shared_ptr<projectSolar::Graphics::VertexArray>	m_vertexArray;
+		std::shared_ptr<projectSolar::Graphics::VertexBuffer>	m_vertexBuffer;
+		std::shared_ptr<projectSolar::Graphics::IndexBuffer>	m_indexBuffer;
 
 		Camera m_currentCamera;
 		

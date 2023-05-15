@@ -1,6 +1,9 @@
 #include "pch.h"
 
 #include "Renderer.h"
+#include "Buffers/IndexBuffer.h"
+#include "Buffers/VertexArray.h"
+#include "Shader.h"
 
 
 using namespace projectSolar::Graphics;

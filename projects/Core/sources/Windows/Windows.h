@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Graphics.h"
-
+#include "GuiApi.h"
 
 namespace projectSolar::Windows
 {
@@ -29,5 +28,8 @@ namespace projectSolar::Windows
 		bool runSimulation = false;
 		bool followPlayer = false;
 		bool showDemoWindow = false;
+		bool generateDebugData = false;
+		bool saveData = false;
+		bool loadData = false;
 	};
 }

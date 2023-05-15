@@ -1,7 +1,12 @@
-#include "SimulationLayer.h"
-#include "GameLogic/CommunicationManager.h"
+#include "pch.h"
 
-#include <algorithm>
+#include "SimulationLayer.h"
+#include "EventManagers/CommunicationManager.h"
+#include "ECS/EntityComponentSystem.h"
+#include "ECS/Components.h"
+
+#include <filesystem>
+
 
 namespace projectSolar::Layers
 {
@@ -17,6 +22,8 @@ namespace projectSolar::Layers
 
 	void SimLayer::process()
 	{
+		std::unique_lock lock(m_dataMutex);
+		
 		m_lastStepsNumber = m_stepsDivider.onRunStart({ 10, m_params.timeRestriction });
 		double stepSize = m_params.stepSize / (double)m_lastStepsNumber;
 
@@ -45,6 +52,91 @@ namespace projectSolar::Layers
 	{
 		// No events to process
 	}
+	void SimLayer::saveAttached(const std::string& saveName)
+	{
+		std::shared_lock lock(m_dataMutex);
+		
+		Simulation::Serializer serializer;
+		errno_t error = serializer.open<Simulation::Serializer::fileMode::writeBytes>(saveFilePath(saveName));
+		if (error != 0)
+		{
+			LOG_ERROR("[SimLayer] Cannot open file for writing '", saveFilePath(saveName), "', error: ", error);
+			return;
+		}
+		for (const auto& [id, simulation] : m_attached)
+		{
+			simulation->save(serializer);
+		}
+		serializer.close();
+	}
+	void SimLayer::loadAttached(const std::string& saveName)
+	{
+		std::unique_lock lock(m_dataMutex);
+		
+		Simulation::Serializer serializer;
+		errno_t error = serializer.open<Simulation::Serializer::fileMode::readBytes>(saveFilePath(saveName));
+		if (error != 0)
+		{
+			LOG_ERROR("[SimLayer] Cannot open file for reading '", saveFilePath(saveName), "', error: ", error);
+			return;
+		}
+		for (const auto& [id, simulation] : m_attached)
+		{
+			simulation->load(serializer);
+		}
+		serializer.close();
+
+		EMIT_EVENT(SIMULATION_UPDATED);
+	}
+	void SimLayer::generateDebugLayout(size_t motionId, size_t gravityId)
+	{
+		std::unique_lock lock(m_dataMutex);
+		
+		auto simulation = m_attached[motionId];
+		auto motionSim = std::dynamic_pointer_cast<Simulation::Motion>(simulation);
+		auto& data = motionSim->data;
+		data.clear();
+
+		const size_t objectsNumber = 36;
+		const double bigMass = 1e0;
+		const double smallMass = 1e-3;
+		const double initOrbit = 1.0;
+		const double initSpeed = 1.0;
+
+		double angle = 2 * std::numbers::pi / (double)objectsNumber;
+		Eigen::Vector3d radiusVector{ initOrbit, 0, 0 };
+		Eigen::Vector3d velocityVector{ 0, initSpeed, 0 };
+		Eigen::Vector3d rotationAxis{ 0, 0, 1 };
+		Eigen::Vector3d nullVector(0.0, 0.0, 0.0);
+
+		auto ECS = Com::get().ECS;
+
+		data.reserve(objectsNumber + 2);
+
+		data.addElement({ bigMass, nullVector, nullVector, nullVector });
+		auto centralObj = ECS->create();
+		ECS->insert<Components::CelestialObject>(centralObj, Components::LongTitle{ "Central" });
+		ECS->insert<Components::Dynamic>(centralObj, 0ui64);
+
+		data.addElement({ smallMass, 4.0 * radiusVector, 0.5 * velocityVector, nullVector });
+		auto redObj = ECS->create();
+		ECS->insert<Components::CelestialObject>(redObj, Components::LongTitle{ "Red" });
+		ECS->insert<Components::Dynamic>(redObj, 1ui64);
+
+		for (size_t index = 0; index < objectsNumber; index++)
+		{
+			Eigen::AngleAxisd rotation(angle * (double)index, rotationAxis);
+			data.addElement({ smallMass, rotation * radiusVector, rotation * velocityVector, nullVector });
+			auto justObj = ECS->create();
+			ECS->insert<Components::Dynamic>(justObj, index + 2);
+		}
+
+		setSimOrder(motionId, { {0, objectsNumber + 1} });
+		setSimOrder(gravityId, { {0, objectsNumber + 1} });
+
+		EMIT_EVENT(SIMULATION_UPDATED);
+	}
+
 	size_t SimLayer::getLastStepsNumber() const
 	{
 		return m_lastStepsNumber;
@@ -83,6 +175,19 @@ namespace projectSolar::Layers
 		}
 	}
 
+	std::string SimLayer::saveFilePath(const std::string& saveName) const
+	{
+		std::string saveNameStripped = saveName.c_str();
+		std::filesystem::path filePath = std::filesystem::current_path();
+		filePath.append(savesDirectory);
+		filePath.append(saveNameStripped);
+		if (!std::filesystem::exists(filePath))
+		{
+			std::filesystem::create_directories(filePath);
+		}
+		filePath.append(saveNameStripped + "." + saveExtension);
+		return filePath.generic_string();
+	}
 
 	// Steps divider
 	size_t StepsDivider::onRunStart(const Params& params)

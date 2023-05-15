@@ -1,7 +1,9 @@
+#include "pch.h"
+
 #include "MapManager.h"
 
 
-namespace projectSolar::GameLogic
+namespace projectSolar::EventManagers
 {
 	void MapManager::processEvent(uint8_t eventType, uint8_t* data)
 	{

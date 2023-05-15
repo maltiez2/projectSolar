@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Input/Input.h"
-
-#include "../vendor/opengl/imgui_impl_glfw.h"
-
 #include <string>
-#include <functional>
+#include <memory>
 
+struct GLFWmonitor;
+struct GLFWwindow;
 
 namespace projectSolar::Graphics
 {
+	class InputEventsManager;
+	class InputManager;
+	
 	struct GuiProperties
 	{
 		std::string font = "default.ttf";
@@ -53,11 +54,12 @@ namespace projectSolar::Graphics
 		void setFont(const std::string& font);
 		void setSize(uint32_t width, uint32_t height);
 
-		InputEventsManager m_eventsManager;
-		InputManager m_inputManager;
-		WindowProperties m_properties;
 
 	private:
+		std::shared_ptr<InputEventsManager> m_eventsManager;
+		std::shared_ptr<InputManager> m_inputManager;
+		WindowProperties m_properties;
+
 		const char* fontsFolder = "resources/fonts";
 		const char* glslVersion = "#version 130";
 		const int glMajorVersion = 3;

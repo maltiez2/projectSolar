@@ -27,7 +27,7 @@
     <ClCompile Include="sources\ECS\EntityComponentSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\GameLogic\SimulationManager.cpp">
+    <ClCompile Include="sources\EventManagers\SimulationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\Layers\GuiLayer.cpp">
@@ -36,13 +36,13 @@
     <ClCompile Include="sources\Layers\MapLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\GameLogic\CommunicationManager.cpp">
+    <ClCompile Include="sources\EventManagers\CommunicationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\GameLogic\GuiManager.cpp">
+    <ClCompile Include="sources\EventManagers\GuiManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\GameLogic\MapManager.cpp">
+    <ClCompile Include="sources\EventManagers\MapManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\Windows\Debug.cpp">
@@ -52,6 +52,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\ECS\Components.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\ApplicationEventHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,10 +80,10 @@
     <ClInclude Include="sources\ECS\Serialization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\GameLogic\SimulationManager.h">
+    <ClInclude Include="sources\EventManagers\SimulationManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\GameLogic\Managers.h">
+    <ClInclude Include="sources\EventManagers\Managers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\Layers\MapLayer.h">
@@ -89,13 +92,13 @@
     <ClInclude Include="sources\Layers\GuiLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\GameLogic\CommunicationManager.h">
+    <ClInclude Include="sources\EventManagers\CommunicationManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\GameLogic\GuiManager.h">
+    <ClInclude Include="sources\EventManagers\GuiManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\GameLogic\MapManager.h">
+    <ClInclude Include="sources\EventManagers\MapManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\Layers\Layers.h">
@@ -105,6 +108,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\Layers\SimulationLayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\EventManagers\ApplicationEventHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Layers\EntityStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

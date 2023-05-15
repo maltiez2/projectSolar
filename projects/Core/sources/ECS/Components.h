@@ -1,16 +1,15 @@
 #pragma once
 
-#include <Eigen/Core>
 #include <EnTT/entt.hpp>
 #include <uuid_v4/uuid_v4.h>
 #include <shared_mutex>
-#include <memory>
+#include <array>
 
 #define PPCAT_NX(A, B) A ## B
 #define PPCAT(A, B) PPCAT_NX(A, B)
 #define COMPONENT_DECL(name, ...) struct name {enum : uint16_t { TYPE = __LINE__ }; static std::shared_mutex& mutex(); __VA_ARGS__}
 #define COMPONENT_IMPL(name) std::shared_mutex& name::mutex() {static std::shared_mutex mutex; return mutex;}
-#define COMPONENT_INIT(name) name::mutex();
+#define COMPONENT_INIT(name) name::mutex()
 
 
 #define ECS_ALL_COMPONENTS	Components::Game,\
@@ -18,9 +17,9 @@
 							Components::GameSettings,\
 							Components::VideoSettings,\
 							Components::SimulationSettings,\
-							Components::Attractor,\
-							Components::Attractant,\
-							Components::Propulsed
+							Components::CelestialObject,\
+							Components::Dynamic
+
 
 namespace projectSolar
 {
@@ -42,8 +41,11 @@ namespace projectSolar
 		};
 	}
 
-	namespace Components
+	namespace Components // Do not forget to add new components to Components.cpp
 	{
+		using LongTitle = std::array<char, 128>;
+		using ShortTitle = std::array<char, 16>;
+		
 		
 		// General components
 		COMPONENT_DECL(Game);
@@ -71,14 +73,12 @@ namespace projectSolar
 		);
 
 		// Gravitational objects
-		COMPONENT_DECL(Attractor,
-			size_t dataIndex;
+		COMPONENT_DECL(CelestialObject,
+			LongTitle name;
 		);
-		COMPONENT_DECL(Attractant,
-			size_t dataIndex;
-		);
-		COMPONENT_DECL(Propulsed,
-			size_t dataIndex;
+
+		COMPONENT_DECL(Dynamic,
+			size_t motionDataIndex;
 		);
 
 		// Initializes static variables inside components

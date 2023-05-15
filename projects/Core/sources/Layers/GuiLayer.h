@@ -1,10 +1,16 @@
 #pragma once
 
 #include "Layer.h"
-#include "Graphics.h"
-#include "GameLogic/CommunicationManager.h"
 
 #include <memory>
+
+namespace projectSolar::Graphics
+{
+	class GuiWindowsManager;
+	class GuiRenderer;
+	class Window;
+	class InputEvent;
+}
 
 
 namespace projectSolar::Layers
@@ -22,7 +28,7 @@ namespace projectSolar::Layers
 
 	private:
 		std::shared_ptr<Graphics::GuiWindowsManager> m_windowsManager = std::make_shared<Graphics::GuiWindowsManager>();
-		Graphics::GuiRenderer m_renderer;
+		std::shared_ptr<Graphics::GuiRenderer> m_renderer;
 		bool m_blockEvents;
 	};
 }

@@ -2,6 +2,7 @@
 
 #include "GuiRenderer.h"
 #include "GuiWindow.h"
+#include "Window.h"
 
 
 using namespace projectSolar::Graphics;

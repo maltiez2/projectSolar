@@ -1,7 +1,9 @@
+#include "pch.h"
+
 #include "SimulationManager.h"
 #include "CommunicationManager.h"
 
-namespace projectSolar::GameLogic
+namespace projectSolar::EventManagers
 {
 	
 	SimulationManager::SimulationManager(std::shared_ptr<Layers::SimLayer> layer, const size_t& threadsNumber) :
@@ -40,6 +42,20 @@ namespace projectSolar::GameLogic
 			EVENT_DEF(EXCLUDE_FROM_SIM_ORDER);
 			{
 				m_layer->excludeFromSimOrder(eventData.simulation, { eventData.first, eventData.last });
+			}
+			EVENT_DEF(GENERATE_DEBUG_DATA);
+			{
+				m_layer->generateDebugLayout(MOTION_SIM, GRAVITY_SIM);
+			}
+			EVENT_DEF(SAVE_DATA);
+			{
+				std::string saveName(std::begin(eventData.saveName), std::end(eventData.saveName));
+				m_layer->saveAttached(saveName);
+			}
+			EVENT_DEF(LOAD_DATA);
+			{
+				std::string saveName(std::begin(eventData.saveName), std::end(eventData.saveName));
+				m_layer->loadAttached(saveName);
 			}
 			EVENTS_DEF_DEFAULT();
 				break;

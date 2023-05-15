@@ -1,4 +1,5 @@
 #include "Windows.h"
+#include "Graphics.h"
 
 namespace projectSolar::Windows
 {
@@ -16,7 +17,10 @@ namespace projectSolar::Windows
         ImGui::SliderFloat("Scale", &scale, 0.2f, 20.0f);
         ImGui::Checkbox("Follow player", &followPlayer);
         ImGui::Checkbox("Run simulation", &runSimulation);
-        showDemoWindow = ImGui::Button("Show demo widnow");
+        showDemoWindow = ImGui::Button("Show demo window");
+        generateDebugData = ImGui::Button("Generate debug data");
+        saveData = ImGui::Button("Save");
+        loadData = ImGui::Button("Load");
         const ImGuiIO& io = ImGui::GetIO();
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
         ImGui::End();

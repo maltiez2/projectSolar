@@ -8,7 +8,7 @@
 #include <memory>
 
 
-namespace projectSolar::GameLogic
+namespace projectSolar::EventManagers
 {
 	class GuiManager : public Events::EventHandler
 	{

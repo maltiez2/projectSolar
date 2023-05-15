@@ -26,5 +26,8 @@
     <ClInclude Include="sources\DoubleBufferedQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sources\EventHandlerMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="sources\pch.h" />
+    <ClInclude Include="sources\Serializer.h" />
     <ClInclude Include="sources\Simulations\Collision.h" />
     <ClInclude Include="sources\Simulations\Gravity.h" />
     <ClInclude Include="sources\Simulations\Motion.h" />

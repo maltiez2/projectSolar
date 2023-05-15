@@ -8,7 +8,7 @@
 #include <vector>
 
 
-namespace projectSolar::GameLogic
+namespace projectSolar::EventManagers
 {
 	class SimulationManager : public Events::EventHandler
 	{
@@ -28,7 +28,10 @@ namespace projectSolar::GameLogic
 		EVENT_DECL(SET_SIM_LOAD, 102, double timeRestrinctionSeconds);
 		EVENT_DECL(ADD_TO_SIM_ORDER, 103, size_t simulation; size_t first; size_t last);
 		EVENT_DECL(EXCLUDE_FROM_SIM_ORDER, 104, size_t simulation; size_t first; size_t last);
-		EVENT_DECL(NEW_DATA_ADDED, 109, size_t totalDataSize);
+		EVENT_DECL(GENERATE_DEBUG_DATA, 105);
+		EVENT_DECL(SAVE_DATA, 106, std::array<char, 128> saveName);
+		EVENT_DECL(LOAD_DATA, 107, std::array<char, 128> saveName);
+		EVENT_DECL(NEW_DATA_ADDED, 108, size_t totalDataSize);
 		
 
 	private:

@@ -1,12 +1,5 @@
 #pragma once
 
-#include "Event.h"
-#include "KeyCodes.h"
-#include "MouseCodes.h"
-#include "ApplicationEvent.h"
-#include "MouseEvent.h"
-#include "KeyEvent.h"
-
 #include <queue>
 #include <Eigen/Eigen>
 #include <memory>
@@ -14,6 +7,7 @@
 namespace projectSolar::Graphics
 {
 	class Window;
+	class InputEvent;
 	
 	class InputEventsManager
 	{
@@ -51,8 +45,8 @@ namespace projectSolar::Graphics
 		explicit InputManager(Window* window);
 		~InputManager() = default;
 
-		bool isKeyPressed(KeyCode key);
-		bool isMouseButtonPressed(MouseCode button);
+		bool isKeyPressed(uint16_t key);
+		bool isMouseButtonPressed(uint16_t button);
 		Eigen::Vector2f GetMousePosition();
 	private:
 		Window* m_window;

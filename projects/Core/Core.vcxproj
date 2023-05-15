@@ -148,11 +148,30 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="sources\ECS\Components.cpp" />
-    <ClCompile Include="sources\ECS\EntityComponentSystem.cpp" />
-    <ClCompile Include="sources\GameLogic\GuiManager.cpp" />
-    <ClCompile Include="sources\GameLogic\MapManager.cpp" />
-    <ClCompile Include="sources\GameLogic\SimulationManager.cpp" />
+    <ClCompile Include="sources\ECS\Components.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\ECS\EntityComponentSystem.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\ApplicationEventHandler.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\GuiManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\MapManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\SimulationManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="sources\Layers\GuiLayer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
@@ -165,8 +184,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="sources\GameLogic\CommunicationManager.cpp" />
-    <ClCompile Include="sources\Layers\SimulationLayer.cpp" />
+    <ClCompile Include="sources\EventManagers\CommunicationManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\Layers\SimulationLayer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="sources\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -181,15 +206,17 @@
     <ClInclude Include="sources\ECS\Components.h" />
     <ClInclude Include="sources\ECS\EntityComponentSystem.h" />
     <ClInclude Include="sources\ECS\Serialization.h" />
-    <ClInclude Include="sources\GameLogic\GuiManager.h" />
-    <ClInclude Include="sources\GameLogic\Managers.h" />
-    <ClInclude Include="sources\GameLogic\MapManager.h" />
-    <ClInclude Include="sources\GameLogic\SimulationManager.h" />
+    <ClInclude Include="sources\EventManagers\ApplicationEventHandler.h" />
+    <ClInclude Include="sources\EventManagers\GuiManager.h" />
+    <ClInclude Include="sources\EventManagers\Managers.h" />
+    <ClInclude Include="sources\EventManagers\MapManager.h" />
+    <ClInclude Include="sources\EventManagers\SimulationManager.h" />
+    <ClInclude Include="sources\Layers\EntityStack.h" />
     <ClInclude Include="sources\Layers\GuiLayer.h" />
     <ClInclude Include="sources\Layers\Layers.h" />
     <ClInclude Include="sources\Layers\Layer.h" />
     <ClInclude Include="sources\Layers\MapLayer.h" />
-    <ClInclude Include="sources\GameLogic\CommunicationManager.h" />
+    <ClInclude Include="sources\EventManagers\CommunicationManager.h" />
     <ClInclude Include="sources\Layers\SimulationLayer.h" />
     <ClInclude Include="sources\pch.h" />
     <ClInclude Include="sources\Windows\Windows.h" />

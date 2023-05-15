@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "SimulationRunner.h"
+#include "Serializer.h"
 #include "Logger.h"
 
 namespace projectSolar::Simulation

@@ -1,7 +1,14 @@
 #include "pch.h"
 
 #include "MapLayer.h"
-#include "GameLogic/SimulationManager.h"
+
+#include "Graphics.h"
+#include "Buffers.h"
+#include "InputEvents.h"
+
+#include "EventManagers/CommunicationManager.h"
+#include "EventManagers/SimulationManager.h"
+
 
 namespace projectSolar::Layers
 {
@@ -13,14 +20,14 @@ namespace projectSolar::Layers
         updateData();
         updateMVP();
     
-        m_vertexBuffer = std::make_shared<Graphics::VertexBuffer>(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
-        m_layout = std::make_shared<Graphics::VertexBufferLayout>();
+        m_vertexBuffer = std::make_shared<projectSolar::Graphics::VertexBuffer>(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
+        m_layout = std::make_shared<projectSolar::Graphics::VertexBufferLayout>();
         m_layout->push<float>(3);
         m_layout->push<uint32_t>(1);
-        m_vertexArray = std::make_shared<Graphics::VertexArray>();
+        m_vertexArray = std::make_shared<projectSolar::Graphics::VertexArray>();
         m_vertexArray->addBufer(*m_vertexBuffer, *m_layout);
-        m_indexBuffer = std::make_shared<Graphics::IndexBuffer>(std::to_address(m_indices.begin()), (uint32_t)m_indices.size());
-        m_shader = std::make_shared<Graphics::Shader>(c_shaderFile);
+        m_indexBuffer = std::make_shared<projectSolar::Graphics::IndexBuffer>(std::to_address(m_indices.begin()), (uint32_t)m_indices.size());
+        m_shader = std::make_shared<projectSolar::Graphics::Shader>(c_shaderFile);
         m_shader->bind();
         glm::mat4 MVP = m_proj * m_view * m_model;
         m_shader->setUniformMat4f("u_MVP", MVP);
@@ -34,13 +41,13 @@ namespace projectSolar::Layers
 
         EMIT_EVENT(MAP_DRAWN);
     }
-    void MapLayer::onEvent(Graphics::InputEvent* ev)
+    void MapLayer::onEvent(projectSolar::Graphics::InputEvent* ev)
     {
         switch (ev->getEventType())
         {
-        case Graphics::InputEventType::WindowResize:
+        case projectSolar::Graphics::InputEventType::WindowResize:
         {
-            auto eventData = (Graphics::WindowResizeEvent*)ev;
+            auto eventData = (projectSolar::Graphics::WindowResizeEvent*)ev;
             setResolution(eventData->getWidth(), eventData->getHeight());
             break;
         }
@@ -89,6 +96,11 @@ namespace projectSolar::Layers
 
         m_buffer.resize(data.size());
         m_indices.resize(data.size());
+
+        if (data.size() <= 1)
+        {
+            return;
+        }
 
         LOG_ASSERT((m_indices.size() < (1ui64 << 16)), "[MapLayer] updateData - m_indices size is greater then max uint16_t")
         for (size_t i = 0; i < m_indices.size(); i++)

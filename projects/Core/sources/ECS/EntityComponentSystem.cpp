@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "EntityComponentSystem.h"
 #include "Components.h"
 #include "Serialization.h"

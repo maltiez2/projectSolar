@@ -1,11 +1,11 @@
 #pragma once
 
-#include "VertexBuffer.h"
-#include "VertexBufferLayout.h"
-
 
 namespace projectSolar::Graphics
 {
+	class VertexBuffer;
+	class VertexBufferLayout;
+	
 	class VertexArray
 	{
 	public:

@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <queue>
+#include <shared_mutex>
 
 namespace projectSolar::Layers
 {
@@ -47,12 +48,18 @@ namespace projectSolar::Layers
 			double stepSize = 1.0;
 			float timeRestriction = 0.5f / 144.0f;
 		};
+
+		const std::string savesDirectory = "saves";
+		const std::string saveExtension = "sim";
 		
 		explicit SimLayer(const Params& params);
 		~SimLayer() override;
 
 		void process() override;
-		void onEvent(Graphics::InputEvent* ev) override;
+		void onEvent(projectSolar::Graphics::InputEvent* ev) override;
+		void saveAttached(const std::string& saveName);
+		void loadAttached(const std::string& saveName);
+		void generateDebugLayout(size_t motionId, size_t gravityId);
 
 		size_t getLastStepsNumber() const;
 		float getLastStepTime() const;
@@ -67,10 +74,13 @@ namespace projectSolar::Layers
 		Params m_params;
 		size_t m_lastStepsNumber;
 		float  m_lastStepTime;
+		std::shared_mutex m_dataMutex;
 
 		std::map<size_t, std::vector<Simulation::Task>> m_simOrders;
 
 		Simulation::SimulationRunner m_runner;
 		StepsDivider m_stepsDivider;
+
+		std::string saveFilePath(const std::string& saveName) const;
 	};
 }

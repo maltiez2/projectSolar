@@ -16,7 +16,7 @@ namespace projectSolar
 	class Application;
 	class ApplicationEventHandler;
 
-	namespace GameLogic
+	namespace EventManagers
 	{
 		class SimulationManager;
 		class GuiManager;
@@ -43,9 +43,9 @@ namespace projectSolar
 		
 		std::shared_ptr<ApplicationEventHandler> Application;
 		std::shared_ptr<ECS::EntityComponentSystem> ECS;
-		std::shared_ptr<GameLogic::SimulationManager> simulation;
-		std::shared_ptr<GameLogic::GuiManager> GUI;
-		std::shared_ptr<GameLogic::MapManager> Map;
+		std::shared_ptr<EventManagers::SimulationManager> simulation;
+		std::shared_ptr<EventManagers::GuiManager> GUI;
+		std::shared_ptr<EventManagers::MapManager> Map;
 		
 		static void init(const size_t& threadsNumber = 1);
 		static CommunicationManager& get(const size_t& threadsNumber = 1);

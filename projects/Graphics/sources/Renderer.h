@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Buffers/IndexBuffer.h"
-#include "Buffers/VertexArray.h"
-#include "Shader.h"
-
 
 namespace projectSolar::Graphics
 {
+	class VertexArray;
+	class IndexBuffer;
+	class Shader;
+	
 	class Renderer
 	{
 	public:

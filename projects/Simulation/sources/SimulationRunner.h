@@ -1,7 +1,5 @@
 #pragma once
 
-#include "DoubleBufferedContainer.h"
-
 #include <shared_mutex>
 #include <barrier>
 #include <memory>
@@ -11,6 +9,8 @@
 
 namespace projectSolar::Simulation
 {	
+	class Serializer;
+	
 	struct Task
 	{
 		size_t start;
@@ -33,8 +33,10 @@ namespace projectSolar::Simulation
 
 		virtual void run(Task task) = 0;
 		virtual void swapData() = 0;
+		virtual void save(Serializer& serializer) = 0;
+		virtual void load(Serializer& serializer) = 0;
 
-		double stepSize;
+		double stepSize = 1.0;
 	};
 	
 	class SimulationRunner

@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="sources\DoubleBufferedQueue.h" />
     <ClInclude Include="sources\EventHandler.h" />
+    <ClInclude Include="sources\EventHandlerMacros.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

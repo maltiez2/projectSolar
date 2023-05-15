@@ -1,6 +1,8 @@
 #include "pch.h"
 
 #include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 
 
 using namespace projectSolar::Graphics;

@@ -3,49 +3,43 @@
 #include "Graphics.h"
 #include "Simulation.h"
 #include "Application.h"
+#include "InputEvents.h"
+#include "EventHandler.h"
 #include "Layers/Layers.h"
 #include "Layers/GuiLayer.h"
 #include "Layers/MapLayer.h"
-#include "GameLogic/Managers.h"
+#include "EventManagers/Managers.h"
+#include "ECS/EntityComponentSystem.h"
+#include "EventManagers/CommunicationManager.h"
+#include "EventManagers/ApplicationEventHandler.h"
 
-#include <string>
-#include <vector>
-#include <Eigen/Eigen>
-#include <functional>
-
-#include "EventHandler.h"
-#include "GameLogic/CommunicationManager.h"
 
 namespace projectSolar
 {
-
-
-    struct Point
-    {
-        float x;
-        float y;
-        float z;
-        uint32_t type;
-    };
-
     Application::Application()
+    {
+        init();
+    }
+
+    void Application::init()
     {
         m_eventHandler = std::make_shared<ApplicationEventHandler>(*this);
         m_window = std::make_shared<Graphics::Window>();
+        m_layers = std::make_shared<Layers::LayersManager>();
 
         Com::init(16);
 
         Com::get().Application = m_eventHandler;
         Com::get().ECS = std::make_shared<ECS::EntityComponentSystem>();
 
-        m_simLayer = m_layers.add<Layers::SimLayer>(SIM_LAYER_ID, Layers::SimLayer::Params(1e-2, 0.5 / 144.0));
-        Com::get().simulation = std::make_shared<GameLogic::SimulationManager>(m_simLayer);
+        m_simLayer = m_layers->add<Layers::SimLayer>(SIM_LAYER_ID, Layers::SimLayer::Params(1e-2, 0.5f / 144.0f));
+        Com::get().simulation = std::make_shared<EventManagers::SimulationManager>(m_simLayer);
 
-        m_mapLayer = m_layers.add<Layers::MapLayer>(MAP_LAYER_ID);
-        Com::get().Map = std::make_shared<GameLogic::MapManager>(m_mapLayer);
+        m_mapLayer = m_layers->add<Layers::MapLayer>(MAP_LAYER_ID);
+        Com::get().Map = std::make_shared<EventManagers::MapManager>(m_mapLayer);
 
-        m_guiLayer = m_layers.add<Layers::GuiLayer>(GUI_LAYER_ID, m_window);
-        Com::get().GUI = std::make_shared<GameLogic::GuiManager>(m_guiLayer);
+        m_guiLayer = m_layers->add<Layers::GuiLayer>(GUI_LAYER_ID, m_window);
+        Com::get().GUI = std::make_shared<EventManagers::GuiManager>(m_guiLayer);
 
         Com::subsribeToEvent(Com::SIMULATION_UPDATED, Com::get().GUI);
         Com::subsribeToEvent(Com::GUI_UPDATED, Com::get().GUI);
@@ -53,7 +47,7 @@ namespace projectSolar
         m_mapLayer->setResolution(m_window->getWidth(), m_window->getHeight());
         m_simLayer->setTimeRest(m_simLoad / (float)m_window->getFPS());
 
-        m_layers.detach<Layers::SimLayer>(SIM_LAYER_ID);
+        m_layers->detach<Layers::SimLayer>(SIM_LAYER_ID);
     }
 
     void Application::run()
@@ -62,15 +56,15 @@ namespace projectSolar
         EMIT_EVENT(GUI_UPDATED);
         
         // Temporary
-        size_t dataSize = m_simLayer->get<Simulation::Motion>(GameLogic::SimulationManager::MOTION_SIM)->data.size();
-        m_simLayer->setSimOrder(GameLogic::SimulationManager::MOTION_SIM, { { 0, dataSize - 1 } });
-        m_simLayer->setSimOrder(GameLogic::SimulationManager::GRAVITY_SIM, { { 0, dataSize - 1 } });
+        size_t dataSize = m_simLayer->get<Simulation::Motion>(EventManagers::SimulationManager::MOTION_SIM)->data.size();
+        m_simLayer->setSimOrder(EventManagers::SimulationManager::MOTION_SIM, { { 0, dataSize - 1 } });
+        m_simLayer->setSimOrder(EventManagers::SimulationManager::GRAVITY_SIM, { { 0, dataSize - 1 } });
         
         while (m_running)
         {
             m_window->startFrame();
 
-            m_layers.process();
+            m_layers->process();
 
             m_window->finishFrame();
 
@@ -99,55 +93,22 @@ namespace projectSolar
                 }
             }
             
-            m_layers.onEvent(eventsManager.front());
+            m_layers->onEvent(eventsManager.front());
             eventsManager.pop();
         }
     }
     void Application::processAppCondition()
     {
-        if (m_simAttached && !m_layers.ifAttached(Application::SIM_LAYER_ID))
+        if (m_simAttached && !m_layers->ifAttached(Application::SIM_LAYER_ID))
         {
-            m_layers.attach(Application::SIM_LAYER_ID, m_simLayer);
+            m_layers->attach(Application::SIM_LAYER_ID, m_simLayer);
             return;
         }
 
-        if (!m_simAttached && m_layers.ifAttached(Application::SIM_LAYER_ID))
+        if (!m_simAttached && m_layers->ifAttached(Application::SIM_LAYER_ID))
         {
-            m_simLayer = m_layers.detach<Layers::SimLayer>(Application::SIM_LAYER_ID);
+            m_simLayer = m_layers->detach<Layers::SimLayer>(Application::SIM_LAYER_ID);
             return;
         }
-    }
-
-    ApplicationEventHandler::ApplicationEventHandler(Application& app) :
-        m_app(app)
-    {
-    }
-    ApplicationEventHandler::~ApplicationEventHandler()
-    {
-        destroyWorkers();
-    }
-    void ApplicationEventHandler::processEvent(uint8_t eventType, uint8_t* data)
-    {
-        switch (eventType)
-        {
-            EVENTS_DEF_UNKNOWN();
-            EVENT_DEF(SET_RUN_SIMULATION);
-            {
-                m_app.m_simAttached = eventData.run;
-            }
-            EVENT_DEF(CLOSE_WINDOW);
-            {
-                m_app.m_running = false;
-            }
-            EVENTS_DEF_DEFAULT();
-            break;
-        }
-    }
-
-
-
-    Simulation::DoubleBuffVector<Simulation::Motion::Data>& Application::DEBUG_getSimData()
-    {
-        return m_simLayer->get<Simulation::Motion>(GameLogic::SimulationManager::MOTION_SIM)->data;
     }
 }

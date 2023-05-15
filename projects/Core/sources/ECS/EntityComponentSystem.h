@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Components.h"
-#include "EventHandler.h"
-#include "GameLogic/CommunicationManager.h"
-#include "GameLogic/SimulationManager.h"
+#include "EventManagers/CommunicationManager.h"
+#include "EventManagers/SimulationManager.h"
 #include "Logger.h"
 
 #include <EnTT/entt.hpp>
@@ -149,6 +148,6 @@ namespace projectSolar::ECS
 		entt::registry m_registry;
 		UUIDv4::UUIDGenerator<std::mt19937_64> m_uuidGenerator;
 
-		friend GameLogic::SimulationManager; // @TODO This should not be needed, maybe
+		friend EventManagers::SimulationManager; // @TODO This should not be needed, maybe
 	};
 }

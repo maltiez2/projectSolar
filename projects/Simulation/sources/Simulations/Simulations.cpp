@@ -2,6 +2,7 @@
 
 #include "Motion.h"
 #include "Gravity.h"
+#include "Serializer.h"
 
 
 namespace projectSolar::Simulation
@@ -27,6 +28,14 @@ namespace projectSolar::Simulation
 	void Motion::swapData()
 	{
 		data.swap();
+	}
+	void Motion::save(Serializer& serializer)
+	{
+		serializer.serialize(data);
+	}
+	void Motion::load(Serializer& serializer)
+	{
+		serializer.deserialize(data);
 	}
 
 
@@ -66,5 +75,13 @@ namespace projectSolar::Simulation
 	}
 	void Gravity::swapData()
 	{
+	}
+	void Gravity::save(Serializer& serializer)
+	{
+		// Nothing to serialize
+	}
+	void Gravity::load(Serializer& serializer)
+	{
+		// Nothing to deserialize
 	}
 }

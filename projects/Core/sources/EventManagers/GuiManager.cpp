@@ -1,10 +1,14 @@
+#include "pch.h"
+
 #include "GuiManager.h"
 
 #include "MapManager.h"
 #include "Application.h"
 #include "Windows/Windows.h"
+#include "EventManagers/ApplicationEventHandler.h"
+#include "ECS/Components.h"
 
-namespace projectSolar::GameLogic
+namespace projectSolar::EventManagers
 {
 	void GuiManager::processEvent(uint8_t eventType, uint8_t* data)
 	{
@@ -49,6 +53,21 @@ namespace projectSolar::GameLogic
 		if (m_windows->get<Windows::Debug>("debug")->showDemoWindow)
 		{
 			m_windows->show("demo", true);
+		}
+
+		if (m_windows->get<Windows::Debug>("debug")->generateDebugData)
+		{
+			SEND_EVENT(GENERATE_DEBUG_DATA, EventManagers::SimulationManager, Com::get().simulation);
+		}
+
+		if (m_windows->get<Windows::Debug>("debug")->saveData)
+		{
+			SEND_EVENT(SAVE_DATA, EventManagers::SimulationManager, Com::get().simulation, Components::LongTitle{ "debug_0" });
+		}
+
+		if (m_windows->get<Windows::Debug>("debug")->loadData)
+		{
+			SEND_EVENT(LOAD_DATA, EventManagers::SimulationManager, Com::get().simulation, Components::LongTitle{ "debug_0" });
 		}
 	}
 	

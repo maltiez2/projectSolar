@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "CommunicationManager.h"
 #include "Logger.h"
 

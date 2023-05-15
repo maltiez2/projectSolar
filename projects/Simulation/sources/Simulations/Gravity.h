@@ -21,6 +21,8 @@ namespace projectSolar::Simulation
 
 		void run(Task task) override;
 		void swapData() override;
+		void save(Serializer& serializer) override;
+		void load(Serializer& serializer) override;
 
 		DoubleBuffVector<Motion::Data>& data;
 		Params params;

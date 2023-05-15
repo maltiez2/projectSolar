@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+
 namespace projectSolar::Graphics
 {
 	class IndexBuffer
