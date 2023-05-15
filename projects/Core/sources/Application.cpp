@@ -18,18 +18,7 @@
 
 namespace projectSolar
 {
-    bool comparePositions(const Eigen::Vector3d& p1, const Eigen::Vector3d& p2, const double& epsilon)
-    {
-        for (uint8_t i = 0; i < 3; i++)
-        {
-            if (std::abs(p1[i] - p2[i]) > std::abs(p1[i]) * epsilon)
-            {
-                return false;
-            }
-        }
 
-        return true;
-    }
 
     struct Point
     {
@@ -39,31 +28,27 @@ namespace projectSolar
         uint32_t type;
     };
 
-    Application::Application(std::shared_ptr<ECS::EntityManager> entities) :
-        m_enitites(entities)
+    Application::Application()
     {
         m_eventHandler = std::make_shared<ApplicationEventHandler>(*this);
         m_window = std::make_shared<Graphics::Window>();
 
         Com::init(16);
 
-        auto centralRenderer = std::make_shared<Graphics::Renderer>();
-        auto guiWindows = std::make_shared<Graphics::GuiWindowsManager>();
-
         Com::get().Application = m_eventHandler;
-        Com::get().ECS = std::make_shared<ECS::EntityManager>();
+        Com::get().ECS = std::make_shared<ECS::EntityComponentSystem>();
 
         m_simLayer = m_layers.add<Layers::SimLayer>(SIM_LAYER_ID, Layers::SimLayer::Params(1e-2, 0.5 / 144.0));
         Com::get().simulation = std::make_shared<GameLogic::SimulationManager>(m_simLayer);
 
-        m_mapLayer = m_layers.add<Layers::MapLayer>(MAP_LAYER_ID, centralRenderer);
+        m_mapLayer = m_layers.add<Layers::MapLayer>(MAP_LAYER_ID);
         Com::get().Map = std::make_shared<GameLogic::MapManager>(m_mapLayer);
 
         m_guiLayer = m_layers.add<Layers::GuiLayer>(GUI_LAYER_ID, m_window);
         Com::get().GUI = std::make_shared<GameLogic::GuiManager>(m_guiLayer);
 
-        Com::subsribeOnEvent(Com::SIMULATION_UPDATED, Com::get().GUI);
-        Com::subsribeOnEvent(Com::GUI_UPDATED, Com::get().GUI);
+        Com::subsribeToEvent(Com::SIMULATION_UPDATED, Com::get().GUI);
+        Com::subsribeToEvent(Com::GUI_UPDATED, Com::get().GUI);
 
         m_mapLayer->setResolution(m_window->getWidth(), m_window->getHeight());
         m_simLayer->setTimeRest(m_simLoad / (float)m_window->getFPS());

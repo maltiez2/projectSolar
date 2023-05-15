@@ -25,7 +25,7 @@ namespace projectSolar
 
 	namespace ECS
 	{
-		class EntityManager;
+		class EntityComponentSystem;
 	}
 
 	class CommunicationManager : public Events::SubscriptionManager
@@ -42,7 +42,7 @@ namespace projectSolar
 		//
 		
 		std::shared_ptr<ApplicationEventHandler> Application;
-		std::shared_ptr<ECS::EntityManager> ECS;
+		std::shared_ptr<ECS::EntityComponentSystem> ECS;
 		std::shared_ptr<GameLogic::SimulationManager> simulation;
 		std::shared_ptr<GameLogic::GuiManager> GUI;
 		std::shared_ptr<GameLogic::MapManager> Map;
@@ -51,7 +51,7 @@ namespace projectSolar
 		static CommunicationManager& get(const size_t& threadsNumber = 1);
 
 		template<typename SubscriberType>
-		static void subsribeOnEvent(uint8_t eventId, const std::shared_ptr<SubscriberType>& subscriber)
+		static void subsribeToEvent(uint8_t eventId, const std::shared_ptr<SubscriberType>& subscriber)
 		{
 			get().subscribe(eventId, subscriber);
 		}

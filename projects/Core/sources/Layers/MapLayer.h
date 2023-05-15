@@ -19,7 +19,7 @@ namespace projectSolar::Layers
 	class MapLayer : public Layer
 	{
 	public:
-		MapLayer(std::shared_ptr<Graphics::Renderer> centralRenderer);
+		MapLayer();
 		~MapLayer() override = default;
 
 		void process() override;
@@ -52,7 +52,7 @@ namespace projectSolar::Layers
 
 		const char* c_shaderFile = "resources/shaders/map.shader";
 
-		std::shared_ptr<Graphics::Renderer> m_centralRenderer;
+		std::shared_ptr<Graphics::Renderer> m_centralRenderer = std::make_shared<Graphics::Renderer>();
 
 		std::shared_ptr<Graphics::VertexBufferLayout> m_layout;
 		std::shared_ptr<Graphics::Shader>		m_shader;

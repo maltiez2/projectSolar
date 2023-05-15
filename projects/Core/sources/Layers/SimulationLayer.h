@@ -60,6 +60,8 @@ namespace projectSolar::Layers
 		void setStepSize(double stepSize);
 		void setTimeRest(double timeRestrictionSeconds);
 		void setSimOrder(size_t id, const std::vector<Simulation::Task>& order);
+		void addToSimOrder(size_t id, const Simulation::Task& order);
+		void excludeFromSimOrder(size_t id, const Simulation::Task& order);
 
 	private:
 		Params m_params;

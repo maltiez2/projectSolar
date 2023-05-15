@@ -51,6 +51,9 @@
     <ClCompile Include="sources\Layers\SimulationLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sources\ECS\Components.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sources\Application.h">

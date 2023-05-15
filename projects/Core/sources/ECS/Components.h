@@ -8,8 +8,9 @@
 
 #define PPCAT_NX(A, B) A ## B
 #define PPCAT(A, B) PPCAT_NX(A, B)
-#define COMPONENT_DECL(name, ...) struct name {enum : uint16_t { TYPE = __LINE__ }; static std::shared_ptr<std::shared_mutex> mutex; __VA_ARGS__}
-#define COMPONENT_INIT(name) Components::name::mutex = std::shared_ptr<std::shared_mutex>(new std::shared_mutex())
+#define COMPONENT_DECL(name, ...) struct name {enum : uint16_t { TYPE = __LINE__ }; static std::shared_mutex& mutex(); __VA_ARGS__}
+#define COMPONENT_IMPL(name) std::shared_mutex& name::mutex() {static std::shared_mutex mutex; return mutex;}
+#define COMPONENT_INIT(name) name::mutex();
 
 
 #define ECS_ALL_COMPONENTS	Components::Game,\
@@ -81,17 +82,6 @@ namespace projectSolar
 		);
 
 		// Initializes static variables inside components
-		void init()
-		{
-			COMPONENT_INIT(Game);
-			COMPONENT_INIT(Object);
-			COMPONENT_INIT(GameSettings);
-			COMPONENT_INIT(VideoSettings);
-			COMPONENT_INIT(SimulationSettings);
-
-			COMPONENT_INIT(Attractor);
-			COMPONENT_INIT(Attractant);
-			COMPONENT_INIT(Propulsed);
-		}
+		void init();
 	}
 }

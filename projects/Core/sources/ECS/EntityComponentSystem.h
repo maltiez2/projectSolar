@@ -12,25 +12,19 @@
 
 
 namespace projectSolar::ECS
-{
+{	
 	class EntityComponentSystem
 	{
 	public:
 		EntityComponentSystem();
 		~EntityComponentSystem() = default;
 
-		template<typename Component, typename Storage>
-		Component::Data& getData(EntityId id, Storage& storage)
-		{
-			return storage[m_registry.get<Component>(id).dataIndex];
-		}
-
 		entt::entity create()
 		{
 			UUIDv4::UUID uuid = m_uuidGenerator.getUUID();
 			entt::entity entity = m_registry.create();
 			
-			std::unique_lock lock(*Components::Object::mutex);
+			std::unique_lock lock(Components::Object::mutex());
 			m_registry.emplace<Components::Object>(entity, uuid);
 			lock.unlock();
 			
@@ -56,7 +50,7 @@ namespace projectSolar::ECS
 		{
 			LOG_ASSERT(exists(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not exists");
 			LOG_ASSERT(!has<Component>(entity), "[EntityManager] Entity '", (uint32_t)entity, "' already has component: ", Component::TYPE);
-			std::unique_lock lock(*Component::mutex);
+			std::unique_lock lock(Component::mutex());
 			m_registry.emplace<Component>(entity, args...);
 			lock.unlock();
 			EMIT_EVENT(COMPONENT_CREATED, Component::TYPE, (uint32_t)entity);
@@ -66,7 +60,7 @@ namespace projectSolar::ECS
 		{
 			LOG_ASSERT(exists(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not exists");
 			LOG_ASSERT(has<Component>(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not have component: ", Component::TYPE);
-			std::unique_lock lock(*Component::mutex);
+			std::unique_lock lock(Component::mutex());
 			m_registry.replace<Component>(entity, args...);
 			lock.unlock();
 			EMIT_EVENT(COMPONENT_UPDATED, Component::TYPE, (uint32_t)entity);
@@ -74,7 +68,7 @@ namespace projectSolar::ECS
 		template<typename Component, typename ... Args>
 		void update(entt::entity entity, const Args& ... args)
 		{
-			std::unique_lock lock(*Component::mutex);
+			std::unique_lock lock(Component::mutex());
 			m_registry.emplace_or_replace<Component>(entity, args...);
 			lock.unlock();
 			EMIT_EVENT(COMPONENT_UPDATED, Component::TYPE, (uint32_t)entity);
@@ -84,7 +78,7 @@ namespace projectSolar::ECS
 		{
 			LOG_ASSERT(exists(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not exists");
 			LOG_ASSERT(has<Component>(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not have component: ", Component::TYPE);
-			std::unique_lock lock(*Component::mutex);
+			std::unique_lock lock(Component::mutex());
 			m_registry.erase<Component>(entity);
 			lock.unlock();
 			EMIT_EVENT(COMPONENT_REMOVED, Component::TYPE, (uint32_t)entity);
@@ -92,7 +86,7 @@ namespace projectSolar::ECS
 		template<typename Component>
 		void removeIfHas(entt::entity entity)
 		{
-			std::unique_lock lock(*Component::mutex);
+			std::unique_lock lock(Component::mutex());
 			size_t removed = m_registry.remove<Component>(entity);
 			lock.unlock();
 			if (removed > 0)
@@ -104,7 +98,7 @@ namespace projectSolar::ECS
 		template<typename Component>
 		bool has(entt::entity entity)
 		{
-			std::shared_lock lock(*Component::mutex);
+			std::shared_lock lock(Component::mutex());
 			return m_registry.all_of<Component>(entity);
 		}
 		template<typename ... Components>
@@ -123,14 +117,14 @@ namespace projectSolar::ECS
 			LOG_ASSERT(exists(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not exists");
 			LOG_ASSERT(has<Component>(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not have component: ", Component::TYPE);
 			const auto& constRegistry = m_registry;
-			std::shared_lock lock(*Component::mutex);
+			std::shared_lock lock(Component::mutex());
 			return constRegistry.get<Component>(entity);
 		}
-		template<typename ... Components>
+		template<typename Component_0, typename Component_1, typename ... Components>
 		decltype(auto) get(entt::entity entity) // Thread unsafe, call under specific component locks
 		{
 			LOG_ASSERT(exists(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not exists");
-			return m_registry.get<Components...>(entity);
+			return m_registry.get<Component_0, Component_1, Components...>(entity);
 		}
 
 		errno_t save(std::string_view filePath) const;

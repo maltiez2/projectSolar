@@ -59,11 +59,28 @@ namespace projectSolar::Layers
 	}
 	void SimLayer::setTimeRest(double timeRestrictionSeconds)
 	{
-		m_params.timeRestriction = timeRestrictionSeconds;
+		m_params.timeRestriction = (float)timeRestrictionSeconds;
 	}
 	void SimLayer::setSimOrder(size_t id, const std::vector<Simulation::Task>& order)
 	{
 		m_simOrders[id] = order;
+	}
+	void SimLayer::addToSimOrder(size_t id, const Simulation::Task& task)
+	{
+		auto& order = m_simOrders[id];
+		m_simOrders[id].push_back(task);
+		
+	}
+	void SimLayer::excludeFromSimOrder(size_t id, const Simulation::Task& task)
+	{
+		for (auto it = m_simOrders[id].begin(); it != m_simOrders[id].end(); ++it)
+		{
+			if (task.start == (*it).start && task.last == (*it).last)
+			{
+				m_simOrders[id].erase(it);
+				break;
+			}
+		}
 	}
 
 

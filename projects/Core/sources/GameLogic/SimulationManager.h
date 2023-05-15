@@ -24,9 +24,12 @@ namespace projectSolar::GameLogic
 
 		std::vector<Simulation::Motion::Data>& getMotionData();
 
-		EVENT_DECL(SET_SIM_STEP, 11, double stepSize);
-		EVENT_DECL(SET_SIM_LOAD, 12, double timeRestrinctionSeconds);
-		EVENT_DECL(NEW_DATA_ADDED, 19, size_t totalDataSize);
+		EVENT_DECL(SET_SIM_STEP, 101, double stepSize);
+		EVENT_DECL(SET_SIM_LOAD, 102, double timeRestrinctionSeconds);
+		EVENT_DECL(ADD_TO_SIM_ORDER, 103, size_t simulation; size_t first; size_t last);
+		EVENT_DECL(EXCLUDE_FROM_SIM_ORDER, 104, size_t simulation; size_t first; size_t last);
+		EVENT_DECL(NEW_DATA_ADDED, 109, size_t totalDataSize);
+		
 
 	private:
 		std::shared_ptr<Layers::SimLayer> m_layer;

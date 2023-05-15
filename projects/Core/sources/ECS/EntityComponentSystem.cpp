@@ -1,5 +1,7 @@
 #include "EntityComponentSystem.h"
+#include "Components.h"
 #include "Serialization.h"
+
 
 namespace projectSolar::ECS
 {

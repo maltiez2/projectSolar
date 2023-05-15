@@ -4,13 +4,11 @@
 
 #include "Core.h"
 #include "Simulation.h"
-#include "Graphics.h"
 
-#include <shared_mutex>
-#include <chrono>
-#include <thread>
 #include <cmath>
 
+#include "../sources/ECS/EntityComponentSystem.h"
+#include "../sources/ECS/Components.h"
 
 using namespace projectSolar;
 
@@ -21,7 +19,7 @@ int main()
 {
 	LOG_INTT_CONSOLE("logs/log_sandbox.txt");
 	LOG_DEBUG("[sandbox] Sandbox started");
-	
+
 	appRun();
 
 	LOG_DEBUG("[sandbox] Sandbox finished");
@@ -30,9 +28,7 @@ int main()
 
 void appRun()
 {
-	auto ECS = std::make_shared<ECS::EntityManager>();
-
-	auto app = std::make_unique<Application>(ECS);
+	auto app = std::make_unique<Application>();
 	Simulation::DoubleBuffVector<Simulation::Motion::Data>& data = app->DEBUG_getSimData();
 	setupData(data);
 	app->run();

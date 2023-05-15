@@ -5,8 +5,7 @@
 
 namespace projectSolar::Layers
 {
-    MapLayer::MapLayer(std::shared_ptr<Graphics::Renderer> centralRenderer) :
-        m_centralRenderer(centralRenderer)
+    MapLayer::MapLayer()
     {
     }
     void MapLayer::process() // @TODO redo all these buffers stuff

@@ -29,7 +29,7 @@ namespace projectSolar
 	class Application
 	{
 	public:
-		Application(std::shared_ptr<ECS::EntityManager> entities);
+		Application();
 		~Application() = default;
 
 		enum DefaultLayers : size_t
@@ -45,7 +45,7 @@ namespace projectSolar
 
 	private:
 		std::shared_ptr<ApplicationEventHandler> m_eventHandler;
-		std::shared_ptr<ECS::EntityManager> m_enitites;
+		std::shared_ptr<ECS::EntityComponentSystem> m_enitites;
 		std::shared_ptr<Graphics::Window> m_window;
 		Layers::LayersManager m_layers;
 		

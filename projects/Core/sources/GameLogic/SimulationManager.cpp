@@ -33,6 +33,14 @@ namespace projectSolar::GameLogic
 				m_layer->setSimOrder(MOTION_SIM, { {0, eventData.totalDataSize - 1} });
 				m_layer->setSimOrder(GRAVITY_SIM, { {0, eventData.totalDataSize - 1} });
 			}
+			EVENT_DEF(ADD_TO_SIM_ORDER);
+			{
+				m_layer->addToSimOrder(eventData.simulation, { eventData.first, eventData.last });
+			}
+			EVENT_DEF(EXCLUDE_FROM_SIM_ORDER);
+			{
+				m_layer->excludeFromSimOrder(eventData.simulation, { eventData.first, eventData.last });
+			}
 			EVENTS_DEF_DEFAULT();
 				break;
 		}
