@@ -57,6 +57,9 @@
     <ClCompile Include="sources\EventManagers\ApplicationEventHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sources\EventManagers\SavesManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sources\Application.h">
@@ -114,6 +117,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\Layers\EntityStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\EventManagers\SavesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,6 +21,7 @@ namespace projectSolar
 		class SimulationManager;
 		class GuiManager;
 		class MapManager;
+		class SavesManager;
 	};
 
 	namespace ECS
@@ -46,6 +47,7 @@ namespace projectSolar
 		std::shared_ptr<EventManagers::SimulationManager> simulation;
 		std::shared_ptr<EventManagers::GuiManager> GUI;
 		std::shared_ptr<EventManagers::MapManager> Map;
+		std::shared_ptr<EventManagers::SavesManager> Saves;
 		
 		static void init(const size_t& threadsNumber = 1);
 		static CommunicationManager& get(const size_t& threadsNumber = 1);

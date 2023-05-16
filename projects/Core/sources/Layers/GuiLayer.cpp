@@ -32,6 +32,14 @@ namespace projectSolar::Layers
             ev->handled |= ev->isInCategory(Graphics::EventCategoryKeyboard) & io.WantCaptureKeyboard;
         }
     }
+    void GuiLayer::save(const std::string& filePath)
+    {
+        // Nothing to save yet
+    }
+    void GuiLayer::load(const std::string& filePath)
+    {
+        // Nothing to load yet
+    }
     std::shared_ptr<Graphics::GuiWindowsManager> GuiLayer::getWindowsManager()
     {
         return m_windowsManager;

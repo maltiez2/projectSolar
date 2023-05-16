@@ -9,7 +9,8 @@ namespace projectSolar::Components
 	COMPONENT_IMPL(Object);
 	COMPONENT_IMPL(GameSettings);
 	COMPONENT_IMPL(VideoSettings);
-	COMPONENT_IMPL(SimulationSettings);
+	COMPONENT_IMPL(SimSettings);
+	COMPONENT_IMPL(SimPerformance);
 
 	COMPONENT_IMPL(CelestialObject);
 	COMPONENT_IMPL(Dynamic);
@@ -20,7 +21,8 @@ namespace projectSolar::Components
 		COMPONENT_INIT(Object);
 		COMPONENT_INIT(GameSettings);
 		COMPONENT_INIT(VideoSettings);
-		COMPONENT_INIT(SimulationSettings);
+		COMPONENT_INIT(SimSettings);
+		COMPONENT_INIT(SimPerformance);
 
 		COMPONENT_INIT(CelestialObject);
 		COMPONENT_INIT(Dynamic);

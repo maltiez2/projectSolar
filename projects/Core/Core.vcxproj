@@ -168,6 +168,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="sources\EventManagers\SavesManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="sources\EventManagers\SimulationManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
@@ -210,6 +214,7 @@
     <ClInclude Include="sources\EventManagers\GuiManager.h" />
     <ClInclude Include="sources\EventManagers\Managers.h" />
     <ClInclude Include="sources\EventManagers\MapManager.h" />
+    <ClInclude Include="sources\EventManagers\SavesManager.h" />
     <ClInclude Include="sources\EventManagers\SimulationManager.h" />
     <ClInclude Include="sources\Layers\EntityStack.h" />
     <ClInclude Include="sources\Layers\GuiLayer.h" />

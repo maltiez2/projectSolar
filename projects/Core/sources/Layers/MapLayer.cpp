@@ -55,6 +55,14 @@ namespace projectSolar::Layers
             break;
         }
     }
+    void MapLayer::save(const std::string& filePath)
+    {
+        // Nothing to save yet
+    }
+    void MapLayer::load(const std::string& filePath)
+    {
+        // Nothing to load yet
+    }
     void MapLayer::setCameraPosition(float x, float y, float z)
     {
         m_currentCamera.position.x = x;

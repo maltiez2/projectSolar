@@ -20,6 +20,44 @@ namespace projectSolar::Layers
 	{
 	}
 
+	void SimLayer::save(const std::string& filePath)
+	{
+		std::shared_lock lock(m_dataMutex);
+
+		Simulation::Serializer serializer;
+		errno_t error = serializer.open<Simulation::Serializer::fileMode::writeBytes>(filePath);
+		if (error != 0)
+		{
+			LOG_ERROR("[SimLayer] Cannot open file for writing '", filePath, "', error: ", error);
+			return;
+		}
+		for (const auto& [id, simulation] : m_registered)
+		{
+			serializer.serialize(m_simOrders[id]);
+			simulation->save(serializer);
+		}
+		serializer.close();
+	}
+	void SimLayer::load(const std::string& filePath)
+	{
+		std::unique_lock lock(m_dataMutex);
+
+		Simulation::Serializer serializer;
+		errno_t error = serializer.open<Simulation::Serializer::fileMode::readBytes>(filePath);
+		if (error != 0)
+		{
+			LOG_ERROR("[SimLayer] Cannot open file for reading '", filePath, "', error: ", error);
+			return;
+		}
+		for (const auto& [id, simulation] : m_registered)
+		{
+			m_simOrders[id] = {};
+			serializer.deserialize(m_simOrders[id]);
+			simulation->load(serializer);
+		}
+		serializer.close();
+	}
+
 	void SimLayer::process()
 	{
 		std::unique_lock lock(m_dataMutex);
@@ -46,47 +84,11 @@ namespace projectSolar::Layers
 
 		EMIT_EVENT(SIMULATION_UPDATED, m_lastStepTime, m_lastStepsNumber);
 
-		LOG_INFO("[SimLayer] Steps per frame: ", m_lastStepsNumber, ", milliseconds per step: ", m_lastStepTime * 1000.0, ", milliseconds per frame: ", (float)m_lastStepsNumber * m_lastStepTime * 1000.0);
+		//LOG_DEBUG("[SimLayer] Steps per frame: ", m_lastStepsNumber, ", milliseconds per step: ", m_lastStepTime * 1000.0, ", milliseconds per frame: ", (float)m_lastStepsNumber * m_lastStepTime * 1000.0);
 	}
 	void SimLayer::onEvent(Graphics::InputEvent* ev)
 	{
 		// No events to process
-	}
-	void SimLayer::saveAttached(const std::string& saveName)
-	{
-		std::shared_lock lock(m_dataMutex);
-		
-		Simulation::Serializer serializer;
-		errno_t error = serializer.open<Simulation::Serializer::fileMode::writeBytes>(saveFilePath(saveName));
-		if (error != 0)
-		{
-			LOG_ERROR("[SimLayer] Cannot open file for writing '", saveFilePath(saveName), "', error: ", error);
-			return;
-		}
-		for (const auto& [id, simulation] : m_attached)
-		{
-			simulation->save(serializer);
-		}
-		serializer.close();
-	}
-	void SimLayer::loadAttached(const std::string& saveName)
-	{
-		std::unique_lock lock(m_dataMutex);
-		
-		Simulation::Serializer serializer;
-		errno_t error = serializer.open<Simulation::Serializer::fileMode::readBytes>(saveFilePath(saveName));
-		if (error != 0)
-		{
-			LOG_ERROR("[SimLayer] Cannot open file for reading '", saveFilePath(saveName), "', error: ", error);
-			return;
-		}
-		for (const auto& [id, simulation] : m_attached)
-		{
-			simulation->load(serializer);
-		}
-		serializer.close();
-
-		EMIT_EVENT(SIMULATION_UPDATED);
 	}
 	void SimLayer::generateDebugLayout(size_t motionId, size_t gravityId)
 	{
@@ -145,6 +147,11 @@ namespace projectSolar::Layers
 	{
 		return m_lastStepTime;
 	}
+	std::vector<Simulation::Task>& SimLayer::getOrder(size_t id)
+	{
+		LOG_ASSERT(m_simOrders.contains(id), "[SimLayer] Simulation with id '", id, "' has now orders assigned")
+		return m_simOrders[id];
+	}
 	void SimLayer::setStepSize(double stepSize)
 	{
 		m_params.stepSize = stepSize;
@@ -173,20 +180,6 @@ namespace projectSolar::Layers
 				break;
 			}
 		}
-	}
-
-	std::string SimLayer::saveFilePath(const std::string& saveName) const
-	{
-		std::string saveNameStripped = saveName.c_str();
-		std::filesystem::path filePath = std::filesystem::current_path();
-		filePath.append(savesDirectory);
-		filePath.append(saveNameStripped);
-		if (!std::filesystem::exists(filePath))
-		{
-			std::filesystem::create_directories(filePath);
-		}
-		filePath.append(saveNameStripped + "." + saveExtension);
-		return filePath.generic_string();
 	}
 
 	// Steps divider

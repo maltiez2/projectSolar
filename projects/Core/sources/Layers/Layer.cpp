@@ -28,4 +28,19 @@ namespace projectSolar::Layers
         }
         return false;
     }
+    void LayersManager::save(const std::string& filePath)
+    {
+
+        for (const auto& [id, layer] : m_registered)
+        {
+            layer->save(std::format("{}.{}", filePath, id));
+        }
+    }
+    void LayersManager::load(const std::string& filePath)
+    {
+        for (const auto& [id, layer] : m_registered)
+        {
+            layer->load(std::format("{}.{}", filePath, id));
+        }
+    }
 }

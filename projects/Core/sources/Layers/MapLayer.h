@@ -29,6 +29,8 @@ namespace projectSolar::Layers
 
 		void process() override;
 		void onEvent(projectSolar::Graphics::InputEvent* ev) override;
+		void save(const std::string& filePath) override;
+		void load(const std::string& filePath) override;
 
 		void setCameraPosition(float x, float y, float z);
 		void setResolution(uint32_t width, uint32_t height);

@@ -22,6 +22,8 @@ namespace projectSolar::Layers
 
 		virtual void process() = 0;
 		virtual void onEvent(projectSolar::Graphics::InputEvent* ev) = 0;
+		virtual void save(const std::string& filePath) = 0;
+		virtual void load(const std::string& filePath) = 0;
 	};
 
 	class LayersManager : public EntityStack<Layer>
@@ -32,5 +34,7 @@ namespace projectSolar::Layers
 
 		void process();
 		bool onEvent(Graphics::InputEvent* ev);
+		void save(const std::string& filePath);
+		void load(const std::string& filePath);
 	};
 }

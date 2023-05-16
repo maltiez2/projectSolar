@@ -59,6 +59,16 @@ namespace projectSolar::Simulation
 		}
 
 		template<typename DataType>
+		void serialize(std::vector<DataType>& input)
+		{
+			size_t dataSize = sizeof(DataType);
+			size_t dataAmount = input.size();
+			std::fwrite(&dataSize, sizeof(dataSize), 1, p_file);
+			std::fwrite(&dataAmount, sizeof(dataAmount), 1, p_file);
+			std::fwrite(input.data(), dataSize, dataAmount, p_file);
+		}
+
+		template<typename DataType>
 		void deserialize(DoubleBuffVector<DataType>& input)
 		{
 			input.clear();
@@ -72,9 +82,23 @@ namespace projectSolar::Simulation
 			input.reserve(dataAmount);
 			for (auto index = 0; index < dataAmount; index++)
 			{
-				std::fwrite(&buffer, sizeof(DataType), 1, p_file);
+				std::fread(&buffer, sizeof(DataType), 1, p_file);
 				input.addElement(buffer);
 			}
+		}
+
+		template<typename DataType>
+		void deserialize(std::vector<DataType>& input)
+		{
+			input.clear();
+
+			size_t dataSize;
+			size_t dataAmount;
+			std::fread(&dataSize, sizeof(dataSize), 1, p_file);
+			std::fread(&dataAmount, sizeof(dataAmount), 1, p_file);
+
+			input.resize(dataAmount);
+			std::fread(input.data(), sizeof(DataType), dataAmount, p_file);
 		}
 
 	private:

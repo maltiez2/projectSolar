@@ -1,6 +1,8 @@
 #include "Windows.h"
 #include "Graphics.h"
 
+#include <string>
+
 namespace projectSolar::Windows
 {
     void PropulsionControl::show()
@@ -23,6 +25,8 @@ namespace projectSolar::Windows
         loadData = ImGui::Button("Load");
         const ImGuiIO& io = ImGui::GetIO();
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+        ImGui::Text(std::format("Simulation steps per frame {}", stepsPerFrame).c_str());
+        ImGui::Text(std::format("Simulation ms per frame {}", 1000.0f * stepsPerFrame * secondsPerStep).c_str());
         ImGui::End();
     }
 }

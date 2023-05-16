@@ -16,7 +16,8 @@
 							Components::Object,\
 							Components::GameSettings,\
 							Components::VideoSettings,\
-							Components::SimulationSettings,\
+							Components::SimSettings,\
+							Components::SimPerformance,\
 							Components::CelestialObject,\
 							Components::Dynamic
 
@@ -67,9 +68,14 @@ namespace projectSolar
 			uint8_t targetFPS;
 		);
 
-		COMPONENT_DECL(SimulationSettings,
+		COMPONENT_DECL(SimSettings,
 			double gravitationalConstant;
 			double timeStep;
+		);
+
+		COMPONENT_DECL(SimPerformance,
+			size_t stepsPerFrame;
+			float secondsPerStep;
 		);
 
 		// Gravitational objects

@@ -25,11 +25,15 @@ namespace projectSolar::Windows
 		void show() override;
 
 		float scale = 1.0f;
+		size_t stepsPerFrame = 0;
+		float secondsPerStep = 0.0f;
+
 		bool runSimulation = false;
 		bool followPlayer = false;
 		bool showDemoWindow = false;
 		bool generateDebugData = false;
 		bool saveData = false;
 		bool loadData = false;
+
 	};
 }

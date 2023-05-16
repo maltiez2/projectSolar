@@ -16,7 +16,7 @@ namespace projectSolar::EventManagers
 		GuiManager(std::shared_ptr<Layers::GuiLayer> layer, const size_t& threadsNumber = 1);
 		~GuiManager() override;
 
-		EVENT_DECL(SIMULATION_UPDATED, 1);
+		EVENT_DECL(SIMULATION_UPDATED, 1, float secondsPerStep; size_t stepsPerFrame);
 		EVENT_DECL(GUI_UPDATED, 4);
 
 		std::shared_ptr<Graphics::GuiWindowsManager> getWidnows();

@@ -34,7 +34,7 @@ namespace projectSolar::Layers
 		const uint8_t m_queieSize = 10;
 		
 		Params m_params;
-		std::queue<StepData> m_results = {}; // @TODO Experiment with algorithms that us this
+		std::queue<StepData> m_results = {}; // @TODO Experiment with algorithms that use this
 		std::chrono::time_point<std::chrono::steady_clock> m_startTimepoint;
 		size_t m_currentStepNumber;
 		
@@ -48,21 +48,20 @@ namespace projectSolar::Layers
 			double stepSize = 1.0;
 			float timeRestriction = 0.5f / 144.0f;
 		};
-
-		const std::string savesDirectory = "saves";
-		const std::string saveExtension = "sim";
 		
 		explicit SimLayer(const Params& params);
 		~SimLayer() override;
 
+		void save(const std::string& filePath) override;
+		void load(const std::string& filePath) override;
+
 		void process() override;
 		void onEvent(projectSolar::Graphics::InputEvent* ev) override;
-		void saveAttached(const std::string& saveName);
-		void loadAttached(const std::string& saveName);
 		void generateDebugLayout(size_t motionId, size_t gravityId);
 
 		size_t getLastStepsNumber() const;
 		float getLastStepTime() const;
+		std::vector<Simulation::Task>& getOrder(size_t id);
 
 		void setStepSize(double stepSize);
 		void setTimeRest(double timeRestrictionSeconds);
@@ -80,7 +79,5 @@ namespace projectSolar::Layers
 
 		Simulation::SimulationRunner m_runner;
 		StepsDivider m_stepsDivider;
-
-		std::string saveFilePath(const std::string& saveName) const;
 	};
 }

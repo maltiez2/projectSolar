@@ -6,6 +6,7 @@
 #include "Application.h"
 #include "Windows/Windows.h"
 #include "EventManagers/ApplicationEventHandler.h"
+#include "EventManagers/SavesManager.h"
 #include "ECS/Components.h"
 
 namespace projectSolar::EventManagers
@@ -25,6 +26,9 @@ namespace projectSolar::EventManagers
 				{
 					SEND_EVENT(RESET_CAMERA, MapManager, Com::get().Map);
 				}
+
+				m_windows->get<Windows::Debug>("debug")->stepsPerFrame = eventData.stepsPerFrame;
+				m_windows->get<Windows::Debug>("debug")->secondsPerStep = eventData.secondsPerStep;
 			}
 			EVENT_DEF(GUI_UPDATED);
 			{
@@ -62,12 +66,12 @@ namespace projectSolar::EventManagers
 
 		if (m_windows->get<Windows::Debug>("debug")->saveData)
 		{
-			SEND_EVENT(SAVE_DATA, EventManagers::SimulationManager, Com::get().simulation, Components::LongTitle{ "debug_0" });
+			SEND_EVENT(SAVE, EventManagers::SavesManager, Com::get().Saves, Components::LongTitle{ "debug_0" });
 		}
 
 		if (m_windows->get<Windows::Debug>("debug")->loadData)
 		{
-			SEND_EVENT(LOAD_DATA, EventManagers::SimulationManager, Com::get().simulation, Components::LongTitle{ "debug_0" });
+			SEND_EVENT(LOAD, EventManagers::SavesManager, Com::get().Saves, Components::LongTitle{ "debug_0" });
 		}
 	}
 	

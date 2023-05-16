@@ -12,6 +12,7 @@
 #include "ECS/EntityComponentSystem.h"
 #include "EventManagers/CommunicationManager.h"
 #include "EventManagers/ApplicationEventHandler.h"
+#include "EventManagers/SavesManager.h"
 
 
 namespace projectSolar
@@ -41,6 +42,9 @@ namespace projectSolar
         m_guiLayer = m_layers->add<Layers::GuiLayer>(GUI_LAYER_ID, m_window);
         Com::get().GUI = std::make_shared<EventManagers::GuiManager>(m_guiLayer);
 
+        Com::get().Saves = std::make_shared<EventManagers::SavesManager>(m_layers);
+
+        Com::subsribeToEvent(Com::SIMULATION_UPDATED, Com::get().simulation);
         Com::subsribeToEvent(Com::SIMULATION_UPDATED, Com::get().GUI);
         Com::subsribeToEvent(Com::GUI_UPDATED, Com::get().GUI);
 
@@ -101,7 +105,7 @@ namespace projectSolar
     {
         if (m_simAttached && !m_layers->ifAttached(Application::SIM_LAYER_ID))
         {
-            m_layers->attach(Application::SIM_LAYER_ID, m_simLayer);
+            m_layers->reattach<Layers::SimLayer>(Application::SIM_LAYER_ID);
             return;
         }
 

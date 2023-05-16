@@ -23,6 +23,8 @@ namespace projectSolar::Layers
 
 		void process() override;
 		void onEvent(Graphics::InputEvent* ev) override;
+		void save(const std::string& filePath) override;
+		void load(const std::string& filePath) override;
 
 		std::shared_ptr<Graphics::GuiWindowsManager> getWindowsManager();
 

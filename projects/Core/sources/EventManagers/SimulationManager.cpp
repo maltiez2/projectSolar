@@ -2,6 +2,7 @@
 
 #include "SimulationManager.h"
 #include "CommunicationManager.h"
+#include "ECS/EntityComponentSystem.h"
 
 namespace projectSolar::EventManagers
 {
@@ -10,6 +11,10 @@ namespace projectSolar::EventManagers
 		EventHandler(threadsNumber),
 		m_layer(layer)
 	{
+		m_simulationEntity = Com::get().ECS->create();
+		Com::get().ECS->insert<Components::SimSettings>(m_simulationEntity, 1.0, 1.0);
+		Com::get().ECS->insert<Components::SimPerformance>(m_simulationEntity, 1ui64, 0.0f);
+		
 		constructSimulations();
 	}
 	SimulationManager::~SimulationManager()
@@ -47,15 +52,9 @@ namespace projectSolar::EventManagers
 			{
 				m_layer->generateDebugLayout(MOTION_SIM, GRAVITY_SIM);
 			}
-			EVENT_DEF(SAVE_DATA);
+			EVENT_DEF(SIMULATION_UPDATED);
 			{
-				std::string saveName(std::begin(eventData.saveName), std::end(eventData.saveName));
-				m_layer->saveAttached(saveName);
-			}
-			EVENT_DEF(LOAD_DATA);
-			{
-				std::string saveName(std::begin(eventData.saveName), std::end(eventData.saveName));
-				m_layer->loadAttached(saveName);
+				Com::get().ECS->replace<Components::SimPerformance>(m_simulationEntity, eventData.stepsPerFrame, eventData.secondsPerStep);
 			}
 			EVENTS_DEF_DEFAULT();
 				break;
