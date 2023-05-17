@@ -25,6 +25,8 @@ namespace projectSolar::EventManagers
 
 		std::vector<Simulation::Motion::Data>& getMotionData();
 
+		static const size_t maxObjDragged = 8;
+
 		EVENT_DECL(SIMULATION_UPDATED, 1, float secondsPerStep; size_t stepsPerFrame);
 
 		EVENT_DECL(SET_SIM_STEP, 101, double stepSize);
@@ -32,7 +34,7 @@ namespace projectSolar::EventManagers
 		EVENT_DECL(ADD_TO_SIM_ORDER, 103, size_t simulation; size_t first; size_t last);
 		EVENT_DECL(EXCLUDE_FROM_SIM_ORDER, 104, size_t simulation; size_t first; size_t last);
 		EVENT_DECL(GENERATE_DEBUG_DATA, 105);
-		EVENT_DECL(NEW_DATA_ADDED, 108, size_t totalDataSize);
+		EVENT_DECL(OBJ_DRUGGED, 106, float newX; float newY; float newZ; std::array<entt::entity, maxObjDragged> objects);
 		
 
 	private:

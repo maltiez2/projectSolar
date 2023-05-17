@@ -15,19 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sources\Old\SimulationRunner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sources\DoubleBufferedContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Old\DataManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Old\Simulations.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Old\Solvers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Simulation.h">
@@ -43,9 +31,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\Simulations\Gravity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Simulations\Collision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\Serializer.h">

@@ -17,10 +17,11 @@ namespace projectSolar::EventManagers
 		~MapManager() override;
 
 		EVENT_DECL(SIMULATION_UPDATED, 1, float secondsPerStep; uint16_t subSteps);
-		EVENT_DECL(SET_CAMERA_AT, 41, float x; float y; float z);
-		EVENT_DECL(SET_CAMERA_ON, 42, size_t id);
-		EVENT_DECL(RESET_CAMERA, 43);
-		EVENT_DECL(SET_CAMERA_SCALE, 44, float scale);
+
+		EVENT_DECL(SET_CAMERA_AT, 101, float x; float y; float z);
+		EVENT_DECL(SET_CAMERA_ON, 102, size_t id);
+		EVENT_DECL(RESET_CAMERA, 103);
+		EVENT_DECL(SET_CAMERA_SCALE, 104, float scale);
 
 	private:
 		void processEvent(uint8_t eventType, uint8_t* data) override;

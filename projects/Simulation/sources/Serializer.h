@@ -25,7 +25,7 @@ namespace projectSolar::Simulation
 		template<fileMode mode>
 		errno_t open(std::string_view filePath)
 		{
-			LOG_DEBUG("[Serializer] File open: ", filePath.data());
+			LOG_DEBUG("[Serializer] Try to open file: ", filePath.data());
 			switch (mode)
 			{
 			case fileMode::readBytes:
@@ -49,13 +49,7 @@ namespace projectSolar::Simulation
 		template<typename DataType>
 		void serialize(DoubleBuffVector<DataType>& input)
 		{
-			const auto& data = input.getData();
-			
-			size_t dataSize = sizeof(DataType);
-			size_t dataAmount = data.size();
-			std::fwrite(&dataSize, sizeof(dataSize), 1, p_file);
-			std::fwrite(&dataAmount, sizeof(dataAmount), 1, p_file);
-			std::fwrite(data.data(), dataSize, dataAmount, p_file);
+			serialize<DataType>(input.getData());
 		}
 
 		template<typename DataType>

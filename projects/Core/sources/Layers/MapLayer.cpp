@@ -17,10 +17,7 @@
 
 namespace projectSolar::Layers
 {
-    MapLayer::MapLayer()
-    {
-    }
-    void MapLayer::process() // @TODO redo all these buffers stuff
+    void MapLayer::process() // @TODO redo all this buffers stuff
     {
         updateMVP();
         glm::mat4 MVP = m_proj * m_view * m_model;
@@ -40,7 +37,6 @@ namespace projectSolar::Layers
         m_shader->setUniformMat4f("u_MVP", MVP);
         m_shader->setUniform2f("u_mouseCoords", m_mousePos.x, m_mousePos.y);
         m_shader->setUniform2f("u_mouseEpsilon", 10.0f / m_currentCamera.resolution.x, 10.0f / m_currentCamera.resolution.y);
-        //LOG_DEBUG("Mouse at: ", m_mousePos.x, " : ", m_mousePos.y);
 
         m_centralRenderer->draw(*m_vertexArray, *m_indexBuffer, *m_shader, (uint32_t)m_indices.size());
 
@@ -61,10 +57,36 @@ namespace projectSolar::Layers
             setResolution(eventData->getWidth(), eventData->getHeight());
             break;
         }
+        case projectSolar::Graphics::InputEventType::MouseButtonPressed:
+        {
+            m_objectsDrugged = m_objectsUnderMouse;
+            break;
+        }
+        case projectSolar::Graphics::InputEventType::MouseButtonReleased:
+        {
+            m_objectsDrugged.clear();
+            break;
+        }
         case projectSolar::Graphics::InputEventType::MouseMoved:
         {
             auto eventData = (projectSolar::Graphics::MouseMovedEvent*)ev;
             setMouseAt(eventData->getX(), eventData->getY());
+
+            if (m_objectsDrugged.size() > 0)
+            {
+                std::array<entt::entity, EventManagers::SimulationManager::maxObjDragged> dragged;
+
+                for (size_t i = 0; i < dragged.size(); i++)
+                {
+                    dragged[i] = entt::null;
+                }
+                for (size_t i = 0; i < std::min(dragged.size(), m_objectsDrugged.size()); i++)
+                {
+                    dragged[i] = m_objectsDrugged[i];
+                }
+
+                SEND_EVENT(OBJ_DRUGGED, EventManagers::SimulationManager, Com::get().simulation, m_mousePosInWorld.x, m_mousePosInWorld.y, m_mousePosInWorld.z, dragged);
+            }
             break;
         }
         default:
@@ -123,8 +145,9 @@ namespace projectSolar::Layers
     {
         float epsilon = 0.007f;
         glm::mat4 inversView = glm::inverse(m_view);
-        glm::vec4 mousePos = inversView * glm::vec4(m_mousePos, 0.0f, 0.0f);
+        glm::vec4 mousePos = inversView * glm::vec4(m_mousePos, 0.0f, 0.0f) + glm::vec4(m_currentCamera.position, 0.0f);
         glm::vec4 mouseEpsilon = inversView * glm::vec4(epsilon, epsilon, 0.0f, 0.0f);
+        m_mousePosInWorld = { mousePos.x, mousePos.y, mousePos.z };
 
         auto& simData = Com::get().simulation->getMotionData();
 
@@ -191,17 +214,16 @@ namespace projectSolar::Layers
             -1.0f, 1.0f
         );
 
-        m_view = glm::scale(glm::translate(glm::mat4(1.0f), -1.0f * m_currentCamera.position), glm::vec3(
+        m_view = glm::translate(glm::scale(glm::mat4(1.0f), glm::vec3(
             1.0f / (m_currentCamera.scale * m_currentCamera.resolution.x),
             1.0f / (m_currentCamera.scale * m_currentCamera.resolution.y),
             1.0f / (m_currentCamera.scale)
-        ));
+        )), -1.0f * m_currentCamera.position);
     }
     bool MapLayer::checkMouse(const float& objX, const float& objY, const float& mouseX, const float& mouseY, const float& epsilonX, const float& epsilonY) const
     {
         float diffX = std::abs(objX - mouseX);
         float diffY = std::abs(objY - mouseY);
-        //LOG_INFO((diffX * diffX / epsilonX / epsilonX + diffY * diffY / epsilonY / epsilonY));
         //return (diffX * diffX / epsilonX / epsilonX + diffY * diffY / epsilonY / epsilonY) < 1;
         return (diffX < epsilonX) && (diffY < epsilonY);
     }

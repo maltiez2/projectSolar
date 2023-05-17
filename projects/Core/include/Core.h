@@ -6,8 +6,6 @@
 // TODO
 /*
 
-# Extracting objects coordinates on the screen
-
 # ImGui overlay
 
 # ImPlot performance plot

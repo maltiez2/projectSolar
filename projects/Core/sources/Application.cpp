@@ -28,7 +28,7 @@ namespace projectSolar
         m_window = std::make_shared<Graphics::Window>();
         m_layers = std::make_shared<Layers::LayersManager>();
 
-        Com::init(16);
+        Com::init(std::thread::hardware_concurrency());
 
         Com::get().Application = m_eventHandler;
         Com::get().ECS = std::make_shared<ECS::EntityComponentSystem>();
@@ -59,11 +59,6 @@ namespace projectSolar
         EMIT_EVENT(SIMULATION_UPDATED);
         EMIT_EVENT(GUI_UPDATED);
         
-        // Temporary
-        size_t dataSize = m_simLayer->get<Simulation::Motion>(EventManagers::SimulationManager::MOTION_SIM)->data.size();
-        m_simLayer->setSimOrder(EventManagers::SimulationManager::MOTION_SIM, { { 0, dataSize - 1 } });
-        m_simLayer->setSimOrder(EventManagers::SimulationManager::GRAVITY_SIM, { { 0, dataSize - 1 } });
-        
         while (m_running)
         {
             m_window->startFrame();
@@ -73,7 +68,7 @@ namespace projectSolar
             m_window->finishFrame();
 
             processInputEvents();
-            processAppCondition();
+            processAppState();
         }
     }
 
@@ -101,7 +96,7 @@ namespace projectSolar
             eventsManager.pop();
         }
     }
-    void Application::processAppCondition()
+    void Application::processAppState()
     {
         if (m_simAttached && !m_layers->ifAttached(Application::SIM_LAYER_ID))
         {
@@ -111,7 +106,7 @@ namespace projectSolar
 
         if (!m_simAttached && m_layers->ifAttached(Application::SIM_LAYER_ID))
         {
-            m_simLayer = m_layers->detach<Layers::SimLayer>(Application::SIM_LAYER_ID);
+            m_layers->detach<Layers::SimLayer>(Application::SIM_LAYER_ID);
             return;
         }
     }

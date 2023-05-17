@@ -27,21 +27,7 @@ namespace projectSolar::Graphics
 		std::string m_title;
 		std::string m_message;
 	};
-	class DebugWindow : public GuiWindow
-	{
-	public:
-		bool showDemoWindow = false;
-		
-		DebugWindow() = default;
-		~DebugWindow() override = default;
 
-		void show() override;
-
-		float scale = 1.0f;
-		float timeScale = 1.0f;
-		bool runSimulation = false;
-		bool closeApp = false;
-	};
 	class DemoWindow : public GuiWindow
 	{
 	public:

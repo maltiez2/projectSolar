@@ -14,8 +14,8 @@ namespace projectSolar
 		explicit ApplicationEventHandler(Application& app);
 		~ApplicationEventHandler() override;
 
-		EVENT_DECL(CLOSE_WINDOW, 10);
-		EVENT_DECL(SET_RUN_SIMULATION, 11, bool run);
+		EVENT_DECL(CLOSE_WINDOW, 101);
+		EVENT_DECL(SET_RUN_SIMULATION, 102, bool run);
 
 	private:
 		Application& m_app;

@@ -16,6 +16,8 @@ namespace projectSolar::EventManagers
 		Com::get().ECS->insert<Components::SimPerformance>(m_simulationEntity, 1ui64, 0.0f);
 		
 		constructSimulations();
+
+
 	}
 	SimulationManager::~SimulationManager()
 	{
@@ -35,11 +37,6 @@ namespace projectSolar::EventManagers
 			{
 				m_layer->setTimeRest(eventData.timeRestrinctionSeconds);
 			}
-			EVENT_DEF(NEW_DATA_ADDED);
-			{
-				m_layer->setSimOrder(MOTION_SIM, { {0, eventData.totalDataSize - 1} });
-				m_layer->setSimOrder(GRAVITY_SIM, { {0, eventData.totalDataSize - 1} });
-			}
 			EVENT_DEF(ADD_TO_SIM_ORDER);
 			{
 				m_layer->addToSimOrder(eventData.simulation, { eventData.first, eventData.last });
@@ -54,7 +51,25 @@ namespace projectSolar::EventManagers
 			}
 			EVENT_DEF(SIMULATION_UPDATED);
 			{
-				Com::get().ECS->replace<Components::SimPerformance>(m_simulationEntity, eventData.stepsPerFrame, eventData.secondsPerStep);
+				if (Com::get().ECS->exists(m_simulationEntity))
+				{
+					Com::get().ECS->replace<Components::SimPerformance>(m_simulationEntity, eventData.stepsPerFrame, eventData.secondsPerStep);
+				}
+			}
+			EVENT_DEF(OBJ_DRUGGED);
+			{
+				LOG_DEBUG("Obj drugged at: ", eventData.newX, " : ", eventData.newY, " : ", eventData.newZ);
+
+				auto& motionData = Com::get().ECS->get<Components::Dynamic>(eventData.objects[0]);
+				auto& data = m_layer->get<Simulation::Motion>(MOTION_SIM)->data.getData();
+				auto& buffer = m_layer->get<Simulation::Motion>(MOTION_SIM)->data.getBuffer();
+				
+				std::unique_lock wirteLock(m_layer->m_dataMutex);
+				data[motionData.motionDataIndex].position = { eventData.newX, eventData.newY, eventData.newZ };
+				data[motionData.motionDataIndex].velocity = { 0.0, 0.0, 0.0 };
+				buffer[motionData.motionDataIndex].position = { eventData.newX, eventData.newY, eventData.newZ };
+				buffer[motionData.motionDataIndex].velocity = { 0.0, 0.0, 0.0 };
+				break;
 			}
 			EVENTS_DEF_DEFAULT();
 				break;
@@ -66,8 +81,10 @@ namespace projectSolar::EventManagers
 		auto motionSim = m_layer->add<Simulation::Motion>(MOTION_SIM, Simulation::Motion::Params());
 		auto gravSim = m_layer->add<Simulation::Gravity>(GRAVITY_SIM, Simulation::Gravity::Params(), &motionSim->data);
 
-		m_layer->setSimOrder(MOTION_SIM, { {} });
-		m_layer->setSimOrder(GRAVITY_SIM, { {} });
+		std::vector<std::vector<Simulation::Task>> emptyOrder = { {} };
+
+		m_layer->setSimOrder(MOTION_SIM, {});
+		m_layer->setSimOrder(GRAVITY_SIM, {});
 	}
 
 	std::vector<Simulation::Motion::Data>& SimulationManager::getMotionData()

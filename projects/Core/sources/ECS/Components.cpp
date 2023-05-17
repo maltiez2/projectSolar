@@ -6,6 +6,7 @@
 namespace projectSolar::Components
 {
 	COMPONENT_IMPL(Game);
+	COMPONENT_IMPL(Player);
 	COMPONENT_IMPL(Object);
 	COMPONENT_IMPL(GameSettings);
 	COMPONENT_IMPL(VideoSettings);
@@ -20,6 +21,7 @@ namespace projectSolar::Components
 	void init()
 	{
 		COMPONENT_INIT(Game);
+		COMPONENT_INIT(Player);
 		COMPONENT_INIT(Object);
 		COMPONENT_INIT(GameSettings);
 		COMPONENT_INIT(VideoSettings);

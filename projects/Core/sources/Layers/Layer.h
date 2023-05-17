@@ -34,7 +34,7 @@ namespace projectSolar::Layers
 
 		void process();
 		bool onEvent(Graphics::InputEvent* ev);
-		void save(const std::string& filePath);
-		void load(const std::string& filePath);
+		void save(const std::string& filePath) const;
+		void load(const std::string& filePath) const;
 	};
 }

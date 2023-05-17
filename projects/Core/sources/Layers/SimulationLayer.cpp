@@ -16,9 +16,6 @@ namespace projectSolar::Layers
 	{
 
 	}
-	SimLayer::~SimLayer()
-	{
-	}
 
 	void SimLayer::save(const std::string& filePath)
 	{
@@ -83,8 +80,6 @@ namespace projectSolar::Layers
 		m_lastStepTime = m_stepsDivider.onRunEnd();
 
 		EMIT_EVENT(SIMULATION_UPDATED, m_lastStepTime, m_lastStepsNumber);
-
-		//LOG_DEBUG("[SimLayer] Steps per frame: ", m_lastStepsNumber, ", milliseconds per step: ", m_lastStepTime * 1000.0, ", milliseconds per frame: ", (float)m_lastStepsNumber * m_lastStepTime * 1000.0);
 	}
 	void SimLayer::onEvent(Graphics::InputEvent* ev)
 	{
@@ -99,6 +94,14 @@ namespace projectSolar::Layers
 		auto& data = motionSim->data;
 		data.clear();
 
+		auto ECS = Com::get().ECS;
+		auto view = ECS->getView<Components::Dynamic>();
+		for (auto& entity : view)
+		{
+			ECS->destroy(entity);
+		}
+
+		
 		const size_t objectsNumber = 36;
 		const double bigMass = 1e0;
 		const double smallMass = 1e-3;
@@ -111,8 +114,7 @@ namespace projectSolar::Layers
 		Eigen::Vector3d rotationAxis{ 0, 0, 1 };
 		Eigen::Vector3d nullVector(0.0, 0.0, 0.0);
 
-		auto ECS = Com::get().ECS;
-
+		
 		data.reserve(objectsNumber + 2);
 
 		data.addElement({ bigMass, nullVector, nullVector, nullVector });
@@ -126,6 +128,9 @@ namespace projectSolar::Layers
 		ECS->insert<Components::CelestialObject>(redObj, Components::LongTitle{ "Red" });
 		ECS->insert<Components::Dynamic>(redObj, 1ui64);
 		ECS->insert<Components::MapObject>(redObj, 1ui32, 1.0f, 0.0f, 0.0f, 1.0f);
+		ECS->insert<Components::Player>(redObj);
+
+		LOG_DEBUG("Player: ", (int)redObj);
 
 		for (size_t index = 0; index < objectsNumber; index++)
 		{
@@ -136,8 +141,8 @@ namespace projectSolar::Layers
 			ECS->insert<Components::MapObject>(justObj, (uint32_t)index, 1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
-		setSimOrder(motionId, { {0, objectsNumber + 1} });
-		setSimOrder(gravityId, { {0, objectsNumber + 1} });
+		setSimOrder(motionId, { {1, objectsNumber + 1} });
+		setSimOrder(gravityId, { {1, objectsNumber + 1} });
 
 		EMIT_EVENT(SIMULATION_UPDATED);
 	}

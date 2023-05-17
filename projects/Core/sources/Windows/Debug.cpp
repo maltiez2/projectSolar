@@ -16,6 +16,7 @@ namespace projectSolar::Windows
     void Debug::show()
     {
         ImGui::Begin("Debug", &showFlag);
+        ImGui::Text("Objects are draggable");
         ImGui::SliderFloat("Scale", &scale, 0.2f, 20.0f);
         ImGui::Checkbox("Follow player", &followPlayer);
         ImGui::Checkbox("Run simulation", &runSimulation);

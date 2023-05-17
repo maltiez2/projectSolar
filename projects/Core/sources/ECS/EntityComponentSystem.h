@@ -11,80 +11,7 @@
 
 
 namespace projectSolar::ECS
-{	
-	template<typename Component>
-	class SingleEntityView
-	{
-	public:
-		SingleEntityView(entt::registry& registry) :
-			m_view(registry.view<Component>()),
-			m_registry(registry)
-		{
-		}
-		~SingleEntityView() = default;
-
-		decltype(auto) begin()
-		{
-			return m_view.begin();
-		}
-		decltype(auto) end()
-		{
-			return m_view.end();
-		}
-
-		const Component& get(entt::entity entity)
-		{
-			LOG_ASSERT(m_registry.exists(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not exists");
-			LOG_ASSERT(m_registry.has<Component>(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not have component: ", Component::TYPE);
-			std::shared_lock lock(Component::mutex());
-			return m_view.get<Component>(entity);
-		}
-
-	private:
-		const entt::view<Component> m_view;
-		entt::registry m_registry;
-	};
-
-	template<typename Component_0, typename Component_1, typename ... Components>
-	class MultippleEntityView
-	{
-	public:
-		MultippleEntityView(entt::registry& registry) :
-			m_view(registry.view<Component_0, Component_1, Components...>()),
-			m_registry(registry)
-		{
-		}
-		~MultippleEntityView() = default;
-
-		decltype(auto) begin()
-		{
-			return m_view.begin();
-		}
-		decltype(auto) end()
-		{
-			return m_view.end();
-		}
-
-		template<typename Component>
-		const Component& get(entt::entity entity) // Thread unsafe, call under specific component locks
-		{
-			LOG_ASSERT(m_registry.exists(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not exists");
-			LOG_ASSERT(m_registry.has<Component>(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not have component: ", Component::TYPE);
-			return m_view.get<Component>(entity);
-		}
-		template<typename Component_f_0, typename Component_f_1, typename ... Components_f>
-		decltype(auto) get(entt::entity entity) // Thread unsafe, call under specific component locks
-		{
-			LOG_ASSERT(m_registry.exists(entity), "[EntityManager] Entity '", (uint32_t)entity, "' does not exists");
-			return m_view.get<Component_f_0, Component_f_1, Components_f...>(entity);
-		}
-
-	private:
-		entt::basic_view<Component_0, Component_1, Components...> m_view;
-		entt::registry m_registry;
-	};
-
-	
+{
 	class EntityComponentSystem
 	{
 	public:
@@ -207,15 +134,14 @@ namespace projectSolar::ECS
 			return m_registry;
 		}
 		template<typename Component>
-		SingleEntityView<Component> getView()
+		decltype(auto) getView()
 		{
-			return SingleEntityView<Component>(m_registry);
+			return m_registry.view<Component>();
 		}
 		template<typename Component_0, typename Component_1, typename ... Components>
 		decltype(auto) getView()
 		{
 			return m_registry.view<Component_0, Component_1, Components...>();
-			//return MultippleEntityView<Component_0, Component_1, Components...>(m_registry);
 		}
 
 	private:

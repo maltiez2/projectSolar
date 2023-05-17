@@ -20,7 +20,14 @@ namespace projectSolar::EventManagers
 			{
 				if (m_windows->get<Windows::Debug>("debug")->followPlayer)
 				{
-					SEND_EVENT(SET_CAMERA_ON, MapManager, Com::get().Map, 1);
+					auto view = Com::get().ECS->getView<Components::Player>();
+
+					for (auto entity : view)
+					{
+						size_t motionDataIndex = Com::get().ECS->get<Components::Dynamic>(entity).motionDataIndex;
+						SEND_EVENT(SET_CAMERA_ON, MapManager, Com::get().Map, motionDataIndex);
+						break;
+					}
 				}
 				else
 				{

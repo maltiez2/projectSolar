@@ -54,7 +54,7 @@ namespace projectSolar
 
 		void init();
 		void processInputEvents();
-		void processAppCondition();
+		void processAppState();
 
 		friend ApplicationEventHandler;
 	};

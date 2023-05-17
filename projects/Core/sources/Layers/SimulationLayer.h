@@ -7,6 +7,11 @@
 #include <queue>
 #include <shared_mutex>
 
+namespace projectSolar::EventManagers
+{
+	class SimulationManager;
+}
+
 namespace projectSolar::Layers
 {
 	class StepsDivider
@@ -50,7 +55,7 @@ namespace projectSolar::Layers
 		};
 		
 		explicit SimLayer(const Params& params);
-		~SimLayer() override;
+		~SimLayer() override = default;
 
 		void save(const std::string& filePath) override;
 		void load(const std::string& filePath) override;
@@ -79,5 +84,7 @@ namespace projectSolar::Layers
 
 		Simulation::SimulationRunner m_runner;
 		StepsDivider m_stepsDivider;
+
+		friend class EventManagers::SimulationManager;
 	};
 }

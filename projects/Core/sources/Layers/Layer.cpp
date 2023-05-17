@@ -28,7 +28,7 @@ namespace projectSolar::Layers
         }
         return false;
     }
-    void LayersManager::save(const std::string& filePath)
+    void LayersManager::save(const std::string& filePath) const
     {
 
         for (const auto& [id, layer] : m_registered)
@@ -36,7 +36,7 @@ namespace projectSolar::Layers
             layer->save(std::format("{}.{}", filePath, id));
         }
     }
-    void LayersManager::load(const std::string& filePath)
+    void LayersManager::load(const std::string& filePath) const
     {
         for (const auto& [id, layer] : m_registered)
         {

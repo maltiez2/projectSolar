@@ -75,6 +75,7 @@ namespace projectSolar::Simulation
 	}
 	void Gravity::swapData()
 	{
+		// Not responsible for swapping
 	}
 	void Gravity::save(Serializer& serializer)
 	{

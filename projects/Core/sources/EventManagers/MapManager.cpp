@@ -12,7 +12,7 @@ namespace projectSolar::EventManagers
 			EVENTS_DEF_UNKNOWN();
 			EVENT_DEF(SIMULATION_UPDATED);
 			{
-				//
+				// Unused currently
 			}
 			EVENT_DEF(SET_CAMERA_AT);
 			{

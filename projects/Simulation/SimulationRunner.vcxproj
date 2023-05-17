@@ -150,15 +150,10 @@
   <ItemGroup>
     <ClInclude Include="sources\pch.h" />
     <ClInclude Include="sources\Serializer.h" />
-    <ClInclude Include="sources\Simulations\Collision.h" />
     <ClInclude Include="sources\Simulations\Gravity.h" />
     <ClInclude Include="sources\Simulations\Motion.h" />
     <ClInclude Include="sources\SimulationRunner.h" />
-    <ClInclude Include="sources\Old\DataManager.h" />
-    <ClInclude Include="sources\Old\Simulations.h" />
-    <ClInclude Include="sources\Old\SimulationRunner.h" />
     <ClInclude Include="sources\DoubleBufferedContainer.h" />
-    <ClInclude Include="sources\Old\Solvers.h" />
     <ClInclude Include="include\Simulation.h" />
   </ItemGroup>
   <ItemGroup>

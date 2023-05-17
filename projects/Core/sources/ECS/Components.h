@@ -13,6 +13,7 @@
 
 
 #define ECS_ALL_COMPONENTS	Components::Game,\
+							Components::Player,\
 							Components::Object,\
 							Components::GameSettings,\
 							Components::VideoSettings,\
@@ -51,6 +52,8 @@ namespace projectSolar
 		
 		// General components
 		COMPONENT_DECL(Game);
+
+		COMPONENT_DECL(Player);
 
 		COMPONENT_DECL(Object,
 			UUIDv4::UUID id;

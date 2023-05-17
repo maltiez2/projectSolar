@@ -163,7 +163,7 @@ void Window::setupImGui(const GuiProperties& properties)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.IniFilename = nullptr;
+	//io.IniFilename = nullptr; // Uncomment to disable saving gui configuration
 
     ImGui::StyleColorsDark();
 

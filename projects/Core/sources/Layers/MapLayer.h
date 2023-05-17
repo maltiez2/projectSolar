@@ -24,7 +24,7 @@ namespace projectSolar::Layers
 	class MapLayer : public Layer
 	{
 	public:
-		MapLayer();
+		MapLayer() = default;
 		~MapLayer() override = default;
 
 		void process() override;
@@ -84,6 +84,8 @@ namespace projectSolar::Layers
 		glm::vec2 m_mousePos = glm::vec2(0, 0);
 
 		std::vector<entt::entity> m_objectsUnderMouse;
+		std::vector<entt::entity> m_objectsDrugged;
+		glm::vec3 m_mousePosInWorld = glm::vec3(0, 0, 0);
 
 		void updateData();
 		void updateMVP();

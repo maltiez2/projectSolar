@@ -4,7 +4,6 @@
 
 #include <memory>
 
-
 #define EMIT_EVENT(eventName, ...) SEND_EVENT(eventName, Com, &Com::get(), __VA_ARGS__)
 
 
@@ -32,7 +31,6 @@ namespace projectSolar
 	class CommunicationManager : public Events::SubscriptionManager
 	{
 	public:
-		// EVENTS
 		EVENT_DECL(SIMULATION_UPDATED, 1, float secondsPerStep; size_t stepsPerFrame);
 		EVENT_DECL(GUI_DRAWN, 2);
 		EVENT_DECL(MAP_DRAWN, 3);
@@ -40,7 +38,6 @@ namespace projectSolar
 		EVENT_DECL(COMPONENT_CREATED, 5, uint16_t componentType; uint32_t entity);
 		EVENT_DECL(COMPONENT_UPDATED, 6, uint16_t componentType; uint32_t entity);
 		EVENT_DECL(COMPONENT_REMOVED, 7, uint16_t componentType; uint32_t entity);
-		//
 		
 		std::shared_ptr<ApplicationEventHandler> Application;
 		std::shared_ptr<ECS::EntityComponentSystem> ECS;
