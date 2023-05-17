@@ -1,181 +1,99 @@
 #include "pch.h"
 
 #include "SimulationRunner.h"
-
+#include "Serializer.h"
+#include "Logger.h"
 
 namespace projectSolar::Simulation
 {
-	// DATA MANAGER
-	void DataManager::swap()
+	size_t Task::size() const
 	{
-		attractorsData.swap();
-		attractantsData.swap();
-		propulsedData.swap();
-	}
-	errno_t DataManager::save(std::string_view filePath)
-	{
-		Serializer serializer;
-		errno_t error = serializer.open<Serializer::fileMode::writeBytes>(filePath);
-		if (error)
+		if (start > last)
 		{
-			LOG_ERROR("[DataManager] Error on opening file for writing: ", filePath.data());
-			return error;
+			return 0;
 		}
-		serializer.serialize(attractorsData);
-		serializer.serialize(attractantsData);
-		serializer.serialize(propulsedData);
-		serializer.close();
-		return 0;
+
+		return last - start + 1;
 	}
-	errno_t DataManager::load(std::string_view filePath)
-	{
-		Serializer serializer;
-		errno_t error = serializer.open<Serializer::fileMode::readBytes>(filePath);
-		if (error)
-		{
-			LOG_ERROR("[DataManager] Error on opening file for reading: ", filePath.data());
-			return error;
-		}
-		serializer.deserialize(attractorsData);
-		serializer.deserialize(attractantsData);
-		serializer.deserialize(propulsedData);
-		serializer.close();
-		return 0;
-	}
-
-	// SIMULATION
-	BaseSimulation::BaseSimulation(DataManager& dataManager) :
-		m_simulationData(dataManager)
-	{
-	}
-
-	NBodySimulation::NBodySimulation(DataManager& dataManager) :
-		BaseSimulation(dataManager)
-	{
-	}
-	void NBodySimulation::run(SimulationParams params)
-	{
-		PROFILE_FUNCTION();
-		
-		auto partitioner = oneapi::tbb::affinity_partitioner();
-
-		uint8_t splittingFactor = params.splittingFactor;
-		uint8_t concurrencyFactor = std::max(oneapi::tbb::info::default_concurrency() - params.unusedCores, 1);
-		auto tbbGlobalControl = tbb::global_control(tbb::global_control::max_allowed_parallelism, concurrencyFactor);
-
-		oneapi::tbb::task_arena arena(concurrencyFactor);
-		const size_t attractorsAmount = m_simulationData.attractorsData.size();
-		const size_t attractantsAmount = m_simulationData.attractantsData.size();
-		const size_t propulsedAmount = m_simulationData.propulsedData.size();
-
-		size_t attractantsGrainSize = std::max(attractantsAmount / concurrencyFactor / splittingFactor, (size_t)1);
-		size_t attractorsGrainSize = std::max(attractorsAmount / concurrencyFactor / std::max(splittingFactor / 3, 3), (size_t)1);
-		size_t propulsedGrainSize = std::max(propulsedAmount / concurrencyFactor / std::max(splittingFactor / 3, 3), (size_t)1);
-
-		oneapi::tbb::parallel_for(
-			oneapi::tbb::blocked_range<size_t>(0, attractantsAmount, attractantsGrainSize),
-			SolverParallelWrapper<AttractantData, AttractorData, EulerSolver>(
-				{ params.gravitationalConstant, params.stepSize },
-				m_simulationData.attractantsData,
-				m_simulationData.attractorsData,
-				false
-				),
-			partitioner
-		);
-
-		oneapi::tbb::parallel_for(
-			oneapi::tbb::blocked_range<size_t>(0, attractorsAmount, attractorsGrainSize),
-			SolverParallelWrapper<AttractorData, AttractorData, EulerSolver>(
-				{ params.gravitationalConstant, params.stepSize },
-				m_simulationData.attractorsData,
-				m_simulationData.attractorsData,
-				true
-				),
-			partitioner
-		);
-
-		oneapi::tbb::parallel_for(
-			oneapi::tbb::blocked_range<size_t>(0, propulsedAmount, propulsedGrainSize),
-			SolverParallelWrapper<PropulsedData, AttractorData, EulerSolverPropulsed>(
-				{ params.gravitationalConstant, params.stepSize },
-				m_simulationData.propulsedData,
-				m_simulationData.attractorsData,
-				false
-				),
-			partitioner
-		);
-	}
-
-	// RUNNER
+	
+	
 	SimulationRunner::SimulationRunner() :
-		m_simulation_nBody(m_simulationData)
+		m_workersBarrier(m_concurrency + 1)
 	{
-	}
-	float SimulationRunner::run(const Params& params)
-	{
-		uint16_t stepsNumber = m_frameRateController.onRunStart(params);
-
-		for (uint16_t index = 0; index < stepsNumber; index++)
+		for (size_t i = 0; i < m_concurrency; i++)
 		{
-			m_simulation_nBody.run({ params.gravitationalConstant, params.stepSize / stepsNumber, 5, 1 });
-			m_simulationData.swap();
+			m_workers.emplace_back(&SimulationRunner::worker, this, i);
+		}
+	}
+	SimulationRunner::~SimulationRunner()
+	{
+		m_killThreads = true;
+		m_workersBarrier.arrive_and_wait();
+		m_workersBarrier.arrive_and_wait();
+		for (size_t i = 0; i < m_workers.size(); i++)
+		{
+			m_workers[i].join();
+		}
+	}
+
+	void SimulationRunner::run(const RunParams& params, std::shared_ptr<Simulation> simulation, const std::vector<Task>& order)
+	{
+		m_currentSimulation = simulation;
+		distributeTasks(params, order);
+		m_workersBarrier.arrive_and_wait();
+		m_workersBarrier.arrive_and_wait();
+	}
+	void SimulationRunner::worker(uint8_t id)
+	{
+		Task task;
+		while (!m_killThreads)
+		{
+			m_workersBarrier.arrive_and_wait();
+
+			while (true)
+			{
+				std::unique_lock lock(m_queueMutex);
+				if (m_taskQueue.empty())
+				{
+					lock.unlock();
+					break;
+				}
+
+				task = m_taskQueue.front();
+				m_taskQueue.pop();
+				lock.unlock();
+
+				m_currentSimulation->run(task);
+			}
+			
+			m_workersBarrier.arrive_and_wait();
+		}
+	}
+	void SimulationRunner::distributeTasks(const RunParams& params, std::vector<Task> order)
+	{
+		size_t totalSize = 0;
+		for (const Task& part : order)
+		{
+			totalSize += part.last - part.start + 1;
+		}
+		size_t taskSize = totalSize / params.granularity / m_concurrency;
+		if (taskSize < params.minimumSize)
+		{
+			taskSize = params.minimumSize;
 		}
 
-		float secondsElapsed = m_frameRateController.onRunEnd();
-
-		return secondsElapsed;
-	}
-	DataManager& SimulationRunner::getData()
-	{
-		return m_simulationData;
-	}
-
-	uint16_t SimulationRunner::frameRateConsistensyController::onRunStart(const SimulationRunner::Params& runnerParams)
-	{
-		m_startTimepoint = std::chrono::steady_clock::now();
-		m_currentRunnerParams = runnerParams;
-		
-		if (m_results.empty())
+		for (Task& part : order)
 		{
-			LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunStart - defaultStepsNumber: ", m_currentRunnerParams.defaultStepsNumber);
-			m_currentStepNumber = m_currentRunnerParams.defaultStepsNumber;
-			return m_currentRunnerParams.defaultStepsNumber;
+			while (part.size() >= taskSize)
+			{
+				m_taskQueue.emplace(part.start, part.start + taskSize - 1);
+				part.start = part.start + taskSize;
+			}
+
+			if (part.size() > 0)
+			{
+				m_taskQueue.push(part);
+			}
 		}
-
-		float frameRateDiffFactor = (float)m_currentRunnerParams.framesPerSecond / (float)m_results.back().framesPerSecond;
-		float stepsDelta = m_results.back().excessTime * m_results.back().stepsPerSecond;
-		float stepsNumber = stepsDelta + m_results.back().stepsNumber + m_currentRunnerParams.stepsDiffBias * std::abs(stepsDelta);
-		float reducedStepsNumber = stepsNumber * frameRateDiffFactor;
-
-		LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunStart - stepsNumber: ", std::max((uint16_t)reducedStepsNumber, (uint16_t)1), ", stepsDelta: ", stepsDelta);
-
-		m_currentStepNumber = std::min(std::max((uint16_t)reducedStepsNumber, (uint16_t)1), (uint16_t)(m_results.back().stepsNumber * m_maxGrowFactor));
-		return m_currentStepNumber;
-	}
-	float SimulationRunner::frameRateConsistensyController::onRunEnd()
-	{
-		auto endTimepoint = std::chrono::steady_clock::now();
-
-		uint64_t start = std::chrono::time_point_cast<std::chrono::nanoseconds>(m_startTimepoint).time_since_epoch().count();
-		uint64_t end = std::chrono::time_point_cast<std::chrono::nanoseconds>(endTimepoint).time_since_epoch().count();
-
-		float frameTimeSeconds = (float)(end - start) * 1e-9f;
-		float desiredFrameTime = m_currentRunnerParams.framePeriodFactor / m_currentRunnerParams.framesPerSecond;
-		
-		if (m_results.size() > m_queieSize)
-		{
-			m_results.pop();
-		}
-
-		LOG_DEBUG("[SimulationRunner] [frameRateConsistensyController] onRunEnd - frameTimeSeconds: ", frameTimeSeconds, ", desiredFrameTime: ", desiredFrameTime);
-
-		m_results.emplace(
-			m_currentStepNumber,
-			m_currentRunnerParams.framesPerSecond,
-			m_currentStepNumber / frameTimeSeconds,
-			desiredFrameTime - frameTimeSeconds
-		);
-		
-		return frameTimeSeconds;
 	}
 }

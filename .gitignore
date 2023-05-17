@@ -402,3 +402,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+!vendor/*
+!vendor/glew/lib/Release/x64/glew32s.lib

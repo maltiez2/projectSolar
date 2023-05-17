@@ -3,7 +3,7 @@
 #include "Texture.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 Texture::Texture(const std::string& path) :
 	m_filePath(path)

@@ -6,10 +6,6 @@
 
 // External vendor
 #include <Eigen/Eigen>
-#include <oneapi/tbb.h>
-#include <oneapi/tbb/info.h>
-#include <oneapi/tbb/parallel_for.h>
-#include <oneapi/tbb/task_arena.h>
 
 // STL
 #include <string>
@@ -28,3 +24,8 @@
 #include <stdio.h>
 #include <cmath>
 #include <chrono>
+#include <shared_mutex>
+#include <barrier>
+#include <memory>
+#include <thread>
+#include <mutex>

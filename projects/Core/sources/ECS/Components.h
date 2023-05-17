@@ -1,11 +1,28 @@
 #pragma once
 
-#include <Eigen/Core>
-
 #include <EnTT/entt.hpp>
+#include <uuid_v4/uuid_v4.h>
+#include <shared_mutex>
+#include <array>
 
-#define ECS_ALL_COMPONENTS	Components::Universe,	Components::Object,		Components::Attractor,\
-							Components::Attractant,	Components::Propulsed
+#define PPCAT_NX(A, B) A ## B
+#define PPCAT(A, B) PPCAT_NX(A, B)
+#define COMPONENT_DECL(name, ...) struct name {enum : uint16_t { TYPE = __LINE__ }; static std::shared_mutex& mutex(); __VA_ARGS__}
+#define COMPONENT_IMPL(name) std::shared_mutex& name::mutex() {static std::shared_mutex mutex; return mutex;}
+#define COMPONENT_INIT(name) name::mutex()
+
+
+#define ECS_ALL_COMPONENTS	Components::Game,\
+							Components::Player,\
+							Components::Object,\
+							Components::GameSettings,\
+							Components::VideoSettings,\
+							Components::SimSettings,\
+							Components::SimPerformance,\
+							Components::MapObject,\
+							Components::CelestialObject,\
+							Components::Dynamic
+
 
 namespace projectSolar
 {
@@ -27,31 +44,63 @@ namespace projectSolar
 		};
 	}
 
-	namespace Components
+	namespace Components // Do not forget to add new components to Components.cpp
 	{
-		struct Universe
-		{
-			double gravitationalConstant;
-		};
+		using LongTitle = std::array<char, 128>;
+		using ShortTitle = std::array<char, 16>;
 		
-		struct Object
-		{
-			size_t parent;
-		};
+		
+		// General components
+		COMPONENT_DECL(Game);
 
-		struct Attractor
-		{
-			size_t dataIndex;
-		};
+		COMPONENT_DECL(Player);
 
-		struct Attractant
-		{
-			size_t dataIndex;
-		};
+		COMPONENT_DECL(Object,
+			UUIDv4::UUID id;
+		);
 
-		struct Propulsed
-		{
-			size_t dataIndex;
-		};
+		COMPONENT_DECL(GameSettings,
+			float simulationLoadFactor;
+			uint16_t simulationInitialStepsNumber;
+			float simulationStepsAdjustBias;
+		);
+
+		COMPONENT_DECL(VideoSettings,
+			uint32_t width;
+			uint32_t height;
+			bool fullScreen;
+			uint8_t targetFPS;
+		);
+
+		COMPONENT_DECL(SimSettings,
+			double gravitationalConstant;
+			double timeStep;
+		);
+
+		COMPONENT_DECL(SimPerformance,
+			size_t stepsPerFrame;
+			float secondsPerStep;
+		);
+
+		// Map objects
+		COMPONENT_DECL(MapObject,
+			uint32_t id;
+			float colorR;
+			float colorG;
+			float colorB;
+			float colorA;
+		);
+
+		// Gravitational objects
+		COMPONENT_DECL(CelestialObject,
+			LongTitle name;
+		);
+
+		COMPONENT_DECL(Dynamic,
+			size_t motionDataIndex;
+		);
+
+		// Initializes static variables inside components
+		void init();
 	}
 }

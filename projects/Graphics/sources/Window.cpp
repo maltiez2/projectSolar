@@ -1,19 +1,36 @@
 #include "pch.h"
 
 #include "Window.h"
+#include "Input/Input.h"
+
+#include "../vendor/opengl/imgui_impl_glfw.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 static void glfwErrorCallback(int error, const char* description)
 {
 	LOG_ERROR("[OpenGL] (", error, "): ", description);
 }
 
-Window::Window(const WindowProperties& properties) :
-	m_eventsManager(this),
-	m_inputManager(this)
+static void glErrorCallback(
+	GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam
+)
 {
+	LOG_ERROR("[OpenGL] (", source,":", type,":", id, "): ", message);
+}
+
+Window::Window(const WindowProperties& properties)
+{
+	m_eventsManager = std::make_shared<InputEventsManager>(this);
+	m_inputManager = std::make_shared<InputManager>(this);
+	
 	init(properties);
 }
 Window::~Window()
@@ -23,9 +40,18 @@ Window::~Window()
 
 void Window::startFrame()
 {
-	glfwPollEvents();
 	glfwSwapBuffers(m_window);
 	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void projectSolar::Graphics::Window::finishFrame()
+{
+	glfwPollEvents();
+}
+
+bool projectSolar::Graphics::Window::ifClose()
+{
+	return glfwWindowShouldClose(m_window);
 }
 
 uint32_t Window::getWidth() const
@@ -35,6 +61,12 @@ uint32_t Window::getWidth() const
 uint32_t Window::getHeight() const
 {
 	return m_properties.height;
+}
+uint32_t Window::getFPS() const
+{
+	GLFWmonitor* monitor = getMonitor();
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	return mode->refreshRate;
 }
 GLFWwindow* Window::getNativeWindow()
 {
@@ -46,11 +78,11 @@ bool Window::isVSync() const
 }
 InputEventsManager& Window::getEventsManager()
 {
-	return m_eventsManager;
+	return *m_eventsManager;
 }
 InputManager& Window::getInputManager()
 {
-	return m_inputManager;
+	return *m_inputManager;
 }
 
 void Window::setVSync(bool enabled)
@@ -64,16 +96,8 @@ void Window::setFont(const std::string& font)
 }
 void Window::setSize(uint32_t width, uint32_t height)
 {
-	int currentWidth;
-	int currentHeight;
-	glfwGetWindowSize(m_window, &currentWidth, &currentHeight);
-	if (width != currentWidth || height != currentHeight)
-	{
-		glfwSetWindowSize(m_window, width, height);
-	}
 	m_properties.width = width;
 	m_properties.height = height;
-	LOG_DEBUG("Set size");
 }
 
 void Window::init(const WindowProperties& properties)
@@ -81,8 +105,7 @@ void Window::init(const WindowProperties& properties)
 	LOG_DEBUG("Window initialization started");
 	
 	m_properties = properties;
-	m_properties.eventsManager = &m_eventsManager;
-
+	m_properties.eventsManager = std::to_address(m_eventsManager);
 	glfwSetErrorCallback(glfwErrorCallback);
 	int success = glfwInit();
 	LOG_ASSERT(success, "Failed to initialize GLFW")
@@ -108,7 +131,9 @@ void Window::init(const WindowProperties& properties)
 	LOG_ASSERT(error == GLEW_OK, "Error on glew init: ", error)
 	LOG_INFO("GL version: ", (char*)glGetString(GL_VERSION));
 
-	m_eventsManager.setupCallbacks(); // need to be before setupImGui
+	glDebugMessageCallback(glErrorCallback, this);
+
+	m_eventsManager->setupCallbacks(); // need to be before setupImGui
 	setupImGui(properties.guiProperties);
 
 	glEnable(GL_BLEND);
@@ -138,7 +163,7 @@ void Window::setupImGui(const GuiProperties& properties)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.IniFilename = nullptr;
+	//io.IniFilename = nullptr; // Uncomment to disable saving gui configuration
 
     ImGui::StyleColorsDark();
 
@@ -154,18 +179,7 @@ GLFWmonitor* Window::setUpFullscreen()
 		return nullptr;
 	}
 	
-	int count;
-	GLFWmonitor* monitor;
-	GLFWmonitor** monitors = glfwGetMonitors(&count);
-	if (m_properties.monitor < 0 || m_properties.monitor >= count)
-	{
-		monitor = glfwGetPrimaryMonitor();
-	}
-	else
-	{
-		monitor = monitors[m_properties.monitor];
-	}
-
+	GLFWmonitor* monitor = getMonitor();
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
@@ -177,4 +191,17 @@ GLFWmonitor* Window::setUpFullscreen()
 	m_properties.height = mode->height;
 
 	return monitor;
+}
+GLFWmonitor* Window::getMonitor() const
+{
+	int count;
+	GLFWmonitor** monitors = glfwGetMonitors(&count);
+	if (m_properties.monitor < 0 || m_properties.monitor >= count)
+	{
+		return glfwGetPrimaryMonitor();
+	}
+	else
+	{
+		return monitors[m_properties.monitor];
+	}
 }

@@ -8,7 +8,7 @@
 #include "MouseCodes.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 // InputEvent
 std::string InputEvent::toString() const
@@ -23,20 +23,20 @@ bool InputEvent::isInCategory(InputEventCategory category) const
 
 // APPLICATION
 // WindowResizeEvent
-projectSolar::WindowResizeEvent::WindowResizeEvent(uint32_t width, uint32_t height) :
+WindowResizeEvent::WindowResizeEvent(uint32_t width, uint32_t height) :
 	m_width(width),
 	m_height(height)
 {
 }
-uint32_t projectSolar::WindowResizeEvent::getWidth() const
+uint32_t WindowResizeEvent::getWidth() const
 {
 	return m_width;
 }
-uint32_t projectSolar::WindowResizeEvent::getHeight() const
+uint32_t WindowResizeEvent::getHeight() const
 {
 	return m_height;
 }
-std::string projectSolar::WindowResizeEvent::toString() const
+std::string WindowResizeEvent::toString() const
 {
 	std::stringstream ss;
 	ss << "WindowResizeEvent: " << m_width << ", " << m_height;
@@ -98,11 +98,11 @@ EVENT_CLASS_TYPE_IMPLEMENTATION(MouseScrolledEvent, MouseScrolled)
 EVENT_CLASS_CATEGORY_IMPLEMENTATION(MouseScrolledEvent, EventCategoryMouse | EventCategoryInput)
 
 // MouseButtonEvent
-projectSolar::MouseCode MouseButtonEvent::getMouseButton() const
+MouseCode MouseButtonEvent::getMouseButton() const
 {
 	return m_button;
 }
-MouseButtonEvent::MouseButtonEvent(const projectSolar::MouseCode button) :
+MouseButtonEvent::MouseButtonEvent(const MouseCode button) :
 	m_button(button)
 {
 }

@@ -25,6 +25,7 @@ namespace projectSolar::ECS
                 .entities(ser)
                 .component<ComponentsList...>(ser);
             std::fclose(ser.p_file);
+            return 0;
         }
         template<typename ... ComponentsList>
         static errno_t deserialize(entt::registry& storage, std::string_view filePath)
@@ -41,6 +42,7 @@ namespace projectSolar::ECS
                 .entities(des)
                 .component<ComponentsList...>(des);
             std::fclose(des.p_file);
+            return 0;
         }
 
         Serializer() = delete;

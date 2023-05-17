@@ -15,19 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sources\SimulationRunner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\SimulationRunner\DoubleBufferedContainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\SimulationRunner\DataManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\SimulationRunner\Simulations.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\SimulationRunner\Solvers.h">
+    <ClInclude Include="sources\DoubleBufferedContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Simulation.h">
@@ -36,12 +24,27 @@
     <ClInclude Include="sources\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sources\SimulationRunner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Simulations\Motion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Simulations\Gravity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Serializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="sources\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="sources\SimulationRunner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\pch.cpp">
+    <ClCompile Include="sources\Simulations\Simulations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

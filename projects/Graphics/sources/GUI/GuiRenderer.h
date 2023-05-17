@@ -1,15 +1,16 @@
 #pragma once
 
-#include "../Window.h"
-#include "GuiWindow.h"
 #include "Logger.h"
 
 #include <unordered_map>
 #include <string>
 
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
+	class GuiWindow;
+	class Window;
+	
 	class GuiWindowsManager
 	{
 	public:

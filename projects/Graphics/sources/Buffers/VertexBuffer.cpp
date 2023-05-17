@@ -3,7 +3,7 @@
 #include "VertexBuffer.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 VertexBuffer::VertexBuffer(const void* data, size_t size)
 {

@@ -71,7 +71,7 @@ namespace projectSolar
 		{
 			std::ostringstream oss;
 			logImpl(oss, args...);
-			log<severity>(oss.str());
+			log<severity>(oss.str()); //-V530
 		}
 
 		template<Severity severity>
@@ -111,7 +111,7 @@ namespace projectSolar
 		static Logger& get();
 
 		Logger() = default;
-		~Logger();
+		~Logger() = default;
 		void setParams(const LoggerParameters& params);
 	};
 }

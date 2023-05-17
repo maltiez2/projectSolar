@@ -7,7 +7,9 @@
 #include "Window.h"
 
 
-namespace projectSolar
+
+
+namespace projectSolar::Graphics
 {
 	// InputEventsManager
 	InputEventsManager::InputEventsManager(Window* window) :
@@ -134,13 +136,13 @@ namespace projectSolar
 		m_window(window)
 	{
 	}
-	bool InputManager::isKeyPressed(KeyCode key)
+	bool InputManager::isKeyPressed(uint16_t key)
 	{
 		GLFWwindow* window = m_window->getNativeWindow();
 		auto state = glfwGetKey(window, static_cast<int32_t>(key));
 		return state == GLFW_PRESS;
 	}
-	bool InputManager::isMouseButtonPressed(MouseCode button)
+	bool InputManager::isMouseButtonPressed(uint16_t button)
 	{
 		GLFWwindow* window = m_window->getNativeWindow();
 		auto state = glfwGetMouseButton(window, static_cast<int32_t>(button));

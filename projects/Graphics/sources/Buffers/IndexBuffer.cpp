@@ -2,7 +2,7 @@
 
 #include "IndexBuffer.h"
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 IndexBuffer::IndexBuffer(const uint32_t* data, uint32_t count) :
 	m_count(count)
@@ -15,6 +15,14 @@ IndexBuffer::IndexBuffer(const uint32_t* data, uint32_t count) :
 IndexBuffer::~IndexBuffer()
 {
 	glDeleteBuffers(1, &m_rendererID);
+}
+
+void IndexBuffer::updateData(const void* data, uint32_t count)
+{
+	bind();
+	m_count = count;
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, count * sizeof(uint32_t), data);
+	unbind();
 }
 
 void IndexBuffer::bind() const

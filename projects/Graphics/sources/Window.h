@@ -1,15 +1,16 @@
 #pragma once
 
-#include "Input/Input.h"
-
-#include "../vendor/opengl/imgui_impl_glfw.h"
-
 #include <string>
-#include <functional>
+#include <memory>
 
+struct GLFWmonitor;
+struct GLFWwindow;
 
-namespace projectSolar
+namespace projectSolar::Graphics
 {
+	class InputEventsManager;
+	class InputManager;
+	
 	struct GuiProperties
 	{
 		std::string font = "default.ttf";
@@ -22,7 +23,8 @@ namespace projectSolar
 		uint32_t height     = 900;
 		 int32_t monitor    = -1;
 		bool VSync          = true;
-		bool fullScreen     = true;
+		bool fullScreen     = false;
+		
 		InputEventsManager* eventsManager = nullptr;
 
 		GuiProperties guiProperties;
@@ -36,11 +38,14 @@ namespace projectSolar
 		~Window();
 
 		void startFrame();
+		void finishFrame();
+		bool ifClose();
 
 		// Getters
 		GLFWwindow* getNativeWindow();
 		uint32_t    getWidth() const;
 		uint32_t    getHeight() const;
+		uint32_t    getFPS() const;
 		bool        isVSync() const;
 		InputEventsManager& getEventsManager();
 		InputManager& getInputManager();
@@ -50,11 +55,12 @@ namespace projectSolar
 		void setFont(const std::string& font);
 		void setSize(uint32_t width, uint32_t height);
 
-		InputEventsManager m_eventsManager;
-		InputManager m_inputManager;
-		WindowProperties m_properties;
 
 	private:
+		std::shared_ptr<InputEventsManager> m_eventsManager;
+		std::shared_ptr<InputManager> m_inputManager;
+		WindowProperties m_properties;
+
 		const char* fontsFolder = "resources/fonts";
 		const char* glslVersion = "#version 130";
 		const int glMajorVersion = 3;
@@ -67,6 +73,7 @@ namespace projectSolar
 
 		void setupImGui(const GuiProperties& properties);
 		GLFWmonitor* setUpFullscreen();
+		GLFWmonitor* getMonitor() const;
 	};
 }
 

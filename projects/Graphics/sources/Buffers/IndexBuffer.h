@@ -2,7 +2,8 @@
 
 #include <stdint.h>
 
-namespace projectSolar
+
+namespace projectSolar::Graphics
 {
 	class IndexBuffer
 	{
@@ -10,6 +11,7 @@ namespace projectSolar
 		IndexBuffer(const uint32_t* data, uint32_t count);
 		~IndexBuffer();
 
+		void updateData(const void* data, uint32_t count);
 		void bind() const;
 		void unbind() const;
 

@@ -114,7 +114,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG_LOGGING;PROFILING;GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -132,7 +132,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -144,7 +144,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Buffers.h" />
     <ClInclude Include="include\Graphics.h" />
+    <ClInclude Include="include\GuiApi.h" />
+    <ClInclude Include="include\InputEvents.h" />
     <ClInclude Include="sources\GUI\GuiRenderer.h" />
     <ClInclude Include="sources\GUI\GuiWindow.h" />
     <ClInclude Include="sources\Buffers\IndexBuffer.h" />

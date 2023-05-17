@@ -2,9 +2,10 @@
 
 #include "GuiRenderer.h"
 #include "GuiWindow.h"
+#include "Window.h"
 
 
-using namespace projectSolar;
+using namespace projectSolar::Graphics;
 
 GuiRenderer::GuiRenderer(Window& window, GuiWindowsManager& windowsManager) :
 	m_window(window),
@@ -25,14 +26,14 @@ void GuiRenderer::render()
 
 	end();
 }
-void projectSolar::GuiRenderer::begin()
+void GuiRenderer::begin()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_NoDockingInCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
 }
-void projectSolar::GuiRenderer::end()
+void GuiRenderer::end()
 {
 	const ImGuiIO& io = ImGui::GetIO();
 
@@ -99,7 +100,7 @@ bool GuiWindowsManager::shown(const std::string& id)
 
 	return m_windows[id]->showFlag;
 }
-const std::unordered_map<std::string, GuiWindow*>& projectSolar::GuiWindowsManager::getWindows()
+const std::unordered_map<std::string, GuiWindow*>& GuiWindowsManager::getWindows()
 {
 	return m_windows;
 }

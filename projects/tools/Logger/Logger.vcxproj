@@ -120,7 +120,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(ProjectDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\includes;$(SolutionDir)projects\simulation\SimulationRunner\includes;$(SolutionDir)projects\graphics\CentralRenderer\includes;$(SolutionDir)projects\graphics\GUIRenderer\includes;$(SolutionDir)projects\core\Core\includes;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
@@ -143,7 +143,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(ProjectDir)sources;$(ProjectDir)vendor;$(SolutionDir)projects\general\Profiler\sources;$(SolutionDir)projects\general\Logger\sources;$(SolutionDir)projects\general\EntityComponentSystem\includes;$(SolutionDir)projects\simulation\SimulationRunner\includes;$(SolutionDir)projects\graphics\CentralRenderer\includes;$(SolutionDir)projects\graphics\GUIRenderer\includes;$(SolutionDir)projects\core\Core\includes;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>

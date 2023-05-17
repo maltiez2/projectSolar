@@ -114,7 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC;DEBUG_LOGGING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)projects\Simulation\include;$(SolutionDir)projects\Graphics\include;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)projects\Simulation\include;$(SolutionDir)projects\Graphics\include;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -131,7 +131,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)projects\Simulation\include;$(SolutionDir)projects\Graphics\include;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)projects\Simulation\include;$(SolutionDir)projects\Graphics\include;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -148,8 +148,51 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="sources\ECS\EntityComponentSystem.cpp" />
-    <ClCompile Include="sources\Layers.cpp">
+    <ClCompile Include="sources\ECS\Components.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\ECS\EntityComponentSystem.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\ApplicationEventHandler.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\GuiManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\MapManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\SavesManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\SimulationManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\Layers\GuiLayer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\Layers\Layer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\Layers\MapLayer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\EventManagers\CommunicationManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="sources\Layers\SimulationLayer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -159,6 +202,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="sources\Windows\Debug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core.h" />
@@ -166,9 +210,21 @@
     <ClInclude Include="sources\ECS\Components.h" />
     <ClInclude Include="sources\ECS\EntityComponentSystem.h" />
     <ClInclude Include="sources\ECS\Serialization.h" />
-    <ClInclude Include="sources\Layers.h" />
+    <ClInclude Include="sources\EventManagers\ApplicationEventHandler.h" />
+    <ClInclude Include="sources\EventManagers\GuiManager.h" />
+    <ClInclude Include="sources\EventManagers\Managers.h" />
+    <ClInclude Include="sources\EventManagers\MapManager.h" />
+    <ClInclude Include="sources\EventManagers\SavesManager.h" />
+    <ClInclude Include="sources\EventManagers\SimulationManager.h" />
+    <ClInclude Include="sources\Layers\EntityStack.h" />
+    <ClInclude Include="sources\Layers\GuiLayer.h" />
+    <ClInclude Include="sources\Layers\Layers.h" />
+    <ClInclude Include="sources\Layers\Layer.h" />
+    <ClInclude Include="sources\Layers\MapLayer.h" />
+    <ClInclude Include="sources\EventManagers\CommunicationManager.h" />
+    <ClInclude Include="sources\Layers\SimulationLayer.h" />
     <ClInclude Include="sources\pch.h" />
-    <ClInclude Include="sources\Tasks\TaskManager.h" />
+    <ClInclude Include="sources\Windows\Windows.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
