@@ -119,11 +119,13 @@ namespace projectSolar::Layers
 		auto centralObj = ECS->create();
 		ECS->insert<Components::CelestialObject>(centralObj, Components::LongTitle{ "Central" });
 		ECS->insert<Components::Dynamic>(centralObj, 0ui64);
+		ECS->insert<Components::MapObject>(centralObj, 0ui32, 1.0f, 1.0f, 0.0f, 1.0f);
 
 		data.addElement({ smallMass, 4.0 * radiusVector, 0.5 * velocityVector, nullVector });
 		auto redObj = ECS->create();
 		ECS->insert<Components::CelestialObject>(redObj, Components::LongTitle{ "Red" });
 		ECS->insert<Components::Dynamic>(redObj, 1ui64);
+		ECS->insert<Components::MapObject>(redObj, 1ui32, 1.0f, 0.0f, 0.0f, 1.0f);
 
 		for (size_t index = 0; index < objectsNumber; index++)
 		{
@@ -131,6 +133,7 @@ namespace projectSolar::Layers
 			data.addElement({ smallMass, rotation * radiusVector, rotation * velocityVector, nullVector });
 			auto justObj = ECS->create();
 			ECS->insert<Components::Dynamic>(justObj, index + 2);
+			ECS->insert<Components::MapObject>(justObj, (uint32_t)index, 1.0f, 1.0f, 1.0f, 1.0f);
 		}
 
 		setSimOrder(motionId, { {0, objectsNumber + 1} });

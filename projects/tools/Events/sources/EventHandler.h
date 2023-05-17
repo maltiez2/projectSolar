@@ -47,7 +47,6 @@ namespace projectSolar::Events
 		EventHandler(const size_t& workersNumber = 1, const size_t& bufferSize = RingBuffer::MAX_BUFFER_SIZE);
 		virtual ~EventHandler();
 
-		// Accepts only POD as 'data'!
 		template<typename DataType>
 		void receiveEvent(uint8_t eventType, DataType& data)
 		{

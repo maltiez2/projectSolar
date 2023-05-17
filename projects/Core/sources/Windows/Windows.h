@@ -2,6 +2,10 @@
 
 #include "GuiApi.h"
 
+#include <vector>
+#include <string>
+
+
 namespace projectSolar::Windows
 {
 	class PropulsionControl : public Graphics::GuiWindow
@@ -27,6 +31,7 @@ namespace projectSolar::Windows
 		float scale = 1.0f;
 		size_t stepsPerFrame = 0;
 		float secondsPerStep = 0.0f;
+		std::vector<std::string> objUnderCursor = {};
 
 		bool runSimulation = false;
 		bool followPlayer = false;

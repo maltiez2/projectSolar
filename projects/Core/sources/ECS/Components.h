@@ -18,6 +18,7 @@
 							Components::VideoSettings,\
 							Components::SimSettings,\
 							Components::SimPerformance,\
+							Components::MapObject,\
 							Components::CelestialObject,\
 							Components::Dynamic
 
@@ -76,6 +77,15 @@ namespace projectSolar
 		COMPONENT_DECL(SimPerformance,
 			size_t stepsPerFrame;
 			float secondsPerStep;
+		);
+
+		// Map objects
+		COMPONENT_DECL(MapObject,
+			uint32_t id;
+			float colorR;
+			float colorG;
+			float colorB;
+			float colorA;
 		);
 
 		// Gravitational objects

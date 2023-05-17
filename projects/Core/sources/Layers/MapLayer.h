@@ -38,6 +38,9 @@ namespace projectSolar::Layers
 		void moveCameraPosition(float x, float y, float z);
 		void moveCameraScale(float scaleDelta);
 		void setCameraOn(size_t motionDataIndex);
+		void setMouseAt(float x, float y);
+
+		const std::vector<entt::entity>& getObjectsUnderMouse() const;
 
 
 	private:
@@ -46,7 +49,11 @@ namespace projectSolar::Layers
 			float x;
 			float y;
 			float z;
-			uint32_t type;
+			float r;
+			float g;
+			float b;
+			float a;
+			uint32_t id;
 		};
 
 		struct Camera
@@ -74,8 +81,12 @@ namespace projectSolar::Layers
 		glm::mat4 m_proj = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
 		glm::mat4 m_model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 		glm::mat4 m_view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+		glm::vec2 m_mousePos = glm::vec2(0, 0);
+
+		std::vector<entt::entity> m_objectsUnderMouse;
 
 		void updateData();
 		void updateMVP();
+		bool checkMouse(const float& objX, const float& objY, const float& mouseX, const float& mouseY, const float& epsilonX, const float& epsilonY) const;
 	};
 }

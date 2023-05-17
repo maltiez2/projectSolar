@@ -16,8 +16,12 @@ namespace projectSolar::EventManagers
 		GuiManager(std::shared_ptr<Layers::GuiLayer> layer, const size_t& threadsNumber = 1);
 		~GuiManager() override;
 
+		static const size_t maxObjUnderCursor = 16;
+
 		EVENT_DECL(SIMULATION_UPDATED, 1, float secondsPerStep; size_t stepsPerFrame);
 		EVENT_DECL(GUI_UPDATED, 4);
+
+		EVENT_DECL(MAP_OBJECTS_UNDER_CURSOR, 101, std::array<entt::entity, maxObjUnderCursor> objects);
 
 		std::shared_ptr<Graphics::GuiWindowsManager> getWidnows();
 

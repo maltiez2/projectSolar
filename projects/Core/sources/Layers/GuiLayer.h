@@ -12,6 +12,11 @@ namespace projectSolar::Graphics
 	class InputEvent;
 }
 
+namespace projectSolar::EventManagers
+{
+	class GuiManager;
+}
+
 
 namespace projectSolar::Layers
 {
@@ -32,5 +37,7 @@ namespace projectSolar::Layers
 		std::shared_ptr<Graphics::GuiWindowsManager> m_windowsManager = std::make_shared<Graphics::GuiWindowsManager>();
 		std::shared_ptr<Graphics::GuiRenderer> m_renderer;
 		bool m_blockEvents;
+
+		friend class GuiManager;
 	};
 }

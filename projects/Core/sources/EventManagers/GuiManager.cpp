@@ -40,6 +40,29 @@ namespace projectSolar::EventManagers
 
 				updateWidnowsInteraction();
 			}
+			EVENT_DEF(MAP_OBJECTS_UNDER_CURSOR);
+			{
+				m_windows->get<Windows::Debug>("debug")->objUnderCursor.clear();
+				
+				for (entt::entity& entity : eventData.objects)
+				{
+					if (entity == entt::null)
+					{
+						continue;
+					}
+
+					if (Com::get().ECS->has<Components::CelestialObject>(entity))
+					{
+						auto& celestObj = Com::get().ECS->get<Components::CelestialObject>(entity);
+						m_windows->get<Windows::Debug>("debug")->objUnderCursor.push_back(celestObj.name.data());
+					}
+					else
+					{
+						auto& mapObj = Com::get().ECS->get<Components::MapObject>(entity);
+						m_windows->get<Windows::Debug>("debug")->objUnderCursor.push_back(std::to_string(mapObj.id));
+					}
+				}
+			}
 			EVENTS_DEF_DEFAULT();
 			break;
 		}
@@ -49,7 +72,6 @@ namespace projectSolar::EventManagers
 	{
 		m_windows->add<Windows::Debug>("debug", true);
 		m_windows->add<Graphics::DemoWindow>("demo", false);
-		m_windows->add<Windows::PropulsionControl>("prop", true);
 	}
 
 	void GuiManager::updateWidnowsInteraction()

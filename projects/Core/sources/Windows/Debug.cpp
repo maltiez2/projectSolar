@@ -27,6 +27,11 @@ namespace projectSolar::Windows
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
         ImGui::Text(std::format("Simulation steps per frame {}", stepsPerFrame).c_str());
         ImGui::Text(std::format("Simulation ms per frame {}", 1000.0f * stepsPerFrame * secondsPerStep).c_str());
+        ImGui::Text("Objects under cursor:");
+        for (auto& objName : objUnderCursor)
+        {
+            ImGui::Text(std::format("    {}", objName).c_str());
+        }
         ImGui::End();
     }
 }
