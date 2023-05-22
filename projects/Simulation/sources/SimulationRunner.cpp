@@ -52,16 +52,19 @@ namespace projectSolar::Simulation
 
 			while (true)
 			{
-				std::unique_lock lock(m_queueMutex);
-				if (m_taskQueue.empty())
 				{
-					lock.unlock();
-					break;
-				}
+					PROFILE_SCOPE("Worker acquiring task");
+					std::unique_lock lock(m_queueMutex);
+					if (m_taskQueue.empty())
+					{
+						lock.unlock();
+						break;
+					}
 
-				task = m_taskQueue.front();
-				m_taskQueue.pop();
-				lock.unlock();
+					task = m_taskQueue.front();
+					m_taskQueue.pop();
+					lock.unlock();
+				}
 
 				m_currentSimulation->run(task);
 			}
@@ -71,6 +74,8 @@ namespace projectSolar::Simulation
 	}
 	void SimulationRunner::distributeTasks(const RunParams& params, std::vector<Task> order)
 	{
+		PROFILE_FUNCTION();
+		
 		size_t totalSize = 0;
 		for (const Task& part : order)
 		{

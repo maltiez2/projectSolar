@@ -88,7 +88,7 @@ namespace projectSolar::Layers
 			ECS->destroy(entity);
 		}
 		
-		const size_t objectsNumber = 10;
+		const size_t objectsNumber = m_objNumberInDebugLayout;
 		const double bigMass = 1e0;
 		const double smallMass = 1e-3;
 		const double initOrbit = 1.0;
@@ -146,5 +146,10 @@ namespace projectSolar::Layers
 	void SimLayer::setSecondsPerFrame(double secondsPerFrame)
 	{
 		m_secondsPerFrame = secondsPerFrame;
+	}
+
+	void SimLayer::setObjNumberInDebugLayout(size_t number)
+	{
+		m_objNumberInDebugLayout = number;
 	}
 }

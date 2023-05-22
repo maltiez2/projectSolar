@@ -118,6 +118,14 @@ namespace projectSolar::EventManagers
 			prevRate = currentRate;
 			SEND_EVENT(SET_SIM_RATE, SimulationManager, Com::get().simulation, currentRate);
 		}
+
+		auto& prevObjNum = m_windows->get<Windows::Debug>(DEBUG)->prevDebugObjNumber;
+		const auto& currentObjNum = m_windows->get<Windows::Debug>(DEBUG)->debugObjNumber;
+		if (currentObjNum != prevObjNum)
+		{
+			prevObjNum = currentObjNum;
+			SEND_EVENT(SET_DEBUG_DATA_OBJ_NUMBER, SimulationManager, Com::get().simulation, (size_t)currentObjNum);
+		}
 	}
 	
 	GuiManager::GuiManager(std::shared_ptr<Layers::GuiLayer> layer, const size_t& threadsNumber) :

@@ -11,7 +11,7 @@ namespace projectSolar::Simulation
 
 		if (m_results.empty())
 		{
-			m_currentStepNumber = m_params.desiredStepsNumber;
+			m_currentStepNumber = 1;
 			return m_currentStepNumber;
 		}
 

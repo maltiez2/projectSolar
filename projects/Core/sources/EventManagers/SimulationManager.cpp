@@ -39,6 +39,10 @@ namespace projectSolar::EventManagers
 			{
 				m_layer->generateDebugLayout(MOTION_SIM, GRAVITY_SIM);
 			}
+			EVENT_DEF(SET_DEBUG_DATA_OBJ_NUMBER);
+			{
+				m_layer->setObjNumberInDebugLayout(eventData.number);
+			}
 			EVENT_DEF(SIMULATION_UPDATED);
 			{
 				if (Com::get().ECS->exists(m_simulationEntity))

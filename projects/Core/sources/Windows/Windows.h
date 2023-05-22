@@ -34,6 +34,8 @@ namespace projectSolar::Windows
 		float prevSimLoad = 0.0f;
 		float prevSimRate = 0.0f;
 		size_t stepsPerFrame = 0;
+		int32_t debugObjNumber = 10;
+		int32_t prevDebugObjNumber = 10;
 		float secondsPerStep = 0.0f;
 		std::vector<std::string> objUnderCursor = {};
 

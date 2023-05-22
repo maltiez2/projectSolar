@@ -32,7 +32,8 @@ namespace projectSolar::EventManagers
 		EVENT_DECL(SET_SIM_RATE, 101, double timePerSecond);
 		EVENT_DECL(SET_SIM_LOAD, 102, double timeRestrinctionSeconds);
 		EVENT_DECL(GENERATE_DEBUG_DATA, 103);
-		EVENT_DECL(OBJ_DRUGGED, 104, float newX; float newY; float newZ; std::array<entt::entity, maxObjDragged> objects);
+		EVENT_DECL(SET_DEBUG_DATA_OBJ_NUMBER, 104, uint64_t number);
+		EVENT_DECL(OBJ_DRUGGED, 105, float newX; float newY; float newZ; std::array<entt::entity, maxObjDragged> objects);
 		
 
 	private:

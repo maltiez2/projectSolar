@@ -17,6 +17,8 @@ namespace projectSolar::Simulation
 	}
 	void Motion::run(Task task)
 	{
+		PROFILE_FUNCTION();
+
 		auto& initial = data.getData();
 		auto& result = data.getBuffer();
 		
@@ -51,7 +53,7 @@ namespace projectSolar::Simulation
 	}
 	RunParams Motion::runParams()
 	{
-		return { 5, 1 };
+		return { 1, std::max(data.size() / 3, 1ui64) };
 	}
 
 
@@ -62,6 +64,8 @@ namespace projectSolar::Simulation
 	}
 	void Gravity::run(Task task)
 	{
+		PROFILE_FUNCTION();
+		
 		auto& initial = data.getData();
 		auto& result = data.getBuffer();
 
@@ -111,6 +115,6 @@ namespace projectSolar::Simulation
 	}
 	RunParams Gravity::runParams()
 	{
-		return { 5, 1 };
+		return { 9, std::max(data.size() / 100, 1ui64) };
 	}
 }

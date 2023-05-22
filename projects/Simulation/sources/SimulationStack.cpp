@@ -15,6 +15,8 @@ namespace projectSolar::Simulation
 
 	void SimulationStack::step()
 	{
+		PROFILE_FUNCTION();
+		
 		for (auto& [id, simulation] : m_attached)
 		{
 			if (!simulation->skip(m_step))

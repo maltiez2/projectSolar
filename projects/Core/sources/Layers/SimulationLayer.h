@@ -17,7 +17,7 @@ namespace projectSolar::Layers
 	class SimLayer : public Layer, public Simulation::SimulationStack
 	{
 	public:		
-		const double stepSize = 1e-2;
+		const double stepSize = 1e-4;
 		
 		struct Params
 		{
@@ -42,6 +42,8 @@ namespace projectSolar::Layers
 		void setTimePerSecond(double simulationTimePerSecond);
 		void setSecondsPerFrame(double secondsPerFrame);
 
+		void setObjNumberInDebugLayout(size_t number);
+
 	private:
 		Params m_params;
 		size_t m_lastStepsNumber;
@@ -50,6 +52,8 @@ namespace projectSolar::Layers
 		std::shared_mutex m_dataMutex;
 
 		Simulation::StepsDivider m_stepsDivider;
+
+		size_t m_objNumberInDebugLayout = 10;
 
 		friend class EventManagers::SimulationManager;
 	};

@@ -23,6 +23,7 @@ namespace projectSolar::Windows
         ImGui::Checkbox("Follow player", &followPlayer);
         ImGui::Checkbox("Run simulation", &runSimulation);
         showDemoWindow = ImGui::Button("Show demo window");
+        ImGui::SliderInt("Obj number", &debugObjNumber, 1, 1024, "%d", ImGuiSliderFlags_Logarithmic);
         generateDebugData = ImGui::Button("Generate debug data");
         saveData = ImGui::Button("Save");
         loadData = ImGui::Button("Load");
