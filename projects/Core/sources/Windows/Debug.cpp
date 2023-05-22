@@ -17,7 +17,9 @@ namespace projectSolar::Windows
     {
         ImGui::Begin("Debug", &showFlag);
         ImGui::Text("Objects are draggable");
-        ImGui::SliderFloat("Scale", &scale, 0.2f, 20.0f);
+        ImGui::SliderFloat("Scale", &scale, 1e-2f, 1e2f, "%.3f", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderFloat("Load", &simLoad, 0.1f, 0.9f);
+        ImGui::SliderFloat("Simulation rate", &simRate, 1e-2f, 1e2f, "%.3f", ImGuiSliderFlags_Logarithmic);
         ImGui::Checkbox("Follow player", &followPlayer);
         ImGui::Checkbox("Run simulation", &runSimulation);
         showDemoWindow = ImGui::Button("Show demo window");

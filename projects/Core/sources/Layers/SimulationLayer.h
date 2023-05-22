@@ -82,7 +82,7 @@ namespace projectSolar::Layers
 		double  m_secondsPerFrame;
 		std::shared_mutex m_dataMutex;
 
-		std::map<size_t, std::vector<Simulation::Task>> m_simOrders;
+		std::map<size_t, std::vector<Simulation::Task>> m_simOrders; // @TODO remake orders system so it is easier to add remove objects from simulation processing orders
 
 		Simulation::SimulationRunner m_runner;
 		StepsDivider m_stepsDivider;

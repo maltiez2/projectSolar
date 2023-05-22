@@ -90,17 +90,35 @@ namespace projectSolar::EventManagers
 
 		if (m_windows->get<Windows::Debug>(DEBUG)->generateDebugData)
 		{
-			SEND_EVENT(GENERATE_DEBUG_DATA, EventManagers::SimulationManager, Com::get().simulation);
+			SEND_EVENT(GENERATE_DEBUG_DATA, SimulationManager, Com::get().simulation);
 		}
 
 		if (m_windows->get<Windows::Debug>(DEBUG)->saveData)
 		{
-			SEND_EVENT(SAVE, EventManagers::SavesManager, Com::get().Saves, Components::LongTitle{ "debug_0" });
+			SEND_EVENT(SAVE, SavesManager, Com::get().Saves, Components::LongTitle{ "debug_0" });
 		}
 
 		if (m_windows->get<Windows::Debug>(DEBUG)->loadData)
 		{
-			SEND_EVENT(LOAD, EventManagers::SavesManager, Com::get().Saves, Components::LongTitle{ "debug_0" });
+			SEND_EVENT(LOAD, SavesManager, Com::get().Saves, Components::LongTitle{ "debug_0" });
+		}
+
+		auto& prevLoad = m_windows->get<Windows::Debug>(DEBUG)->prevSimLoad;
+		const auto& currentLoad = m_windows->get<Windows::Debug>(DEBUG)->simLoad;
+		if (currentLoad != prevLoad)
+		{
+			LOG_DEBUG("Sim load: ", currentLoad);
+			prevLoad = currentLoad;
+			SEND_EVENT(SET_SIM_LOAD, ApplicationEventHandler, Com::get().Application, currentLoad);
+		}
+
+		auto& prevRate = m_windows->get<Windows::Debug>(DEBUG)->prevSimRate;
+		const auto& currentRate = m_windows->get<Windows::Debug>(DEBUG)->simRate;
+		if (currentRate != prevRate)
+		{
+			LOG_DEBUG("Sim rate: ", currentRate);
+			prevRate = currentRate;
+			SEND_EVENT(SET_SIM_RATE, SimulationManager, Com::get().simulation, currentRate);
 		}
 	}
 	

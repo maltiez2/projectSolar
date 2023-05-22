@@ -103,12 +103,8 @@ namespace projectSolar
             return;
         }
 
-        uint32_t currentFPS = m_window->getFPS();
-        if (m_targetFPS != currentFPS)
-        {
-            m_targetFPS = currentFPS;
-            m_simLayer->setTimeRest(m_simLoad / (float)currentFPS);
-        }
+        m_targetFPS = m_window->getFPS();
+        m_simLayer->setTimeRest(m_simLoad / (float)m_targetFPS); // @TODO make call only on changes of load and fps
     }
     void Application::calcFrameTime()
     {

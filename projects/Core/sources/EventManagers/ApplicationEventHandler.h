@@ -16,6 +16,7 @@ namespace projectSolar
 
 		EVENT_DECL(CLOSE_WINDOW, 101);
 		EVENT_DECL(SET_RUN_SIMULATION, 102, bool run);
+		EVENT_DECL(SET_SIM_LOAD, 103, float load);
 
 	private:
 		Application& m_app;

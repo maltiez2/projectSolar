@@ -29,6 +29,10 @@ namespace projectSolar
             {
                 m_app.m_running = false;
             }
+            EVENT_DEF(SET_SIM_LOAD);
+            {
+                m_app.m_simLoad = eventData.load;
+            }
             EVENTS_DEF_DEFAULT();
             break;
         }

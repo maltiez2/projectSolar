@@ -29,6 +29,10 @@ namespace projectSolar::Windows
 		void show() override;
 
 		float scale = 1.0f;
+		float simLoad = 0.5f;
+		float simRate = 1.0f;
+		float prevSimLoad = 0.0f;
+		float prevSimRate = 0.0f;
 		size_t stepsPerFrame = 0;
 		float secondsPerStep = 0.0f;
 		std::vector<std::string> objUnderCursor = {};
