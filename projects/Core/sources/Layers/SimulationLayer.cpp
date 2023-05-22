@@ -5,8 +5,6 @@
 #include "ECS/EntityComponentSystem.h"
 #include "ECS/Components.h"
 
-#include <filesystem>
-
 
 namespace projectSolar::Layers
 {
@@ -60,7 +58,7 @@ namespace projectSolar::Layers
 		std::unique_lock lock(m_dataMutex);
 		
 		m_lastStepsNumber = m_stepsDivider.onRunStart({ 16, m_params.timeRestriction });
-		double stepSize = m_params.stepSize / (double)m_lastStepsNumber;
+		double stepSize = m_params.simulationTimePerSecond * m_secondsPerFrame / (double)m_lastStepsNumber;
 
 		for (size_t step = 0; step < m_lastStepsNumber; step++)
 		{
@@ -100,7 +98,6 @@ namespace projectSolar::Layers
 		{
 			ECS->destroy(entity);
 		}
-
 		
 		const size_t objectsNumber = 100;
 		const double bigMass = 1e0;
@@ -113,7 +110,6 @@ namespace projectSolar::Layers
 		Eigen::Vector3d velocityVector{ 0, initSpeed, 0 };
 		Eigen::Vector3d rotationAxis{ 0, 0, 1 };
 		Eigen::Vector3d nullVector(0.0, 0.0, 0.0);
-
 		
 		data.reserve(objectsNumber + 2);
 
@@ -158,13 +154,17 @@ namespace projectSolar::Layers
 		LOG_ASSERT(m_simOrders.contains(id), "[SimLayer] Simulation with id '", id, "' has now orders assigned")
 		return m_simOrders[id];
 	}
-	void SimLayer::setStepSize(double stepSize)
-	{
-		m_params.stepSize = stepSize;
-	}
 	void SimLayer::setTimeRest(double timeRestrictionSeconds)
 	{
 		m_params.timeRestriction = (float)timeRestrictionSeconds;
+	}
+	void SimLayer::setTimePerSecond(double simulationTimePerSecond)
+	{
+		m_params.simulationTimePerSecond = simulationTimePerSecond;
+	}
+	void SimLayer::setSecondsPerFrame(double secondsPerFrame)
+	{
+		m_secondsPerFrame = secondsPerFrame;
 	}
 	void SimLayer::setSimOrder(size_t id, const std::vector<Simulation::Task>& order)
 	{
@@ -200,7 +200,6 @@ namespace projectSolar::Layers
 			return m_currentStepNumber;
 		}
 
-		float multiplier = 1.0;
 		StepsDivider::StepData average(0.0f, 0.0f, 0.0f, 0.0f);
 		for (const auto& result : m_results)
 		{
@@ -217,13 +216,9 @@ namespace projectSolar::Layers
 		float excessTime = average.excessTime + average.timeRestrictionSeconds - m_params.timeRestrictionSeconds;
 		float excessSteps = excessTime / average.secondsPerStep;
 		excessSteps = excessSteps + 0.1f * std::abs(excessSteps);
-		size_t newStepsNumber = (10 * average.stepsNumber - (size_t)(excessSteps * 10.0f)) / 10;
-		if (excessSteps > average.stepsNumber)
-		{
-			newStepsNumber = 1;
-		}
+		int64_t newStepsNumber = (10 * (int64_t)average.stepsNumber - (int64_t)(excessSteps * 10.0f)) / 10;
 
-		m_currentStepNumber = std::min(std::max(newStepsNumber, 1ui64), m_params.desiredStepsNumber);
+		m_currentStepNumber = std::min((uint64_t)std::max(newStepsNumber, 1i64), m_params.desiredStepsNumber);
 		return m_currentStepNumber;
 	}
 	float StepsDivider::onRunEnd()

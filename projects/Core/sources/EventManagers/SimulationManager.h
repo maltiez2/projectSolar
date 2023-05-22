@@ -29,7 +29,7 @@ namespace projectSolar::EventManagers
 
 		EVENT_DECL(SIMULATION_UPDATED, 1, float secondsPerStep; size_t stepsPerFrame);
 
-		EVENT_DECL(SET_SIM_STEP, 101, double stepSize);
+		EVENT_DECL(SET_SIM_RATE, 101, double timePerSecond);
 		EVENT_DECL(SET_SIM_LOAD, 102, double timeRestrinctionSeconds);
 		EVENT_DECL(ADD_TO_SIM_ORDER, 103, size_t simulation; size_t first; size_t last);
 		EVENT_DECL(EXCLUDE_FROM_SIM_ORDER, 104, size_t simulation; size_t first; size_t last);

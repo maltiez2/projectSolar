@@ -24,7 +24,7 @@ namespace projectSolar::Layers
 	class MapLayer : public Layer
 	{
 	public:
-		MapLayer() = default;
+		MapLayer();
 		~MapLayer() override = default;
 
 		void process() override;
@@ -65,6 +65,7 @@ namespace projectSolar::Layers
 		};
 
 		const char* c_shaderFile = "resources/shaders/map.shader";
+		const float c_mouseDetectionRadius = 0.007f;
 
 		std::shared_ptr<projectSolar::Graphics::Renderer> m_centralRenderer = std::make_shared<projectSolar::Graphics::Renderer>();
 

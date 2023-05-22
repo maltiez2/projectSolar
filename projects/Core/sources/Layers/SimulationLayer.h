@@ -50,7 +50,7 @@ namespace projectSolar::Layers
 	public:
 		struct Params
 		{
-			double stepSize = 1.0;
+			double simulationTimePerSecond = 1.0;
 			float timeRestriction = 0.5f / 144.0f;
 		};
 		
@@ -68,9 +68,10 @@ namespace projectSolar::Layers
 		float getLastStepTime() const;
 		std::vector<Simulation::Task>& getOrder(size_t id);
 
-		void setStepSize(double stepSize);
 		void setTimeRest(double timeRestrictionSeconds);
 		void setSimOrder(size_t id, const std::vector<Simulation::Task>& order);
+		void setTimePerSecond(double simulationTimePerSecond);
+		void setSecondsPerFrame(double secondsPerFrame);
 		void addToSimOrder(size_t id, const Simulation::Task& order);
 		void excludeFromSimOrder(size_t id, const Simulation::Task& order);
 
@@ -78,6 +79,7 @@ namespace projectSolar::Layers
 		Params m_params;
 		size_t m_lastStepsNumber;
 		float  m_lastStepTime;
+		double  m_secondsPerFrame;
 		std::shared_mutex m_dataMutex;
 
 		std::map<size_t, std::vector<Simulation::Task>> m_simOrders;

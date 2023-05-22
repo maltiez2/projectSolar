@@ -29,9 +29,9 @@ namespace projectSolar::EventManagers
 		switch (eventType)
 		{
 			EVENTS_DEF_UNKNOWN();
-			EVENT_DEF(SET_SIM_STEP);
+			EVENT_DEF(SET_SIM_RATE);
 			{
-				m_layer->setStepSize(eventData.stepSize);
+				m_layer->setTimePerSecond(eventData.timePerSecond);
 			}
 			EVENT_DEF(SET_SIM_LOAD);
 			{

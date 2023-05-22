@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <chrono>
 
 namespace projectSolar
 {
@@ -46,6 +47,8 @@ namespace projectSolar
 		std::shared_ptr<Layers::MapLayer> m_mapLayer;
 		std::shared_ptr<Layers::GuiLayer> m_guiLayer;
 
+		std::chrono::time_point<std::chrono::steady_clock> m_frameTimepoint;
+
 		bool m_running = true;
 		bool m_simAttached = false;
 
@@ -55,6 +58,7 @@ namespace projectSolar
 		void init();
 		void processInputEvents();
 		void processAppState();
+		void calcFrameTime();
 
 		friend ApplicationEventHandler;
 	};

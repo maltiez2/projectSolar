@@ -3,6 +3,7 @@
 // Internal
 #include "Logger.h"
 #include "Profiler.h"
+#include "EventHandler.h"
 
 // External vendor
 #include <glm/glm.hpp>

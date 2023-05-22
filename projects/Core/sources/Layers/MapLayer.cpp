@@ -17,6 +17,15 @@
 
 namespace projectSolar::Layers
 {
+    MapLayer::MapLayer()
+    {
+        m_layout = std::make_shared<projectSolar::Graphics::VertexBufferLayout>();
+        m_layout->push<float>(3);
+        m_layout->push<float>(4);
+        m_layout->push<uint32_t>(1);
+
+        m_shader = std::make_shared<projectSolar::Graphics::Shader>(c_shaderFile);
+    }
     void MapLayer::process() // @TODO redo all this buffers stuff
     {
         updateMVP();
@@ -24,15 +33,11 @@ namespace projectSolar::Layers
         
         updateData();
 
-        m_vertexBuffer = std::make_shared<projectSolar::Graphics::VertexBuffer>(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point));
-        m_layout = std::make_shared<projectSolar::Graphics::VertexBufferLayout>();
-        m_layout->push<float>(3);
-        m_layout->push<float>(4);
-        m_layout->push<uint32_t>(1);
+        m_vertexBuffer = std::make_shared<projectSolar::Graphics::VertexBuffer>(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point)); 
         m_vertexArray = std::make_shared<projectSolar::Graphics::VertexArray>();
         m_vertexArray->addBufer(*m_vertexBuffer, *m_layout);
         m_indexBuffer = std::make_shared<projectSolar::Graphics::IndexBuffer>(std::to_address(m_indices.begin()), (uint32_t)m_indices.size());
-        m_shader = std::make_shared<projectSolar::Graphics::Shader>(c_shaderFile);
+        
         m_shader->bind();
         m_shader->setUniformMat4f("u_MVP", MVP);
         m_shader->setUniform2f("u_mouseCoords", m_mousePos.x, m_mousePos.y);
@@ -72,7 +77,7 @@ namespace projectSolar::Layers
             auto eventData = (projectSolar::Graphics::MouseMovedEvent*)ev;
             setMouseAt(eventData->getX(), eventData->getY());
 
-            if (m_objectsDrugged.size() > 0)
+            if (!m_objectsDrugged.empty())
             {
                 std::array<entt::entity, EventManagers::SimulationManager::maxObjDragged> dragged;
 
@@ -143,10 +148,9 @@ namespace projectSolar::Layers
 
     void MapLayer::updateData()
     {
-        float epsilon = 0.007f;
         glm::mat4 inversView = glm::inverse(m_view);
         glm::vec4 mousePos = inversView * glm::vec4(m_mousePos, 0.0f, 0.0f) + glm::vec4(m_currentCamera.position, 0.0f);
-        glm::vec4 mouseEpsilon = inversView * glm::vec4(epsilon, epsilon, 0.0f, 0.0f);
+        glm::vec4 mouseEpsilon = inversView * glm::vec4(c_mouseDetectionRadius, c_mouseDetectionRadius, 0.0f, 0.0f);
         m_mousePosInWorld = { mousePos.x, mousePos.y, mousePos.z };
 
         auto& simData = Com::get().simulation->getMotionData();
