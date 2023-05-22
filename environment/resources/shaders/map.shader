@@ -6,7 +6,6 @@ layout(location = 1) in vec4 color;
 layout(location = 2) in uint pointId;
 
 out vec4 typeColor;
-out float gl_PointSize;
 
 uniform mat4 u_MVP;
 uniform vec2 u_mouseCoords;
