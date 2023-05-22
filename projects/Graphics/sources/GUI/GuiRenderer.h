@@ -2,7 +2,7 @@
 
 #include "Logger.h"
 
-#include <unordered_map>
+#include <map>
 #include <string>
 
 
@@ -18,11 +18,11 @@ namespace projectSolar::Graphics
 		~GuiWindowsManager();
 		
 		template<typename WindowType, typename ... Args>
-		bool add(const std::string& id, bool show, const Args& ... args)
+		bool add(const size_t& id, bool show, const Args& ... args)
 		{
 			if (m_windows.contains(id))
 			{
-				LOG_ERROR("[GuiWindowsManager][add()] Window with id '" + id + "' already exists");
+				LOG_ERROR("[GuiWindowsManager][add()] Window with id '", id, "' already exists");
 				return false;
 			}
 
@@ -35,26 +35,26 @@ namespace projectSolar::Graphics
 		}
 
 		template<typename WindowType>
-		WindowType* get(const std::string& id)
+		WindowType* get(const size_t& id)
 		{
 			if (!m_windows.contains(id))
 			{
-				LOG_ERROR("[GuiWindowsManager][get()] Window with id '" + id + "' does not exist");
+				LOG_ERROR("[GuiWindowsManager][get()] Window with id '", id, "' does not exist");
 				return nullptr;
 			}
 
 			return (WindowType*)m_windows.at(id);
 		}
 
-		bool del(const std::string& id);
-		bool show(const std::string& id, bool show);
-		bool exist(const std::string& id);
-		bool shown(const std::string& id);
+		bool del(const size_t& id);
+		bool show(const size_t& id, bool show);
+		bool exist(const size_t& id);
+		bool shown(const size_t& id);
 
-		const std::unordered_map<std::string, GuiWindow*>& getWindows();
+		const std::map<size_t, GuiWindow*>& getWindows();
 
 	private:
-		std::unordered_map<std::string, GuiWindow*> m_windows;
+		std::map<size_t, GuiWindow*> m_windows;
 	};
 	
 	class GuiRenderer

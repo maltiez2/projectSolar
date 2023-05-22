@@ -56,16 +56,16 @@ void GuiRenderer::end()
 
 GuiWindowsManager::~GuiWindowsManager()
 {
-	for (auto& [id, pointer] : m_windows)
+	for (const auto& [id, pointer] : m_windows)
 	{
 		delete(pointer);
 	}
 }
-bool GuiWindowsManager::del(const std::string& id)
+bool GuiWindowsManager::del(const size_t& id)
 {
 	if (!m_windows.contains(id))
 	{
-		LOG_ERROR("[GuiWindowsManager][del()] Window with id '" + id + "' does not exist");
+		LOG_ERROR("[GuiWindowsManager][del()] Window with id '", id, "' does not exist");
 		return false;
 	}
 
@@ -74,11 +74,11 @@ bool GuiWindowsManager::del(const std::string& id)
 
 	return true;
 }
-bool GuiWindowsManager::show(const std::string& id, bool show)
+bool GuiWindowsManager::show(const size_t& id, bool show)
 {
 	if (!m_windows.contains(id))
 	{
-		LOG_ERROR("[GuiWindowsManager][show()] Window with id '" + id + "' does not exist");
+		LOG_ERROR("[GuiWindowsManager][show()] Window with id '", id,"' does not exist");
 		return false;
 	}
 
@@ -86,21 +86,21 @@ bool GuiWindowsManager::show(const std::string& id, bool show)
 
 	return true;
 }
-bool GuiWindowsManager::exist(const std::string& id)
+bool GuiWindowsManager::exist(const size_t& id)
 {
 	return m_windows.contains(id);
 }
-bool GuiWindowsManager::shown(const std::string& id)
+bool GuiWindowsManager::shown(const size_t& id)
 {
 	if (!m_windows.contains(id))
 	{
-		LOG_ERROR("[GuiWindowsManager][shown()] Window with id '" + id + "' does not exist");
+		LOG_ERROR("[GuiWindowsManager][shown()] Window with id '", id, "' does not exist");
 		return false;
 	}
 
 	return m_windows[id]->showFlag;
 }
-const std::unordered_map<std::string, GuiWindow*>& GuiWindowsManager::getWindows()
+const std::map<size_t, GuiWindow*>& GuiWindowsManager::getWindows()
 {
 	return m_windows;
 }

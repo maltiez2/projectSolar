@@ -18,7 +18,7 @@ namespace projectSolar::EventManagers
 			EVENTS_DEF_UNKNOWN();
 			EVENT_DEF(SIMULATION_UPDATED);
 			{
-				if (m_windows->get<Windows::Debug>("debug")->followPlayer)
+				if (m_windows->get<Windows::Debug>(DEBUG)->followPlayer)
 				{
 					auto view = Com::get().ECS->getView<Components::Player>();
 
@@ -34,22 +34,22 @@ namespace projectSolar::EventManagers
 					SEND_EVENT(RESET_CAMERA, MapManager, Com::get().Map);
 				}
 
-				m_windows->get<Windows::Debug>("debug")->stepsPerFrame = eventData.stepsPerFrame;
-				m_windows->get<Windows::Debug>("debug")->secondsPerStep = eventData.secondsPerStep;
+				m_windows->get<Windows::Debug>(DEBUG)->stepsPerFrame = eventData.stepsPerFrame;
+				m_windows->get<Windows::Debug>(DEBUG)->secondsPerStep = eventData.secondsPerStep;
 			}
 			EVENT_DEF(GUI_UPDATED);
 			{
-				float scale = m_windows->get<Windows::Debug>("debug")->scale * 0.05f;
+				float scale = m_windows->get<Windows::Debug>(DEBUG)->scale * 0.05f;
 				SEND_EVENT(SET_CAMERA_SCALE, MapManager, Com::get().Map, scale);
 
-				bool runSimulation = m_windows->get<Windows::Debug>("debug")->runSimulation;
+				bool runSimulation = m_windows->get<Windows::Debug>(DEBUG)->runSimulation;
 				SEND_EVENT(SET_RUN_SIMULATION, ApplicationEventHandler, Com::get().Application, runSimulation);
 
 				updateWidnowsInteraction();
 			}
 			EVENT_DEF(MAP_OBJECTS_UNDER_CURSOR);
 			{
-				m_windows->get<Windows::Debug>("debug")->objUnderCursor.clear();
+				m_windows->get<Windows::Debug>(DEBUG)->objUnderCursor.clear();
 				
 				for (entt::entity& entity : eventData.objects)
 				{
@@ -61,12 +61,12 @@ namespace projectSolar::EventManagers
 					if (Com::get().ECS->has<Components::CelestialObject>(entity))
 					{
 						auto& celestObj = Com::get().ECS->get<Components::CelestialObject>(entity);
-						m_windows->get<Windows::Debug>("debug")->objUnderCursor.push_back(celestObj.name.data());
+						m_windows->get<Windows::Debug>(DEBUG)->objUnderCursor.push_back(celestObj.name.data());
 					}
 					else
 					{
 						auto& mapObj = Com::get().ECS->get<Components::MapObject>(entity);
-						m_windows->get<Windows::Debug>("debug")->objUnderCursor.push_back(std::to_string(mapObj.id));
+						m_windows->get<Windows::Debug>(DEBUG)->objUnderCursor.push_back(std::to_string(mapObj.id));
 					}
 				}
 			}
@@ -77,28 +77,28 @@ namespace projectSolar::EventManagers
 
 	void GuiManager::setUpGUI()
 	{
-		m_windows->add<Windows::Debug>("debug", true);
-		m_windows->add<Graphics::DemoWindow>("demo", false);
+		m_windows->add<Windows::Debug>(DEBUG, true);
+		m_windows->add<Graphics::DemoWindow>(DEMO, false);
 	}
 
 	void GuiManager::updateWidnowsInteraction()
 	{
-		if (m_windows->get<Windows::Debug>("debug")->showDemoWindow)
+		if (m_windows->get<Windows::Debug>(DEBUG)->showDemoWindow)
 		{
-			m_windows->show("demo", true);
+			m_windows->show(DEMO, true);
 		}
 
-		if (m_windows->get<Windows::Debug>("debug")->generateDebugData)
+		if (m_windows->get<Windows::Debug>(DEBUG)->generateDebugData)
 		{
 			SEND_EVENT(GENERATE_DEBUG_DATA, EventManagers::SimulationManager, Com::get().simulation);
 		}
 
-		if (m_windows->get<Windows::Debug>("debug")->saveData)
+		if (m_windows->get<Windows::Debug>(DEBUG)->saveData)
 		{
 			SEND_EVENT(SAVE, EventManagers::SavesManager, Com::get().Saves, Components::LongTitle{ "debug_0" });
 		}
 
-		if (m_windows->get<Windows::Debug>("debug")->loadData)
+		if (m_windows->get<Windows::Debug>(DEBUG)->loadData)
 		{
 			SEND_EVENT(LOAD, EventManagers::SavesManager, Com::get().Saves, Components::LongTitle{ "debug_0" });
 		}
