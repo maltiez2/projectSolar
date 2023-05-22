@@ -107,7 +107,6 @@ namespace projectSolar::EventManagers
 		const auto& currentLoad = m_windows->get<Windows::Debug>(DEBUG)->simLoad;
 		if (currentLoad != prevLoad)
 		{
-			LOG_DEBUG("Sim load: ", currentLoad);
 			prevLoad = currentLoad;
 			SEND_EVENT(SET_SIM_LOAD, ApplicationEventHandler, Com::get().Application, currentLoad);
 		}
@@ -116,7 +115,6 @@ namespace projectSolar::EventManagers
 		const auto& currentRate = m_windows->get<Windows::Debug>(DEBUG)->simRate;
 		if (currentRate != prevRate)
 		{
-			LOG_DEBUG("Sim rate: ", currentRate);
 			prevRate = currentRate;
 			SEND_EVENT(SET_SIM_RATE, SimulationManager, Com::get().simulation, currentRate);
 		}

@@ -114,7 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC;DEBUG_LOGGING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)projects\Simulation\include;$(SolutionDir)projects\Graphics\include;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\DataStructures\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)projects\Simulation\include;$(SolutionDir)projects\Graphics\include;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -131,7 +131,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)projects\Simulation\include;$(SolutionDir)projects\Graphics\include;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\DataStructures\sources;$(SolutionDir)projects\tools\Logger\sources;$(SolutionDir)projects\Simulation\include;$(SolutionDir)projects\Graphics\include;$(SolutionDir)vendor\GLFW\include;$(SolutionDir)vendor\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -216,7 +216,6 @@
     <ClInclude Include="sources\EventManagers\MapManager.h" />
     <ClInclude Include="sources\EventManagers\SavesManager.h" />
     <ClInclude Include="sources\EventManagers\SimulationManager.h" />
-    <ClInclude Include="sources\Layers\EntityStack.h" />
     <ClInclude Include="sources\Layers\GuiLayer.h" />
     <ClInclude Include="sources\Layers\Layers.h" />
     <ClInclude Include="sources\Layers\Layer.h" />

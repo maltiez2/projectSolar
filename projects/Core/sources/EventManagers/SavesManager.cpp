@@ -23,12 +23,14 @@ namespace projectSolar::EventManagers
 
 	void SavesManager::save(std::string saveName)
 	{
+		LOG_DEBUG("Saving to: ", saveName);
 		std::string filePath = saveFilePath(saveName);
 		m_layers->save(std::format("{}.{}", filePath, "layer"));
 		Com::get().ECS->save(std::format("{}.{}", filePath, "ecs"));
 	}
 	void SavesManager::load(std::string saveName)
 	{
+		LOG_DEBUG("Loading from: ", saveName);
 		std::string filePath = saveFilePath(saveName);
 		m_layers->load(std::format("{}.{}", filePath, "layer"));
 		Com::get().ECS->load(std::format("{}.{}", filePath, "ecs"));

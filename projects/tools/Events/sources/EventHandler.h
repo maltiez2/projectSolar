@@ -7,51 +7,25 @@
 #include <array>
 
 #include "EventHandlerMacros.h"
-
+#include "RingBuffer.h"
 
 namespace projectSolar::Events
 {
 	constexpr uint8_t MAX_EVENT_ID = 255;
 	constexpr uint8_t MAX_EVENT_DATA_SIZE = 255;
 
-	namespace RingBuffer
-	{
-		constexpr size_t MAX_BUFFER_SIZE = 1i64 << 25; // 16 Mb
-
-		struct Buffer
-		{
-			uint8_t* front;
-			uint8_t* back;
-			uint8_t* head;
-			uint8_t* tail;
-		};
-
-		Buffer* create(const size_t size);
-		void destroy(Buffer* buffer);
-		void clear(Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
-
-		// Only POD data
-		void put(Buffer* buffer, const uint8_t* data, const uint8_t dataType, const uint8_t size, std::shared_mutex* head, std::shared_mutex* tail);
-		bool pop(Buffer* buffer, uint8_t* data, uint8_t& dataType, uint8_t& size, std::shared_mutex* head, std::shared_mutex* tail);
-
-		bool splited(const Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
-		size_t left(const Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
-		bool empty(const Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
-		bool full(const Buffer* buffer, std::shared_mutex* head, std::shared_mutex* tail);
-	}
-
 	// Only POD data in events
 	class EventHandler
 	{
 	public:
-		EventHandler(const size_t& workersNumber = 1, const size_t& bufferSize = RingBuffer::MAX_BUFFER_SIZE);
+		EventHandler(const size_t& workersNumber = 1, const size_t& bufferSize = DataStructures::RingBuffer::MAX_BUFFER_SIZE);
 		virtual ~EventHandler();
 
 		template<typename DataType>
 		void receiveEvent(uint8_t eventType, DataType& data)
 		{
 			uint8_t size = sizeof(DataType);
-			RingBuffer::put(m_buffer, (uint8_t*)&data, eventType, sizeof(DataType), &m_headMutex, &m_tailMutex);
+			DataStructures::RingBuffer::put(m_buffer, (uint8_t*)&data, eventType, sizeof(DataType), &m_headMutex, &m_tailMutex);
 			realeseWorkers();
 		}
 
@@ -59,7 +33,7 @@ namespace projectSolar::Events
 		void destroyWorkers();
 		virtual void processEvent(uint8_t eventType, uint8_t* data) = 0;
 
-		RingBuffer::Buffer* m_buffer;
+		DataStructures::RingBuffer::Buffer* m_buffer;
 		std::shared_mutex m_headMutex;
 		std::shared_mutex m_tailMutex;
 
@@ -75,7 +49,7 @@ namespace projectSolar::Events
 	class SubscriptionManager : public EventHandler
 	{
 	public:
-		SubscriptionManager(const size_t& workersNumber = 1, const size_t& bufferSize = RingBuffer::MAX_BUFFER_SIZE);
+		SubscriptionManager(const size_t& workersNumber = 1, const size_t& bufferSize = DataStructures::RingBuffer::MAX_BUFFER_SIZE);
 		~SubscriptionManager() override;
 
 		template<typename SubscriberType>

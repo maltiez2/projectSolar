@@ -5,7 +5,7 @@
 #include <map>
 #include <memory>
 
-namespace projectSolar::Layers
+namespace projectSolar::DataStructures
 {
 	template<typename BaseEntityType>
 	class EntityStack

@@ -116,9 +116,6 @@
     <ClInclude Include="sources\EventManagers\ApplicationEventHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Layers\EntityStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sources\EventManagers\SavesManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>

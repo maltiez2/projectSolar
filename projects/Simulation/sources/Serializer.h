@@ -47,7 +47,7 @@ namespace projectSolar::Simulation
 		}
 
 		template<typename DataType>
-		void serialize(DoubleBuffVector<DataType>& input)
+		void serialize(DataStructures::DoubleBuffVector<DataType>& input)
 		{
 			serialize<DataType>(input.getData());
 		}
@@ -63,7 +63,7 @@ namespace projectSolar::Simulation
 		}
 
 		template<typename DataType>
-		void deserialize(DoubleBuffVector<DataType>& input)
+		void deserialize(DataStructures::DoubleBuffVector<DataType>& input)
 		{
 			input.clear();
 

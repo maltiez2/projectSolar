@@ -12,6 +12,6 @@ namespace projectSolar::Graphics
 	public:
 		Renderer();
 
-		void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader, uint32_t count) const;
+		void draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
 	};
 }

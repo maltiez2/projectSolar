@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../SimulationRunner.h"
-#include "../DoubleBufferedContainer.h"
+#include "Simulation.h"
+#include "DoubleBufferedContainer.h"
 
 #include <Eigen/Eigen>
 
@@ -21,6 +21,8 @@ namespace projectSolar::Simulation
 
 		struct Params
 		{
+			double stepSize;
+			double precesision;
 		};
 		
 		explicit Motion(Params params);
@@ -30,9 +32,14 @@ namespace projectSolar::Simulation
 		void swapData() override;
 		void save(Serializer& serializer) override;
 		void load(Serializer& serializer) override;
+		bool skip(const uint16_t& step) override;
+		std::vector<Task> task() override;
+		RunParams runParams() override;
 
-		DoubleBuffVector<Data> data;
+		DataStructures::DoubleBuffVector<Data> data;
 		Params params;
 
+		double stepSize;
+		uint16_t unskipStep;
 	};
 }

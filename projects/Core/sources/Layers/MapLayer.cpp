@@ -43,7 +43,7 @@ namespace projectSolar::Layers
         m_shader->setUniform2f("u_mouseCoords", m_mousePos.x, m_mousePos.y);
         m_shader->setUniform2f("u_mouseEpsilon", 10.0f / m_currentCamera.resolution.x, 10.0f / m_currentCamera.resolution.y);
 
-        m_centralRenderer->draw(*m_vertexArray, *m_indexBuffer, *m_shader, (uint32_t)m_indices.size());
+        m_centralRenderer->draw(*m_vertexArray, *m_indexBuffer, *m_shader);
 
         m_vertexBuffer->unbind();
         m_indexBuffer->unbind();
@@ -185,22 +185,20 @@ namespace projectSolar::Layers
             );
         }
 
-        
-
         if (!isOUMEmpty || !m_objectsUnderMouse.empty())
         {
-            std::array<entt::entity, EventManagers::GuiManager::maxObjUnderCursor> oum;
+            std::array<entt::entity, EventManagers::GuiManager::maxObjUnderCursor> objectsUnderMouse;
             
-            for (size_t i = 0; i < oum.size(); i++)
+            for (size_t i = 0; i < objectsUnderMouse.size(); i++)
             {
-                oum[i] = entt::null;
+                objectsUnderMouse[i] = entt::null;
             }
-            for (size_t i = 0; i < std::min(oum.size(), m_objectsUnderMouse.size()); i++)
+            for (size_t i = 0; i < std::min(objectsUnderMouse.size(), m_objectsUnderMouse.size()); i++)
             {
-                oum[i] = m_objectsUnderMouse[i];
+                objectsUnderMouse[i] = m_objectsUnderMouse[i];
             }
             
-            SEND_EVENT(MAP_OBJECTS_UNDER_CURSOR, EventManagers::GuiManager, Com::get().GUI, oum);
+            SEND_EVENT(MAP_OBJECTS_UNDER_CURSOR, EventManagers::GuiManager, Com::get().GUI, objectsUnderMouse);
         }
 
         LOG_ASSERT((m_buffer.size() < (1ui64 << 16)), "[MapLayer] updateData - m_indices size is greater then max uint16_t");

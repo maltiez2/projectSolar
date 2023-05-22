@@ -3,7 +3,7 @@
 #include <set>
 #include <vector>
 
-namespace projectSolar::Simulation
+namespace projectSolar::DataStructures
 {
 	template<typename DataType>
 	class DoubleBuffVector

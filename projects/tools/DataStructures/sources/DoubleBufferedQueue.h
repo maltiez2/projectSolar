@@ -3,7 +3,7 @@
 #include <queue>
 #include <shared_mutex>
 
-namespace projectSolar
+namespace projectSolar::DataStructures
 {
 	template<typename DataType>
 	class DoubleBufferedQueue

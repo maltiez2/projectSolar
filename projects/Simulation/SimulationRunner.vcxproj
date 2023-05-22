@@ -116,7 +116,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG_LOGGING;PROFILING</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\Logger\sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\DataStructures\sources;$(SolutionDir)projects\tools\Logger\sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -135,7 +135,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\Logger\sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)sources;$(SolutionDir)vendor;$(SolutionDir)projects\tools\Profiler\sources;$(SolutionDir)projects\tools\Events\sources;$(SolutionDir)projects\tools\DataStructures\sources;$(SolutionDir)projects\tools\Logger\sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -150,11 +150,13 @@
   <ItemGroup>
     <ClInclude Include="sources\pch.h" />
     <ClInclude Include="sources\Serializer.h" />
+    <ClInclude Include="sources\SimulationStack.h" />
     <ClInclude Include="sources\Simulations\Gravity.h" />
     <ClInclude Include="sources\Simulations\Motion.h" />
     <ClInclude Include="sources\SimulationRunner.h" />
-    <ClInclude Include="sources\DoubleBufferedContainer.h" />
     <ClInclude Include="include\Simulation.h" />
+    <ClInclude Include="sources\Simulations\Simulation.h" />
+    <ClInclude Include="sources\StepsDivider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\pch.cpp">
@@ -162,7 +164,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="sources\SimulationRunner.cpp" />
+    <ClCompile Include="sources\SimulationStack.cpp" />
     <ClCompile Include="sources\Simulations\Simulations.cpp" />
+    <ClCompile Include="sources\StepsDivider.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

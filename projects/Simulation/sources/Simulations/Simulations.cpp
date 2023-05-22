@@ -3,6 +3,7 @@
 #include "Motion.h"
 #include "Gravity.h"
 #include "Serializer.h"
+#include "Logger.h"
 
 
 namespace projectSolar::Simulation
@@ -10,6 +11,9 @@ namespace projectSolar::Simulation
 	Motion::Motion(Params params) :
 		params(params)
 	{
+		LOG_ASSERT(params.precesision / params.stepSize > 0.5, "[Motion] Insufficient step precision: ", params.precesision / params.stepSize);
+		unskipStep = std::max((uint16_t)(params.precesision / params.stepSize), 1ui16);
+		stepSize = params.stepSize * (double)unskipStep;
 	}
 	void Motion::run(Task task)
 	{
@@ -37,9 +41,21 @@ namespace projectSolar::Simulation
 	{
 		serializer.deserialize(data);
 	}
+	bool Motion::skip(const uint16_t& step)
+	{
+		return false;// step% unskipStep != 0;
+	}
+	std::vector<Task> Motion::task()
+	{
+		return { {0, data.size() - 1}};
+	}
+	RunParams Motion::runParams()
+	{
+		return { 5, 1 };
+	}
 
 
-	Gravity::Gravity(Params params, DoubleBuffVector<Motion::Data>* motionData) :
+	Gravity::Gravity(Params params, DataStructures::DoubleBuffVector<Motion::Data>* motionData) :
 		data(*motionData),
 		params(params)
 	{
@@ -84,5 +100,17 @@ namespace projectSolar::Simulation
 	void Gravity::load(Serializer& serializer)
 	{
 		// Nothing to deserialize
+	}
+	bool Gravity::skip(const uint16_t& step)
+	{
+		return false;//step % 2ui16 != 1ui16;
+	}
+	std::vector<Task> Gravity::task()
+	{
+		return { {0, data.size() - 1} };
+	}
+	RunParams Gravity::runParams()
+	{
+		return { 5, 1 };
 	}
 }

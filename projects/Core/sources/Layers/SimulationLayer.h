@@ -14,40 +14,11 @@ namespace projectSolar::EventManagers
 
 namespace projectSolar::Layers
 {
-	class StepsDivider
+	class SimLayer : public Layer, public Simulation::SimulationStack
 	{
-	public:
-		struct Params
-		{
-			size_t desiredStepsNumber;
-			float timeRestrictionSeconds;
-		};
+	public:		
+		const double stepSize = 1e-2;
 		
-		struct StepData
-		{
-			size_t stepsNumber;
-			float timeRestrictionSeconds;
-			float secondsPerStep;
-			float excessTime;
-		};
-
-		size_t onRunStart(const Params& params);
-		float onRunEnd();
-
-	private:
-		const uint8_t m_maxGrowFactor = 10;
-		const uint8_t m_queieSize = 32;
-		
-		Params m_params;
-		std::deque<StepData> m_results = {};
-		std::chrono::time_point<std::chrono::steady_clock> m_startTimepoint;
-		size_t m_currentStepNumber;
-		
-	};
-	
-	class SimLayer : public Layer, public EntityStack<Simulation::Simulation>
-	{
-	public:
 		struct Params
 		{
 			double simulationTimePerSecond = 1.0;
@@ -66,14 +37,10 @@ namespace projectSolar::Layers
 
 		size_t getLastStepsNumber() const;
 		float getLastStepTime() const;
-		std::vector<Simulation::Task>& getOrder(size_t id);
 
 		void setTimeRest(double timeRestrictionSeconds);
-		void setSimOrder(size_t id, const std::vector<Simulation::Task>& order);
 		void setTimePerSecond(double simulationTimePerSecond);
 		void setSecondsPerFrame(double secondsPerFrame);
-		void addToSimOrder(size_t id, const Simulation::Task& order);
-		void excludeFromSimOrder(size_t id, const Simulation::Task& order);
 
 	private:
 		Params m_params;
@@ -82,10 +49,7 @@ namespace projectSolar::Layers
 		double  m_secondsPerFrame;
 		std::shared_mutex m_dataMutex;
 
-		std::map<size_t, std::vector<Simulation::Task>> m_simOrders; // @TODO remake orders system so it is easier to add remove objects from simulation processing orders
-
-		Simulation::SimulationRunner m_runner;
-		StepsDivider m_stepsDivider;
+		Simulation::StepsDivider m_stepsDivider;
 
 		friend class EventManagers::SimulationManager;
 	};

@@ -36,10 +36,10 @@ namespace projectSolar::Simulation
 		}
 	}
 
-	void SimulationRunner::run(const RunParams& params, std::shared_ptr<Simulation> simulation, const std::vector<Task>& order)
+	void SimulationRunner::run(std::shared_ptr<Simulation> simulation)
 	{
 		m_currentSimulation = simulation;
-		distributeTasks(params, order);
+		distributeTasks(simulation->runParams(), simulation->task());
 		m_workersBarrier.arrive_and_wait();
 		m_workersBarrier.arrive_and_wait();
 	}
@@ -76,7 +76,7 @@ namespace projectSolar::Simulation
 		{
 			totalSize += part.last - part.start + 1;
 		}
-		size_t taskSize = totalSize / params.granularity / m_concurrency;
+		size_t taskSize = totalSize / params.granularity / (size_t)m_concurrency;
 		if (taskSize < params.minimumSize)
 		{
 			taskSize = params.minimumSize;

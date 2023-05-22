@@ -26,7 +26,7 @@ namespace projectSolar::Layers
 		virtual void load(const std::string& filePath) = 0;
 	};
 
-	class LayersManager : public EntityStack<Layer>
+	class LayersManager : public DataStructures::EntityStack<Layer>
 	{
 	public:
 		LayersManager() = default;
