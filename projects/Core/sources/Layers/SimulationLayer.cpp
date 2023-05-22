@@ -59,7 +59,7 @@ namespace projectSolar::Layers
 	{
 		std::unique_lock lock(m_dataMutex);
 		
-		m_lastStepsNumber = m_stepsDivider.onRunStart({ 10, m_params.timeRestriction });
+		m_lastStepsNumber = m_stepsDivider.onRunStart({ 16, m_params.timeRestriction });
 		double stepSize = m_params.stepSize / (double)m_lastStepsNumber;
 
 		for (size_t step = 0; step < m_lastStepsNumber; step++)
@@ -102,7 +102,7 @@ namespace projectSolar::Layers
 		}
 
 		
-		const size_t objectsNumber = 36;
+		const size_t objectsNumber = 100;
 		const double bigMass = 1e0;
 		const double smallMass = 1e-3;
 		const double initOrbit = 1.0;
@@ -129,8 +129,6 @@ namespace projectSolar::Layers
 		ECS->insert<Components::Dynamic>(redObj, 1ui64);
 		ECS->insert<Components::MapObject>(redObj, 1ui32, 1.0f, 0.0f, 0.0f, 1.0f);
 		ECS->insert<Components::Player>(redObj);
-
-		LOG_DEBUG("Player: ", (int)redObj);
 
 		for (size_t index = 0; index < objectsNumber; index++)
 		{
@@ -202,11 +200,28 @@ namespace projectSolar::Layers
 			return m_currentStepNumber;
 		}
 
-		const auto& prev = m_results.back();
-		float excessTime = prev.excessTime + prev.timeRestrictionSeconds - m_params.timeRestrictionSeconds;
-		float excessSteps = excessTime / prev.secondsPerStep;
+		float multiplier = 1.0;
+		StepsDivider::StepData average(0.0f, 0.0f, 0.0f, 0.0f);
+		for (const auto& result : m_results)
+		{
+			average.excessTime += result.excessTime;
+			average.secondsPerStep += result.secondsPerStep;
+			average.stepsNumber += result.stepsNumber;
+			average.timeRestrictionSeconds += result.timeRestrictionSeconds;
+		}
+		average.excessTime /= (float)m_results.size();
+		average.secondsPerStep /= (float)m_results.size();
+		average.stepsNumber /= m_results.size();
+		average.timeRestrictionSeconds /= (float)m_results.size();
+
+		float excessTime = average.excessTime + average.timeRestrictionSeconds - m_params.timeRestrictionSeconds;
+		float excessSteps = excessTime / average.secondsPerStep;
 		excessSteps = excessSteps + 0.1f * std::abs(excessSteps);
-		size_t newStepsNumber = (10 * prev.stepsNumber - (size_t)(excessSteps * 10.0f))/10;
+		size_t newStepsNumber = (10 * average.stepsNumber - (size_t)(excessSteps * 10.0f)) / 10;
+		if (excessSteps > average.stepsNumber)
+		{
+			newStepsNumber = 1;
+		}
 
 		m_currentStepNumber = std::min(std::max(newStepsNumber, 1ui64), m_params.desiredStepsNumber);
 		return m_currentStepNumber;
@@ -223,10 +238,10 @@ namespace projectSolar::Layers
 
 		if (m_results.size() > m_queieSize)
 		{
-			m_results.pop();
+			m_results.pop_front();
 		}
 
-		m_results.emplace(
+		m_results.emplace_back(
 			m_currentStepNumber,
 			m_params.timeRestrictionSeconds,
 			secondsPerStep,

@@ -16,7 +16,7 @@ namespace projectSolar::EventManagers
 		switch (eventType)
 		{
 			EVENTS_DEF_UNKNOWN();
-			EVENT_DEF(SIMULATION_UPDATED);
+			EVENT_DEF(SIMULATION_UPDATED); //****************************************************************************************************
 			{
 				if (m_windows->get<Windows::Debug>(DEBUG)->followPlayer)
 				{
@@ -37,7 +37,7 @@ namespace projectSolar::EventManagers
 				m_windows->get<Windows::Debug>(DEBUG)->stepsPerFrame = eventData.stepsPerFrame;
 				m_windows->get<Windows::Debug>(DEBUG)->secondsPerStep = eventData.secondsPerStep;
 			}
-			EVENT_DEF(GUI_UPDATED);
+			EVENT_DEF(GUI_UPDATED);//****************************************************************************************************
 			{
 				float scale = m_windows->get<Windows::Debug>(DEBUG)->scale * 0.05f;
 				SEND_EVENT(SET_CAMERA_SCALE, MapManager, Com::get().Map, scale);
@@ -47,7 +47,7 @@ namespace projectSolar::EventManagers
 
 				updateWidnowsInteraction();
 			}
-			EVENT_DEF(MAP_OBJECTS_UNDER_CURSOR);
+			EVENT_DEF(MAP_OBJECTS_UNDER_CURSOR); //****************************************************************************************************
 			{
 				m_windows->get<Windows::Debug>(DEBUG)->objUnderCursor.clear();
 				
@@ -70,7 +70,7 @@ namespace projectSolar::EventManagers
 					}
 				}
 			}
-			EVENTS_DEF_DEFAULT();
+			EVENTS_DEF_DEFAULT(); //****************************************************************************************************
 			break;
 		}
 	}

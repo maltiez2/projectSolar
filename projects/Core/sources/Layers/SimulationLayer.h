@@ -4,7 +4,7 @@
 #include "Simulation.h"
 
 #include <chrono>
-#include <queue>
+#include <deque>
 #include <shared_mutex>
 
 namespace projectSolar::EventManagers
@@ -36,10 +36,10 @@ namespace projectSolar::Layers
 
 	private:
 		const uint8_t m_maxGrowFactor = 10;
-		const uint8_t m_queieSize = 10;
+		const uint8_t m_queieSize = 32;
 		
 		Params m_params;
-		std::queue<StepData> m_results = {}; // @TODO Experiment with algorithms that use this
+		std::deque<StepData> m_results = {};
 		std::chrono::time_point<std::chrono::steady_clock> m_startTimepoint;
 		size_t m_currentStepNumber;
 		
