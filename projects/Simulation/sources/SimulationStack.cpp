@@ -16,14 +16,19 @@ namespace projectSolar::Simulation
 	void SimulationStack::step()
 	{
 		PROFILE_FUNCTION();
+
+		std::vector<std::shared_ptr<Simulation>> group = {};
 		
 		for (auto& [id, simulation] : m_attached)
 		{
 			if (!simulation->skip(m_step))
 			{
-				m_runner->run(simulation);
+				group.push_back(simulation);
+				//m_runner->run({ simulation });
 			}
 		}
+
+		m_runner->run(group);
 
 		for (const auto& [id, simulation] : m_attached)
 		{

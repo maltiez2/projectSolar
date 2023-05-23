@@ -5,9 +5,12 @@
 namespace projectSolar::Simulation
 {
 	class Serializer;
+	class Simulation;
 
 	struct Task
 	{
+		Simulation* simulation;
+		
 		size_t start;
 		size_t last;
 

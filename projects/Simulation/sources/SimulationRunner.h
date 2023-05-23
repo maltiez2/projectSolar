@@ -8,6 +8,7 @@
 #include <thread>
 #include <queue>
 #include <mutex>
+#include <vector>
 
 namespace projectSolar::Simulation
 {	
@@ -19,11 +20,10 @@ namespace projectSolar::Simulation
 		SimulationRunner();
 		~SimulationRunner();
 
-		void run(std::shared_ptr<Simulation> simulation);
+		void run(const std::vector<std::shared_ptr<Simulation>>& simulations);
 
 	private:
 		uint8_t m_concurrency = (uint8_t)std::thread::hardware_concurrency();
-		std::shared_ptr<Simulation> m_currentSimulation;
 		std::vector<std::thread> m_workers;
 		std::barrier<std::_No_completion_function> m_workersBarrier;
 		std::queue<Task> m_taskQueue;

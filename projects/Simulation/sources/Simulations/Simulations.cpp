@@ -49,11 +49,11 @@ namespace projectSolar::Simulation
 	}
 	std::vector<Task> Motion::task()
 	{
-		return { {0, data.size() - 1}};
+		return { {this, 0, data.size() - 1}};
 	}
 	RunParams Motion::runParams()
 	{
-		return { 1, std::max(data.size() / 3, 1ui64) };
+		return { 1, std::max(data.size() / 1, 1ui64) };
 	}
 
 
@@ -111,10 +111,10 @@ namespace projectSolar::Simulation
 	}
 	std::vector<Task> Gravity::task()
 	{
-		return { {0, data.size() - 1} };
+		return { {this, 0, data.size() - 1} };
 	}
 	RunParams Gravity::runParams()
 	{
-		return { 9, std::max(data.size() / 100, 1ui64) };
+		return { 3, std::max(data.size() / 100, 1ui64) };
 	}
 }

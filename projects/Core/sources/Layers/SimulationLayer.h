@@ -17,7 +17,7 @@ namespace projectSolar::Layers
 	class SimLayer : public Layer, public Simulation::SimulationStack
 	{
 	public:		
-		const double stepSize = 1e-4;
+		const double stepSize = 1e-3;
 		
 		struct Params
 		{

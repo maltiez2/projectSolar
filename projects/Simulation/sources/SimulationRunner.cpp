@@ -36,10 +36,12 @@ namespace projectSolar::Simulation
 		}
 	}
 
-	void SimulationRunner::run(std::shared_ptr<Simulation> simulation)
+	void SimulationRunner::run(const std::vector<std::shared_ptr<Simulation>>& simulations)
 	{
-		m_currentSimulation = simulation;
-		distributeTasks(simulation->runParams(), simulation->task());
+		for (const auto& simulation : simulations)
+		{
+			distributeTasks(simulation->runParams(), simulation->task());
+		}
 		m_workersBarrier.arrive_and_wait();
 		m_workersBarrier.arrive_and_wait();
 	}
@@ -66,7 +68,7 @@ namespace projectSolar::Simulation
 					lock.unlock();
 				}
 
-				m_currentSimulation->run(task);
+				task.simulation->run(task);
 			}
 			
 			m_workersBarrier.arrive_and_wait();
@@ -91,7 +93,7 @@ namespace projectSolar::Simulation
 		{
 			while (part.size() >= taskSize)
 			{
-				m_taskQueue.emplace(part.start, part.start + taskSize - 1);
+				m_taskQueue.emplace(part.simulation, part.start, part.start + taskSize - 1);
 				part.start = part.start + taskSize;
 			}
 
