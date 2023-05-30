@@ -18,12 +18,12 @@ namespace projectSolar::Windows
         ImGui::Begin("Debug", &showFlag);
         ImGui::Text("Objects are draggable");
         ImGui::SliderFloat("Scale", &scale, 1e-2f, 1e2f, "%.3f", ImGuiSliderFlags_Logarithmic);
-        ImGui::SliderFloat("Simulation load", &simLoad, 0.1f, 0.9f);
-        ImGui::SliderFloat("Simulation rate", &simRate, 1e-4f, 1e0f, "%.3f", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderFloat("Simulation load", &simLoad, 0.1f, 0.99f);
+        ImGui::SliderFloat("Simulation rate", &simRate, 1e-4f, 1e1f, "%.3f", ImGuiSliderFlags_Logarithmic);
         ImGui::Checkbox("Follow red", &followPlayer);
         ImGui::Checkbox("Run simulation", &runSimulation);
         showDemoWindow = ImGui::Button("Show demo window");
-        ImGui::SliderInt("Obj number", &debugObjNumber, 1, 1024, "%d", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderInt("Obj number", &debugObjNumber, 1, 2048, "%d", ImGuiSliderFlags_Logarithmic);
         generateDebugData = ImGui::Button("Generate debug data");
         saveData = ImGui::Button("Save");
         loadData = ImGui::Button("Load");

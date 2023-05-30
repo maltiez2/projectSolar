@@ -149,8 +149,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="sources\pch.h" />
-    <ClInclude Include="sources\Prototypes\Simulation.h" />
-    <ClInclude Include="sources\Prototypes\SimulationRunner.h" />
     <ClInclude Include="sources\Serializer.h" />
     <ClInclude Include="sources\SimulationStack.h" />
     <ClInclude Include="sources\Simulations\Gravity.h" />
@@ -165,10 +163,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="sources\Prototypes\Gravity.cpp" />
-    <ClCompile Include="sources\Prototypes\Motion.cpp" />
-    <ClCompile Include="sources\Prototypes\Simulation.cpp" />
-    <ClCompile Include="sources\Prototypes\SimulationRunner.cpp" />
     <ClCompile Include="sources\SimulationRunner.cpp" />
     <ClCompile Include="sources\SimulationStack.cpp" />
     <ClCompile Include="sources\Simulations\Simulations.cpp" />

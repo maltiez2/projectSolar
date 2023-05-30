@@ -18,6 +18,8 @@ namespace projectSolar::Layers
 
     void GuiLayer::process()
     {
+        PROFILE_FUNCTION();
+        
         m_renderer->render();
 
         EMIT_EVENT(GUI_DRAWN);

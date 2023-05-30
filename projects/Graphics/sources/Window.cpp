@@ -2,6 +2,7 @@
 
 #include "Window.h"
 #include "Input/Input.h"
+#include "Profiler.h"
 
 #include "../vendor/opengl/imgui_impl_glfw.h"
 
@@ -40,12 +41,16 @@ Window::~Window()
 
 void Window::startFrame()
 {
+	PROFILE_FUNCTION();
+
 	glfwSwapBuffers(m_window);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void projectSolar::Graphics::Window::finishFrame()
 {
+	PROFILE_FUNCTION();
+	
 	glfwPollEvents();
 }
 

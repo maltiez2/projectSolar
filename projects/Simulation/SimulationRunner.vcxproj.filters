@@ -42,12 +42,6 @@
     <ClInclude Include="sources\Simulations\Simulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Prototypes\Simulation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Prototypes\SimulationRunner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\pch.cpp">
@@ -63,18 +57,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\StepsDivider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\Prototypes\Simulation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\Prototypes\Motion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\Prototypes\Gravity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\Prototypes\SimulationRunner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -53,6 +53,8 @@ namespace projectSolar::Layers
 
 	void SimLayer::process()
 	{
+		PROFILE_FUNCTION();
+		
 		std::unique_lock lock(m_dataMutex);
 		
 		auto targetStepsNumber = std::max((size_t)(m_params.simulationTimePerSecond / stepSize), 1ui64);

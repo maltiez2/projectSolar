@@ -28,6 +28,8 @@ namespace projectSolar::Layers
     }
     void MapLayer::process() // @TODO redo all this buffers stuff
     {
+        PROFILE_FUNCTION();
+        
         updateMVP();
         glm::mat4 MVP = m_proj * m_view * m_model;
         

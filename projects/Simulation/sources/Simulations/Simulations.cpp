@@ -8,6 +8,16 @@
 
 namespace projectSolar::Simulation
 {
+	size_t Task::size() const
+	{
+		if (start > last)
+		{
+			return 0;
+		}
+
+		return last - start + 1;
+	}
+	
 	Motion::Motion(Params params) :
 		params(params)
 	{
@@ -115,6 +125,6 @@ namespace projectSolar::Simulation
 	}
 	RunParams Gravity::runParams()
 	{
-		return { 3, std::max(data.size() / 100, 1ui64) };
+		return { 3, std::max(data.size() / 100, 50ui64) };
 	}
 }

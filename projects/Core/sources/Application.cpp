@@ -62,6 +62,8 @@ namespace projectSolar
         
         while (m_running)
         {
+            PROFILE_SCOPE("Application run cycle");
+            
             m_window->startFrame();
 
             m_layers->process();
@@ -76,6 +78,7 @@ namespace projectSolar
 
     void Application::processInputEvents()
     {
+        PROFILE_FUNCTION();
         auto& eventsManager = m_window->getEventsManager();
         while (!eventsManager.isEmpty())
         {
@@ -91,6 +94,7 @@ namespace projectSolar
     }
     void Application::processAppState()
     {
+        PROFILE_FUNCTION();
         if (m_simAttached && !m_layers->ifAttached(Application::SIM_LAYER_ID))
         {
             m_layers->reattach<Layers::SimLayer>(Application::SIM_LAYER_ID);
