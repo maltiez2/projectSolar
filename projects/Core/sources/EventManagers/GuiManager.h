@@ -19,7 +19,8 @@ namespace projectSolar::EventManagers
 		enum WidnowId : size_t
 		{
 			DEBUG,
-			DEMO
+			DEMO,
+			GRAVITY
 		};
 
 		static const size_t maxObjUnderCursor = 16;

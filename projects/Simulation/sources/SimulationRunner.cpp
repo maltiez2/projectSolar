@@ -29,7 +29,7 @@ namespace projectSolar::Simulation
 	{
 		for (const auto& simulation : simulations)
 		{
-			distributeTasks(simulation->runParams(), simulation->task());
+			distributeTasks(simulation->getRunParams(), simulation->task());
 		}
 		m_workersBarrier.arrive_and_wait();
 		m_workersBarrier.arrive_and_wait();

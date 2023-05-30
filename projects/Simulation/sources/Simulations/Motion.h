@@ -25,7 +25,7 @@ namespace projectSolar::Simulation
 			double precesision;
 		};
 		
-		explicit Motion(Params params);
+		explicit Motion(Params params, RunParams concurrencyParams);
 		~Motion() override = default;
 
 		void run(Task task) override;
@@ -34,10 +34,13 @@ namespace projectSolar::Simulation
 		void load(Serializer& serializer) override;
 		bool skip(const uint16_t& step) override;
 		std::vector<Task> task() override;
-		RunParams runParams() override;
+		RunParams getRunParams() override;
+		void setRunParams(RunParams params) override;
+		uint8_t getGroup() override;
 
 		DataStructures::DoubleBuffVector<Data> data;
 		Params params;
+		RunParams runParams;
 
 		double stepSize;
 		uint16_t unskipStep;

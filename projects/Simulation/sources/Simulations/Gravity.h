@@ -16,7 +16,7 @@ namespace projectSolar::Simulation
 			double gravConst = 1.0;
 		};
 
-		Gravity(Params params, DataStructures::DoubleBuffVector<Motion::Data>* motionData);
+		Gravity(Params params, RunParams concurrencyParams, DataStructures::DoubleBuffVector<Motion::Data>* motionData);
 		~Gravity() override = default;
 
 		void run(Task task) override;
@@ -25,10 +25,12 @@ namespace projectSolar::Simulation
 		void load(Serializer& serializer) override;
 		bool skip(const uint16_t& step) override;
 		std::vector<Task> task() override;
-		RunParams runParams() override;
+		RunParams getRunParams() override;
+		void setRunParams(RunParams params) override;
+		uint8_t getGroup() override;
 
 		DataStructures::DoubleBuffVector<Motion::Data>& data;
 		Params params;
-
+		RunParams runParams;
 	};
 }

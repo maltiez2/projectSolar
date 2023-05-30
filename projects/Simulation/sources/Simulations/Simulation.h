@@ -29,12 +29,20 @@ namespace projectSolar::Simulation
 		Simulation() = default;
 		virtual ~Simulation() = default;
 
+		enum : uint8_t
+		{
+			PRIMARY_GROUP,
+			SECONDARY_GROUP
+		};
+
 		virtual void run(Task task) = 0;
 		virtual void swapData() = 0;
 		virtual void save(Serializer& serializer) = 0;
 		virtual void load(Serializer& serializer) = 0;
 		virtual bool skip(const uint16_t& step) = 0;
 		virtual std::vector<Task> task() = 0;
-		virtual RunParams runParams() = 0;
+		virtual RunParams getRunParams() = 0;
+		virtual void setRunParams(RunParams params) = 0;
+		virtual uint8_t getGroup() = 0;
 	};
 }

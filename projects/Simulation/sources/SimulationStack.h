@@ -26,5 +26,7 @@ namespace projectSolar::Simulation
 
 		const uint16_t c_maxStep = 1;
 		uint16_t m_step = 0;
+
+		void runGroup(std::vector<std::shared_ptr<Simulation>>& group);
 	};
 }

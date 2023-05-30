@@ -65,6 +65,11 @@ namespace projectSolar::EventManagers
 				simBuffer[motionData.motionDataIndex].velocity = { 0.0, 0.0, 0.0 };
 				break;
 			}
+			EVENT_DEF(SET_SIM_RUN_PARAMS);
+			{
+				LOG_ASSERT(m_layer->ifAttached(eventData.simulation), "Simulation ", eventData.simulation, " not attached");
+				m_layer->get<Simulation::Simulation>(eventData.simulation)->setRunParams({ eventData.granularity, eventData.minTaskSize });
+			}
 			EVENTS_DEF_DEFAULT();
 				break;
 		}
@@ -72,8 +77,8 @@ namespace projectSolar::EventManagers
 
 	void SimulationManager::constructSimulations()
 	{
-		auto motionSim = m_layer->add<Simulation::Motion>(MOTION_SIM, Simulation::Motion::Params(m_layer->stepSize, m_layer->stepSize));
-		auto gravSim = m_layer->add<Simulation::Gravity>(GRAVITY_SIM, Simulation::Gravity::Params(), &motionSim->data);
+		auto motionSim = m_layer->add<Simulation::Motion>(MOTION_SIM, Simulation::Motion::Params(m_layer->stepSize, m_layer->stepSize), Simulation::RunParams(1, 1));
+		auto gravSim = m_layer->add<Simulation::Gravity>(GRAVITY_SIM, Simulation::Gravity::Params(), Simulation::RunParams(3, 50), &motionSim->data);
 
 		std::vector<std::vector<Simulation::Task>> emptyOrder = { {} };
 	}

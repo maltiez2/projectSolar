@@ -47,4 +47,19 @@ namespace projectSolar::Windows
 		bool loadData = false;
 
 	};
+
+	class Gravity : public Graphics::GuiWindow
+	{
+	public:
+		Gravity() = default;
+		~Gravity() override = default;
+
+		void show() override;
+
+		int32_t granularity = 3;
+		int32_t minTaskSize = 50;
+
+		int32_t prevGranularity = 1;
+		int32_t prevMinTaskSize = 1;
+	};
 }

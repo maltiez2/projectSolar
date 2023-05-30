@@ -34,7 +34,7 @@ namespace projectSolar::EventManagers
 		EVENT_DECL(GENERATE_DEBUG_DATA, 103);
 		EVENT_DECL(SET_DEBUG_DATA_OBJ_NUMBER, 104, uint64_t number);
 		EVENT_DECL(OBJ_DRUGGED, 105, float newX; float newY; float newZ; std::array<entt::entity, maxObjDragged> objects);
-		
+		EVENT_DECL(SET_SIM_RUN_PARAMS, 106, size_t simulation; size_t granularity; size_t minTaskSize);
 
 	private:
 		std::shared_ptr<Layers::SimLayer> m_layer;

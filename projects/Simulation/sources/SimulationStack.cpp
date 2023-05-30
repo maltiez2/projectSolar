@@ -18,26 +18,37 @@ namespace projectSolar::Simulation
 		PROFILE_FUNCTION();
 
 		std::vector<std::shared_ptr<Simulation>> group = {};
+
+		uint8_t currentGroup = 0;
 		
-		for (auto& [id, simulation] : m_attached)
-		{
-			if (!simulation->skip(m_step))
-			{
-				group.push_back(simulation);
-				//m_runner->run({ simulation });
-			}
-		}
-
-		m_runner->run(group);
-
 		for (const auto& [id, simulation] : m_attached)
 		{
-			if (!simulation->skip(m_step))
+			if (simulation->skip(m_step))
 			{
-				simulation->swapData();
+				continue;
 			}
+
+			if (currentGroup != simulation->getGroup())
+			{
+				runGroup(group);
+				group.clear();
+			}
+
+			group.push_back(simulation);
 		}
 
+		runGroup(group);
+
 		m_step = (m_step + 1) % (c_maxStep + 1);
+	}
+
+	void SimulationStack::runGroup(std::vector<std::shared_ptr<Simulation>>& group)
+	{
+		m_runner->run(group);
+
+		for (const auto& ranSimulation : group)
+		{
+			ranSimulation->swapData();
+		}
 	}
 }

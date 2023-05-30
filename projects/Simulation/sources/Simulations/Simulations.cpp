@@ -18,8 +18,9 @@ namespace projectSolar::Simulation
 		return last - start + 1;
 	}
 	
-	Motion::Motion(Params params) :
-		params(params)
+	Motion::Motion(Params params, RunParams concurrencyParams) :
+		params(params),
+		runParams(concurrencyParams)
 	{
 		LOG_ASSERT(params.precesision / params.stepSize > 0.5, "[Motion] Insufficient step precision: ", params.precesision / params.stepSize);
 		unskipStep = std::max((uint16_t)(params.precesision / params.stepSize), 1ui16);
@@ -61,15 +62,24 @@ namespace projectSolar::Simulation
 	{
 		return { {this, 0, data.size() - 1}};
 	}
-	RunParams Motion::runParams()
+	void Motion::setRunParams(RunParams concurencyParams)
 	{
-		return { 1, std::max(data.size() / 1, 1ui64) };
+		runParams = concurencyParams;
+	}
+	RunParams Motion::getRunParams()
+	{
+		return { runParams.granularity, std::max(data.size() / runParams.granularity, 1ui64) };
+	}
+	uint8_t Motion::getGroup()
+	{
+		return PRIMARY_GROUP;
 	}
 
 
-	Gravity::Gravity(Params params, DataStructures::DoubleBuffVector<Motion::Data>* motionData) :
+	Gravity::Gravity(Params params, RunParams concurrencyParams, DataStructures::DoubleBuffVector<Motion::Data>* motionData) :
 		data(*motionData),
-		params(params)
+		params(params),
+		runParams(concurrencyParams)
 	{
 	}
 	void Gravity::run(Task task)
@@ -123,8 +133,16 @@ namespace projectSolar::Simulation
 	{
 		return { {this, 0, data.size() - 1} };
 	}
-	RunParams Gravity::runParams()
+	void Gravity::setRunParams(RunParams concurencyParams)
 	{
-		return { 3, std::max(data.size() / 100, 50ui64) };
+		runParams = concurencyParams;
+	}
+	RunParams Gravity::getRunParams()
+	{
+		return runParams;
+	}
+	uint8_t Gravity::getGroup()
+	{
+		return PRIMARY_GROUP;
 	}
 }

@@ -78,6 +78,7 @@ namespace projectSolar::EventManagers
 	void GuiManager::setUpGUI()
 	{
 		m_windows->add<Windows::Debug>(DEBUG, true);
+		m_windows->add<Windows::Gravity>(GRAVITY, true);
 		m_windows->add<Graphics::DemoWindow>(DEMO, false);
 	}
 
@@ -125,6 +126,17 @@ namespace projectSolar::EventManagers
 		{
 			prevObjNum = currentObjNum;
 			SEND_EVENT(SET_DEBUG_DATA_OBJ_NUMBER, SimulationManager, Com::get().simulation, (size_t)currentObjNum);
+		}
+
+		auto& prevGranularity = m_windows->get<Windows::Gravity>(GRAVITY)->prevGranularity;
+		auto& prevMinTaskSize = m_windows->get<Windows::Gravity>(GRAVITY)->prevMinTaskSize;
+		const auto& currentGranularity = m_windows->get<Windows::Gravity>(GRAVITY)->granularity;
+		const auto& currentMinTaskSize = m_windows->get<Windows::Gravity>(GRAVITY)->minTaskSize;
+		if (prevGranularity != currentGranularity || prevMinTaskSize != currentMinTaskSize)
+		{
+			prevGranularity = currentGranularity;
+			prevMinTaskSize = currentMinTaskSize;
+			SEND_EVENT(SET_SIM_RUN_PARAMS, SimulationManager, Com::get().simulation, SimulationManager::GRAVITY_SIM, (size_t)currentGranularity, (size_t)currentMinTaskSize);
 		}
 	}
 	
