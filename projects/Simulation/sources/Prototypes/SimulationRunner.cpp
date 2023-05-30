@@ -6,7 +6,8 @@
 
 namespace projectSolar::Simulation
 {
-	SimulationRunner::SimulationRunner() :
+	SimulationRunner::SimulationRunner(std::shared_ptr<Simulation> simulation) :
+		m_simulation(simulation),
 		m_workersBarrier(m_concurrency + 1)
 	{
 		for (size_t i = 0; i < m_concurrency; i++)
@@ -25,11 +26,11 @@ namespace projectSolar::Simulation
 		}
 	}
 
-	void SimulationRunner::run(const std::vector<std::shared_ptr<Simulation>>& simulations)
+	void SimulationRunner::run(const std::vector<size_t>& types)
 	{
-		for (const auto& simulation : simulations)
+		for (const auto& type : types)
 		{
-			distributeTasks(simulation->runParams(), simulation->task());
+			distributeTasks(m_simulation->runParams(type), m_simulation->task(type));
 		}
 		m_workersBarrier.arrive_and_wait();
 		m_workersBarrier.arrive_and_wait();
@@ -57,7 +58,7 @@ namespace projectSolar::Simulation
 					lock.unlock();
 				}
 
-				task.simulation->run(task);
+				m_simulation->calc(task);
 			}
 			
 			m_workersBarrier.arrive_and_wait();
@@ -70,7 +71,7 @@ namespace projectSolar::Simulation
 		size_t totalSize = 0;
 		for (const Task& part : order)
 		{
-			totalSize += part.last - part.start + 1;
+			totalSize += part.last - part.first + 1;
 		}
 		size_t taskSize = totalSize / params.granularity / (size_t)m_concurrency;
 		if (taskSize < params.minimumSize)
@@ -82,8 +83,8 @@ namespace projectSolar::Simulation
 		{
 			while (part.size() >= taskSize)
 			{
-				m_taskQueue.emplace(part.simulation, part.start, part.start + taskSize - 1);
-				part.start = part.start + taskSize;
+				m_taskQueue.emplace(part.type, part.first, part.first + taskSize - 1);
+				part.first = part.first + taskSize;
 			}
 
 			if (part.size() > 0)
