@@ -37,7 +37,8 @@ namespace projectSolar::Layers
 		void setCameraScale(float scale);
 		void moveCameraPosition(float x, float y, float z);
 		void moveCameraScale(float scaleDelta);
-		void setCameraOn(size_t motionDataIndex);
+		void setCameraOn(size_t simulation, size_t motionDataIndex);
+		void updateCamera();
 		void setMouseAt(float x, float y);
 
 		const std::vector<entt::entity>& getObjectsUnderMouse() const;
@@ -76,6 +77,9 @@ namespace projectSolar::Layers
 		std::shared_ptr<projectSolar::Graphics::IndexBuffer>	m_indexBuffer;
 
 		Camera m_currentCamera;
+		bool m_cameraSetOn = false;
+		size_t m_cameraObjSimulation;
+		size_t m_cameraObjIndex;
 		
 		std::vector<Point>    m_buffer = {};
 		std::vector<uint32_t> m_indices = {};

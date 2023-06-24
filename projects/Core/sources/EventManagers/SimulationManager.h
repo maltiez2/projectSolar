@@ -16,14 +16,18 @@ namespace projectSolar::EventManagers
 	public:
 		enum : size_t
 		{
-			GRAVITY_SIM,
-			MOTION_SIM
+			PRIMARY_ATTRACTORS_MOTION,
+			PRIMARY_ATTRACTORS_GRAVITY,
+			SECONDARY_ATTRACTORS_MOTION,
+			SECONDARY_ATTRACTORS_GRAVITY,
+			NOT_ATTRACTORS_MOTION,
+			NOT_ATTRACTORS_GRAVITY
 		};
 		
 		SimulationManager(std::shared_ptr<Layers::SimLayer> layer, const size_t& threadsNumber = 1);
 		~SimulationManager() override;
 
-		std::vector<Simulation::Motion::Data>& getMotionData();
+		std::vector<Simulation::Motion::Data>& getMotionData(size_t simulation);
 
 		static const size_t maxObjDragged = 8;
 
@@ -31,8 +35,7 @@ namespace projectSolar::EventManagers
 
 		EVENT_DECL(SET_SIM_RATE, 101, double timePerSecond);
 		EVENT_DECL(SET_SIM_LOAD, 102, double timeRestrinctionSeconds);
-		EVENT_DECL(GENERATE_DEBUG_DATA, 103);
-		EVENT_DECL(SET_DEBUG_DATA_OBJ_NUMBER, 104, uint64_t number);
+		EVENT_DECL(GENERATE_DEBUG_DATA, 103, size_t primary; size_t secondary; size_t ternary);
 		EVENT_DECL(OBJ_DRUGGED, 105, float newX; float newY; float newZ; std::array<entt::entity, maxObjDragged> objects);
 		EVENT_DECL(SET_SIM_RUN_PARAMS, 106, size_t simulation; size_t granularity; size_t minTaskSize);
 
@@ -42,5 +45,7 @@ namespace projectSolar::EventManagers
 
 		void processEvent(uint8_t eventType, uint8_t* data) override;
 		void constructSimulations();
+
+		void genDebugLayout(size_t primary, size_t secondary, size_t ternary);
 	};
 }

@@ -53,6 +53,12 @@ namespace projectSolar::Simulation
 		}
 
 		template<typename DataType>
+		void serialize(DataStructures::DoubleBuffVectorWithVersions<DataType>& input)
+		{
+			serialize<typename DataStructures::DoubleBuffVectorWithVersions<DataType>::Element>(input.getData());
+		}
+
+		template<typename DataType>
 		void serialize(std::vector<DataType>& input)
 		{
 			size_t dataSize = sizeof(DataType);
@@ -78,6 +84,25 @@ namespace projectSolar::Simulation
 			{
 				std::fread(&buffer, sizeof(DataType), 1, p_file);
 				input.addElement(buffer);
+			}
+		}
+
+		template<typename DataType>
+		void deserialize(DataStructures::DoubleBuffVectorWithVersions<DataType>& input)
+		{
+			input.clear();
+
+			size_t dataSize;
+			size_t dataAmount;
+			std::fread(&dataSize, sizeof(dataSize), 1, p_file);
+			std::fread(&dataAmount, sizeof(dataAmount), 1, p_file);
+
+			typename DataStructures::DoubleBuffVectorWithVersions<DataType>::Element buffer;
+			input.reserve(dataAmount);
+			for (auto index = 0; index < dataAmount; index++)
+			{
+				std::fread(&buffer, sizeof(typename DataStructures::DoubleBuffVectorWithVersions<DataType>::Element), 1, p_file);
+				input.addElementVersionEnforced(buffer);
 			}
 		}
 

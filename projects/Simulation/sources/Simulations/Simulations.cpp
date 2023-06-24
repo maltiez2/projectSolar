@@ -23,8 +23,16 @@ namespace projectSolar::Simulation
 		runParams(concurrencyParams)
 	{
 		LOG_ASSERT(params.precesision / params.stepSize > 0.5, "[Motion] Insufficient step precision: ", params.precesision / params.stepSize);
-		unskipStep = std::max((uint16_t)(params.precesision / params.stepSize), 1ui16);
+		unskipStep = std::max((uint16_t)(params.precesision / params.stepSize), runParams.runEachXStep);
 		stepSize = params.stepSize * (double)unskipStep;
+	}
+	void Motion::prepare()
+	{
+		auto& buffer = data.getBuffer();
+		for (auto& element : buffer)
+		{
+			element.force = { 0.0, 0.0, 0.0 };
+		}
 	}
 	void Motion::run(Task task)
 	{
@@ -56,7 +64,7 @@ namespace projectSolar::Simulation
 	}
 	bool Motion::skip(const uint16_t& step)
 	{
-		return false;// step% unskipStep != 0;
+		return step % unskipStep != 0;
 	}
 	std::vector<Task> Motion::task()
 	{
@@ -76,41 +84,63 @@ namespace projectSolar::Simulation
 	}
 
 
-	Gravity::Gravity(Params params, RunParams concurrencyParams, DataStructures::DoubleBuffVector<Motion::Data>* motionData) :
-		data(*motionData),
+	Gravity::Gravity(Params params, RunParams concurrencyParams, Motion::MotionData* motionData) :
+		objects(motionData),
+		skipSameIndex(0),
 		params(params),
 		runParams(concurrencyParams)
 	{
+		attractors.emplace_back(motionData);
+	}
+	Gravity::Gravity(Params params, RunParams concurrencyParams, Motion::MotionData* initObjects, std::vector<Motion::MotionData*> initAttractors) :
+		objects(initObjects),
+		params(params),
+		runParams(concurrencyParams)
+	{
+		for (Motion::MotionData* attractorsData : initAttractors)
+		{
+			if (attractorsData == initObjects)
+			{
+				LOG_ASSERT(skipSameIndex == -1, "Same motion data passed to gravity simulation twice as attractors data");
+				skipSameIndex = attractors.size();
+			}
+			
+			attractors.emplace_back(attractorsData);
+		}
+	}
+	void Gravity::prepare()
+	{
+		// Nothing to prepare
 	}
 	void Gravity::run(Task task)
 	{
 		PROFILE_FUNCTION();
 		
-		auto& initial = data.getData();
-		auto& result = data.getBuffer();
+		auto& initial = objects->getData();
+		auto& result = objects->getBuffer();
 
 		for (size_t index = task.start; index <= task.last; index++)
 		{
-			result[index].force = { 0.0, 0.0, 0.0 };
-
-			for (size_t objIndex = 0; objIndex < data.size(); objIndex++)
+			for (size_t attrIndex = 0; attrIndex < attractors.size(); attrIndex++)
 			{
+				auto& attractorsData = attractors[attrIndex]->getData();
 
-				if (!data.isValid(objIndex))
+				for (size_t objIndex = 0; objIndex < attractorsData.size(); objIndex++)
 				{
-					continue;
-				}
-				if (objIndex == index)
-				{
-					continue;
-				}
+					if (!attractors[attrIndex]->isValid(objIndex))
+					{
+						continue;
+					}
+					if (skipSameIndex == attrIndex && objIndex == index)
+					{
+						continue;
+					}
 
-				Eigen::Vector3d direction = initial[objIndex].position - initial[index].position;
-				double distance = direction.norm();
-				result[index].force += direction * initial[objIndex].mass * initial[index].mass / distance / distance / distance;
+					Eigen::Vector3d direction = attractorsData[objIndex].position - initial[index].position;
+					double distance = direction.norm();
+					result[index].force += direction * attractorsData[objIndex].mass * initial[index].mass / distance / distance / distance * params.gravConst;
+				}
 			}
-
-			result[index].force = result[index].force * params.gravConst;
 		}
 	}
 	void Gravity::swapData()
@@ -127,11 +157,11 @@ namespace projectSolar::Simulation
 	}
 	bool Gravity::skip(const uint16_t& step)
 	{
-		return false;//step % 2ui16 != 1ui16;
+		return step % runParams.runEachXStep != 0;
 	}
 	std::vector<Task> Gravity::task()
 	{
-		return { {this, 0, data.size() - 1} };
+		return { {this, 0, objects->size() - 1} };
 	}
 	void Gravity::setRunParams(RunParams concurencyParams)
 	{

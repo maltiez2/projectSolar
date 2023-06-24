@@ -19,6 +19,8 @@ namespace projectSolar::Simulation
 			Eigen::Vector3d force;
 		};
 
+		typedef DataStructures::DoubleBuffVector<Data> MotionData;
+
 		struct Params
 		{
 			double stepSize;
@@ -28,6 +30,7 @@ namespace projectSolar::Simulation
 		explicit Motion(Params params, RunParams concurrencyParams);
 		~Motion() override = default;
 
+		void prepare() override;
 		void run(Task task) override;
 		void swapData() override;
 		void save(Serializer& serializer) override;

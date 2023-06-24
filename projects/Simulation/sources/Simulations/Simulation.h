@@ -19,8 +19,9 @@ namespace projectSolar::Simulation
 
 	struct RunParams
 	{
-		size_t granularity;
-		size_t minimumSize;
+		size_t granularity = 1;
+		size_t minimumSize = 1;
+		uint16_t runEachXStep = 1;
 	};
 
 	class Simulation
@@ -35,6 +36,7 @@ namespace projectSolar::Simulation
 			SECONDARY_GROUP
 		};
 
+		virtual void prepare() = 0;
 		virtual void run(Task task) = 0;
 		virtual void swapData() = 0;
 		virtual void save(Serializer& serializer) = 0;

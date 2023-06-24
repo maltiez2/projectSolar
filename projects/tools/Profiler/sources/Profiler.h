@@ -29,7 +29,7 @@
 #endif
 
 #ifndef PROFILING_FILE_PATH
-    #define PROFILING_FILE_PATH "logs/profileing_results.json"
+    #define PROFILING_FILE_PATH "logs/profiling_results.json"
 #endif
 
 

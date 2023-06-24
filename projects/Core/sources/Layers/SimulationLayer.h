@@ -17,7 +17,7 @@ namespace projectSolar::Layers
 	class SimLayer : public Layer, public Simulation::SimulationStack
 	{
 	public:		
-		const double stepSize = 1e-3;
+		const double stepSize = 1e-8;
 		
 		struct Params
 		{
@@ -33,7 +33,6 @@ namespace projectSolar::Layers
 
 		void process() override;
 		void onEvent(projectSolar::Graphics::InputEvent* ev) override;
-		void generateDebugLayout(size_t motionId, size_t gravityId);
 
 		size_t getLastStepsNumber() const;
 		float getLastStepTime() const;
@@ -41,8 +40,6 @@ namespace projectSolar::Layers
 		void setTimeRest(double timeRestrictionSeconds);
 		void setTimePerSecond(double simulationTimePerSecond);
 		void setSecondsPerFrame(double secondsPerFrame);
-
-		void setObjNumberInDebugLayout(size_t number);
 
 	private:
 		Params m_params;
@@ -52,8 +49,6 @@ namespace projectSolar::Layers
 		std::shared_mutex m_dataMutex;
 
 		Simulation::StepsDivider m_stepsDivider;
-
-		size_t m_objNumberInDebugLayout = 10;
 
 		friend class EventManagers::SimulationManager;
 	};

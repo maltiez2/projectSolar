@@ -30,10 +30,12 @@ namespace projectSolar::Layers
     {
         PROFILE_FUNCTION();
         
+        updateCamera();
         updateMVP();
         glm::mat4 MVP = m_proj * m_view * m_model;
         
         updateData();
+        
 
         m_vertexBuffer = std::make_shared<projectSolar::Graphics::VertexBuffer>(std::to_address(m_buffer.begin()), m_buffer.size() * sizeof(struct Point)); 
         m_vertexArray = std::make_shared<projectSolar::Graphics::VertexArray>();
@@ -66,6 +68,19 @@ namespace projectSolar::Layers
         }
         case projectSolar::Graphics::InputEventType::MouseButtonPressed:
         {
+            if (!m_objectsUnderMouse.empty())
+            {
+                entt::entity entity = m_objectsUnderMouse[0];
+
+                const auto& data = Com::get().ECS->get<Components::Dynamic>(entity);
+
+                setCameraOn(data.simulationIndex, data.dataIndex);
+            }
+            else
+            {
+                setCameraPosition(0.0f, 0.0f, 0.0f);
+            }
+
             m_objectsDrugged = m_objectsUnderMouse;
             break;
         }
@@ -92,7 +107,7 @@ namespace projectSolar::Layers
                     dragged[i] = m_objectsDrugged[i];
                 }
 
-                SEND_EVENT(OBJ_DRUGGED, EventManagers::SimulationManager, Com::get().simulation, m_mousePosInWorld.x, m_mousePosInWorld.y, m_mousePosInWorld.z, dragged);
+                //SEND_EVENT(OBJ_DRUGGED, EventManagers::SimulationManager, Com::get().simulation, m_mousePosInWorld.x, m_mousePosInWorld.y, m_mousePosInWorld.z, dragged);
             }
             break;
         }
@@ -110,6 +125,8 @@ namespace projectSolar::Layers
     }
     void MapLayer::setCameraPosition(float x, float y, float z)
     {
+        m_cameraSetOn = false;
+        
         m_currentCamera.position.x = x;
         m_currentCamera.position.y = y;
         m_currentCamera.position.z = z;
@@ -126,6 +143,8 @@ namespace projectSolar::Layers
     }
     void MapLayer::moveCameraPosition(float x, float y, float z)
     {
+        m_cameraSetOn = false;
+        
         m_currentCamera.position.x += x;
         m_currentCamera.position.y += y;
         m_currentCamera.position.z += z;
@@ -134,13 +153,27 @@ namespace projectSolar::Layers
     {
         m_currentCamera.scale += scaleDelta;
     }
-    void MapLayer::setCameraOn(size_t motionDataIndex)
+    void MapLayer::setCameraOn(size_t simulation, size_t motionDataIndex)
     {
-        auto& data = Com::get().simulation->getMotionData();
+        m_cameraSetOn = true;
+        m_cameraObjSimulation = simulation;
+        m_cameraObjIndex = motionDataIndex;
+    }
+    void MapLayer::updateCamera()
+    {
+        if (!m_cameraSetOn)
+        {
+            return;
+        }
         
-        LOG_ASSERT(data.size() > motionDataIndex, "[MapLayer] Motion data size is less then ", motionDataIndex);
-        auto& position = data[motionDataIndex];
-        setCameraPosition((float)position.position[0], (float)position.position[1], (float)position.position[2]);
+        auto& data = Com::get().simulation->getMotionData(m_cameraObjSimulation);
+
+        LOG_ASSERT(data.size() > m_cameraObjIndex, "[MapLayer] Motion data size is less then ", m_cameraObjIndex);
+        auto& position = data[m_cameraObjIndex];
+
+        m_currentCamera.position.x = (float)position.position[0];
+        m_currentCamera.position.y = (float)position.position[1];
+        m_currentCamera.position.z = (float)position.position[2];
     }
     void MapLayer::setMouseAt(float x, float y)
     {
@@ -155,8 +188,6 @@ namespace projectSolar::Layers
         glm::vec4 mouseEpsilon = inversView * glm::vec4(c_mouseDetectionRadius, c_mouseDetectionRadius, 0.0f, 0.0f);
         m_mousePosInWorld = { mousePos.x, mousePos.y, mousePos.z };
 
-        auto& simData = Com::get().simulation->getMotionData();
-
         auto entities = Com::get().ECS->getView<Components::Dynamic, Components::MapObject>();
 
         bool isOUMEmpty = m_objectsUnderMouse.empty();
@@ -169,7 +200,8 @@ namespace projectSolar::Layers
         {
             std::shared_lock dynamicLock(Components::Dynamic::mutex());
             const Components::Dynamic& dynamic = entities.get<Components::Dynamic>(entity);
-            Simulation::Motion::Data& motion = simData[dynamic.motionDataIndex];
+            auto& simData = Com::get().simulation->getMotionData(dynamic.simulationIndex);
+            Simulation::Motion::Data& motion = simData[dynamic.dataIndex];
             dynamicLock.unlock();
             
             std::shared_lock mapObjLock(Components::MapObject::mutex());

@@ -20,6 +20,16 @@ namespace projectSolar::Simulation
 		std::vector<std::shared_ptr<Simulation>> group = {};
 
 		uint8_t currentGroup = 0;
+
+		for (const auto& [id, simulation] : m_attached)
+		{
+			if (simulation->skip(m_step))
+			{
+				continue;
+			}
+
+			simulation->prepare();
+		}
 		
 		for (const auto& [id, simulation] : m_attached)
 		{

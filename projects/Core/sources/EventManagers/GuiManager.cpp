@@ -18,7 +18,7 @@ namespace projectSolar::EventManagers
 			EVENTS_DEF_UNKNOWN();
 			EVENT_DEF(SIMULATION_UPDATED); //****************************************************************************************************
 			{
-				if (m_windows->get<Windows::Debug>(DEBUG)->followPlayer)
+				/*if (m_windows->get<Windows::Debug>(DEBUG)->followPlayer)
 				{
 					auto view = Com::get().ECS->getView<Components::Player>();
 
@@ -32,7 +32,7 @@ namespace projectSolar::EventManagers
 				else
 				{
 					SEND_EVENT(RESET_CAMERA, MapManager, Com::get().Map);
-				}
+				}*/
 
 				m_windows->get<Windows::Debug>(DEBUG)->stepsPerFrame = eventData.stepsPerFrame;
 				m_windows->get<Windows::Debug>(DEBUG)->secondsPerStep = eventData.secondsPerStep;
@@ -61,12 +61,12 @@ namespace projectSolar::EventManagers
 					if (Com::get().ECS->has<Components::CelestialObject>(entity))
 					{
 						auto& celestObj = Com::get().ECS->get<Components::CelestialObject>(entity);
-						m_windows->get<Windows::Debug>(DEBUG)->objUnderCursor.push_back(celestObj.name.data());
+						m_windows->get<Windows::Debug>(DEBUG)->objUnderCursor.emplace_back(celestObj.name.data());
 					}
 					else
 					{
 						auto& mapObj = Com::get().ECS->get<Components::MapObject>(entity);
-						m_windows->get<Windows::Debug>(DEBUG)->objUnderCursor.push_back(std::to_string(mapObj.id));
+						m_windows->get<Windows::Debug>(DEBUG)->objUnderCursor.emplace_back(std::to_string(mapObj.id));
 					}
 				}
 			}
@@ -91,7 +91,10 @@ namespace projectSolar::EventManagers
 
 		if (m_windows->get<Windows::Debug>(DEBUG)->generateDebugData)
 		{
-			SEND_EVENT(GENERATE_DEBUG_DATA, SimulationManager, Com::get().simulation);
+			size_t primary = m_windows->get<Windows::Debug>(DEBUG)->primaryObj;
+			size_t secondary = m_windows->get<Windows::Debug>(DEBUG)->secondaryObj;
+			size_t ternary = m_windows->get<Windows::Debug>(DEBUG)->ternaryObj;
+			SEND_EVENT(GENERATE_DEBUG_DATA, SimulationManager, Com::get().simulation, primary, secondary, ternary);
 		}
 
 		if (m_windows->get<Windows::Debug>(DEBUG)->saveData)
@@ -117,15 +120,7 @@ namespace projectSolar::EventManagers
 		if (currentRate != prevRate)
 		{
 			prevRate = currentRate;
-			SEND_EVENT(SET_SIM_RATE, SimulationManager, Com::get().simulation, currentRate);
-		}
-
-		auto& prevObjNum = m_windows->get<Windows::Debug>(DEBUG)->prevDebugObjNumber;
-		const auto& currentObjNum = m_windows->get<Windows::Debug>(DEBUG)->debugObjNumber;
-		if (currentObjNum != prevObjNum)
-		{
-			prevObjNum = currentObjNum;
-			SEND_EVENT(SET_DEBUG_DATA_OBJ_NUMBER, SimulationManager, Com::get().simulation, (size_t)currentObjNum);
+			SEND_EVENT(SET_SIM_RATE, SimulationManager, Com::get().simulation, currentRate * 1e-5);
 		}
 
 		auto& prevGranularity = m_windows->get<Windows::Gravity>(GRAVITY)->prevGranularity;
@@ -136,7 +131,7 @@ namespace projectSolar::EventManagers
 		{
 			prevGranularity = currentGranularity;
 			prevMinTaskSize = currentMinTaskSize;
-			SEND_EVENT(SET_SIM_RUN_PARAMS, SimulationManager, Com::get().simulation, SimulationManager::GRAVITY_SIM, (size_t)currentGranularity, (size_t)currentMinTaskSize);
+			SEND_EVENT(SET_SIM_RUN_PARAMS, SimulationManager, Com::get().simulation, SimulationManager::PRIMARY_ATTRACTORS_GRAVITY, (size_t)currentGranularity, (size_t)currentMinTaskSize);
 		}
 	}
 	

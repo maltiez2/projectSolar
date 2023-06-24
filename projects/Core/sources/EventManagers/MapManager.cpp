@@ -20,7 +20,7 @@ namespace projectSolar::EventManagers
 			}
 			EVENT_DEF(SET_CAMERA_ON);
 			{
-				m_layer->setCameraOn(eventData.id);
+				m_layer->setCameraOn(eventData.simulation, eventData.index);
 			}
 			EVENT_DEF(RESET_CAMERA);
 			{

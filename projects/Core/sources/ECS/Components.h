@@ -97,7 +97,8 @@ namespace projectSolar
 		);
 
 		COMPONENT_DECL(Dynamic,
-			size_t motionDataIndex;
+			size_t simulationIndex;
+			size_t dataIndex;
 		);
 
 		// Initializes static variables inside components
