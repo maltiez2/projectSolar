@@ -1,21 +1,11 @@
 #pragma once
 
+#include <stdint.h>
+
 namespace projectSolar::Simulation
 {
 	class SimulationData;
-
-	/*
-		Used to tell worker thread what system to process and on what data.
-		Contains system id and parallelization parameters.
-		Parameters have different meaning for different systems.
-	*/
-	struct Task
-	{
-		uint16_t system;
-		uint64_t param_1;
-		uint64_t param_2;
-		uint64_t param_3;
-	};
+	struct Task;
 	
 	/*
 		Solves motion equations for celestial objects.

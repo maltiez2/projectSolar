@@ -21,37 +21,19 @@
     <ClInclude Include="sources\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\SimulationRunner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Simulations\Motion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Simulations\Gravity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sources\Serializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\SimulationStack.h">
+    <ClInclude Include="sources\SimulationRunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\StepsDivider.h">
+    <ClInclude Include="sources\SimulationData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Simulations\Simulation.h">
+    <ClInclude Include="sources\Simulation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Prototype\SimulationRunner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Prototype\SimulationData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Prototype\Simulation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sources\Prototype\SimulationSystems.h">
+    <ClInclude Include="sources\SimulationSystems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,25 +41,16 @@
     <ClCompile Include="sources\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sources\SimulationData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Simulation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\MotionSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="sources\SimulationRunner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\Simulations\Simulations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\SimulationStack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\StepsDivider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\Prototype\SimulationData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\Prototype\Simulation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\Prototype\MotionSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

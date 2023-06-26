@@ -2,6 +2,7 @@
 
 #include "SimulationSystems.h"
 #include "SimulationData.h"
+#include "Simulation.h"
 
 
 namespace projectSolar::Simulation
