@@ -5,6 +5,8 @@
 
 namespace projectSolar::DataStructures
 {
+	// @TODO Add RCU mechanism to these containers
+	
 	template<typename DataType>
 	class DoubleBuffVector
 	{
@@ -47,11 +49,16 @@ namespace projectSolar::DataStructures
 			m_oddData.clear();
 			m_invalidElemetns.clear();
 			m_size = 0;
+			m_amount = 0;
 			m_parity = false;
 		}
 		constexpr size_t size() const
 		{
 			return m_size;
+		}
+		constexpr size_t amount() const
+		{
+			return m_amount;
 		}
 
 		size_t addElement(const DataType& value)
@@ -62,6 +69,7 @@ namespace projectSolar::DataStructures
 				index = m_evenData.size();
 				m_evenData.push_back(value);
 				m_oddData.push_back(value);
+				m_size = m_evenData.size();
 			}
 			else
 			{
@@ -69,7 +77,7 @@ namespace projectSolar::DataStructures
 				m_evenData[index] = value;
 				m_oddData[index] = value;
 			}
-			m_size++;
+			m_amount++;
 			return index;
 		}
 		bool delElement(size_t index)
@@ -85,7 +93,9 @@ namespace projectSolar::DataStructures
 			}
 
 			m_invalidElemetns.insert(index);
-			m_size--;
+			m_amount--;
+
+			calculateSize();
 
 			return true;
 		}
@@ -105,6 +115,21 @@ namespace projectSolar::DataStructures
 		std::set<size_t> m_invalidElemetns = {};
 		bool m_parity = false;
 		size_t m_size = 0;
+		size_t m_amount = 0;
+
+		void calculateSize()
+		{
+			for (size_t index = m_size - 1; index > 0; index--)
+			{
+				if (!m_invalidElemetns.contains(index))
+				{
+					m_size = index + 1;
+					return;
+				}
+			}
+
+			m_size = 0;
+		}
 	};
 
 	template<typename DataType>
@@ -158,11 +183,16 @@ namespace projectSolar::DataStructures
 			m_oddData.clear();
 			m_invalidElemetns.clear();
 			m_size = 0;
+			m_amount = 0;
 			m_parity = false;
 		}
 		constexpr size_t size() const
 		{
 			return m_size;
+		}
+		constexpr size_t amount() const
+		{
+			return m_amount;
 		}
 
 		size_t addElement(const DataType& value)
@@ -173,6 +203,7 @@ namespace projectSolar::DataStructures
 				index = m_evenData.size();
 				m_evenData.push_back({ defautVersion, value });
 				m_oddData.push_back({ defautVersion, value });
+				m_size = m_evenData.size();
 			}
 			else
 			{
@@ -182,7 +213,7 @@ namespace projectSolar::DataStructures
 				m_oddData[index].version += 1;
 				m_oddData[index].value = value;
 			}
-			m_size++;
+			m_amount++;
 			return index;
 		}
 		size_t addElementVersionEnforced(const Element& element)
@@ -193,6 +224,7 @@ namespace projectSolar::DataStructures
 				index = m_evenData.size();
 				m_evenData.push_back({ element.version, element.value });
 				m_oddData.push_back({ element.version, element.value });
+				m_size = m_evenData.size();
 			}
 			else
 			{
@@ -202,7 +234,7 @@ namespace projectSolar::DataStructures
 				m_oddData[index].version = element.version;
 				m_oddData[index].value = element.value;
 			}
-			m_size++;
+			m_amount++;
 			return index;
 		}
 		bool delElement(size_t index)
@@ -218,7 +250,9 @@ namespace projectSolar::DataStructures
 			}
 
 			m_invalidElemetns.insert(index);
-			m_size--;
+			m_amount--;
+
+			calculateSize();
 
 			return true;
 		}
@@ -270,5 +304,20 @@ namespace projectSolar::DataStructures
 		std::set<size_t> m_invalidElemetns = {};
 		bool m_parity = false;
 		size_t m_size = 0;
+		size_t m_amount = 0;
+
+		void calculateSize()
+		{
+			for (size_t index = m_size - 1; index > 0; index--)
+			{
+				if (!m_invalidElemetns.contains(index))
+				{
+					m_size = index + 1;
+					return;
+				}
+			}
+
+			m_size = 0;
+		}
 	};
 }

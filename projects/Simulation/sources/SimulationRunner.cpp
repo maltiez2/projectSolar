@@ -122,6 +122,12 @@ namespace projectSolar::Simulation
 		m_targetTicksPerSecond = tickPerSecond;
 		m_microsecondsPerTick = 1e6 / (double)tickPerSecond;
 	}
+	void SimulationRunner::setGranularity(uint32_t granularity) // @TODO Add lock to protect in case if multiple parameters
+	{
+		auto params = m_stepper->getParams(); // Redundant for now
+		params.granularity = granularity;
+		m_stepper->setParams(params);
+	}
 
 	double SimulationRunner::getTicksPerSecond() const
 	{

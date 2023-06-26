@@ -43,6 +43,7 @@ namespace projectSolar::Simulation
 		void advance(uint32_t ticks);
 
 		void setTicksPerSecond(uint32_t tickPerSecond);
+		void setGranularity(uint32_t granularity);
 		
 		double getTicksPerSecond() const;
 		uint32_t getTicksElapsed() const;

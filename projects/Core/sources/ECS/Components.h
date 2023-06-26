@@ -96,9 +96,10 @@ namespace projectSolar
 			LongTitle name;
 		);
 
-		COMPONENT_DECL(Dynamic,
-			size_t simulationIndex;
-			size_t dataIndex;
+		COMPONENT_DECL(MotionSimulation,
+			size_t index;
+			uint64_t version;
+			uint8_t objectClass;
 		);
 
 		// Initializes static variables inside components

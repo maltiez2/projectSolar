@@ -16,7 +16,7 @@ namespace projectSolar::Components
 	COMPONENT_IMPL(MapObject);
 
 	COMPONENT_IMPL(CelestialObject);
-	COMPONENT_IMPL(Dynamic);
+	COMPONENT_IMPL(MotionSimulation);
 
 	void init()
 	{
@@ -31,6 +31,6 @@ namespace projectSolar::Components
 		COMPONENT_INIT(MapObject);
 
 		COMPONENT_INIT(CelestialObject);
-		COMPONENT_INIT(Dynamic);
+		COMPONENT_INIT(MotionSimulation);
 	}
 }
